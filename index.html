@@ -4474,29 +4474,13 @@ window.addEventListener('load', checkForUpdate);
 
 <!-- ==================== УВЕДОМЛЕНИЕ ОБ ОБНОВЛЕНИИ ==================== -->
 <div id="update-notification" 
-     style="display: none; 
-            position: fixed; 
-            top: 20px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: linear-gradient(135deg, #4f46e5, #7c3aed); 
-            color: white; 
-            padding: 16px 24px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
-            font-family: system-ui, sans-serif; 
-            text-align: center; 
-            z-index: 9999; 
-            max-width: 90%; 
-            width: 380px;">
+     style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); 
+            background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 16px 24px; 
+            border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); font-family: system-ui, sans-serif; 
+            text-align: center; z-index: 9999; max-width: 90%; width: 380px;">
   
-  <div style="margin-bottom: 12px; font-size: 18px;">
-    🚀 Доступна новая версия
-  </div>
-  
-  <div style="margin-bottom: 16px; font-size: 15px; opacity: 0.95;">
-    Обновить приложение?
-  </div>
+  <div style="margin-bottom: 12px; font-size: 18px;">🚀 Доступна новая версия</div>
+  <div style="margin-bottom: 16px; font-size: 15px; opacity: 0.95;">Обновить приложение?</div>
 
   <button id="btn-update" 
           style="background: white; color: #4f46e5; border: none; padding: 10px 20px; margin: 0 6px; border-radius: 8px; font-weight: 600; cursor: pointer;">
@@ -4510,23 +4494,17 @@ window.addEventListener('load', checkForUpdate);
 </div>
 
 <script>
-  const CURRENT_VERSION = "2026.02.27";   // ← точно такая же, как в version.json
+  const CURRENT_VERSION = "2025.02.26";   // ← текущая версия приложения
 
   async function checkUpdate() {
     try {
-      console.clear();
-      console.log("=== ПРОВЕРКА ОБНОВЛЕНИЯ ===");
-      console.log("Текущая версия в приложении:", CURRENT_VERSION);
-
       const res = await fetch('version.json?' + Date.now(), { cache: 'no-store' });
       const data = await res.json();
-      
-      console.log("Версия на сервере:", data.version);
 
+      // Всегда сначала прячем
       document.getElementById('update-notification').style.display = 'none';
 
       if (data.version > CURRENT_VERSION) {
-        console.log("🚀 НОВАЯ версия — ПОКАЗЫВАЕМ");
         document.getElementById('update-notification').style.display = 'block';
         
         document.getElementById('btn-update').onclick = () => {
@@ -4537,12 +4515,8 @@ window.addEventListener('load', checkForUpdate);
           document.getElementById('update-notification').style.display = 'none';
           localStorage.setItem('updateDismissed', data.version);
         };
-      } else {
-        console.log("✅ Версия актуальна — НЕ показываем");
       }
-    } catch (e) {
-      console.error("❌ Ошибка:", e);
-    }
+    } catch (e) {}
   }
 
   window.addEventListener('load', checkUpdate);
