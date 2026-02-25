@@ -546,6 +546,45 @@
 </div>
 
 <script>
+  const CURRENT_VERSION = "2025.02.26";   // ←←← ТОЧНО такая же, как в version.json!
+
+  async function checkUpdate() {
+    try {
+      console.clear();
+      console.log("=== ПРОВЕРКА ОБНОВЛЕНИЯ ===");
+      console.log("Текущая версия в приложении:", CURRENT_VERSION);
+
+      const res = await fetch('version.json?' + Date.now(), { cache: 'no-store' });
+      const data = await res.json();
+      
+      console.log("Версия на сервере:", data.version);
+
+      document.getElementById('update-notification').style.display = 'none';
+
+      if (data.version > CURRENT_VERSION) {
+        console.log("🚀 НОВАЯ версия — ПОКАЗЫВАЕМ");
+        document.getElementById('update-notification').style.display = 'block';
+        
+        document.getElementById('btn-update').onclick = () => {
+          window.open(data.releaseUrl, '_blank');
+        };
+        
+        document.getElementById('btn-later').onclick = () => {
+          document.getElementById('update-notification').style.display = 'none';
+          localStorage.setItem('updateDismissed', data.version);
+        };
+      } else {
+        console.log("✅ Версия актуальна — НЕ показываем");
+      }
+    } catch (e) {
+      console.error("❌ Ошибка:", e);
+    }
+  }
+
+  window.addEventListener('load', checkUpdate);
+</script>
+
+<script>
 /*
  * ═══════════════════════════════════════════════════════════════
  *  📦 БЛОК ДАННЫХ — МАССИВ ВОПРОСОВ (пример)
