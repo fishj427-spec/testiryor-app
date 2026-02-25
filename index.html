@@ -4398,7 +4398,7 @@ async function checkForUpdate() {
     const data = await res.json();
 
     // ←←← ИЗМЕНИ НА ТЕКУЩУЮ ВЕРСИЮ ТВОЕГО APK (та, что сейчас в приложении) ←←←
-    const CURRENT_VERSION = '2026.02.26';
+    const CURRENT_VERSION = '2026.02.27';
 
     if (data.version > CURRENT_VERSION) {
       document.getElementById('update-notification').style.display = 'block';
@@ -4426,7 +4426,7 @@ window.addEventListener('load', checkForUpdate);
 </script>
 
 <script>
-  const CURRENT_VERSION = "2026.02.26";   // ←←← ОБЯЗАТЕЛЬНО сделай ТОЧНО как в version.json!
+  const CURRENT_VERSION = "2026.02.27";   // ←←← ОБЯЗАТЕЛЬНО сделай ТОЧНО как в version.json!
 
   async function checkUpdate() {
     try {
@@ -4510,7 +4510,7 @@ window.addEventListener('load', checkForUpdate);
 </div>
 
 <script>
-  const CURRENT_VERSION = "2025.02.26";   // ← точно такая же, как в version.json
+  const CURRENT_VERSION = "2025.02.27";   // ← точно такая же, как в version.json
 
   async function checkUpdate() {
     try {
