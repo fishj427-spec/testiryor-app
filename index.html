@@ -4387,54 +4387,49 @@ window.addEventListener('load', checkForUpdate);
 </script>
 
 <script>
-  const CURRENT_VERSION = "2025.02.26";   // ←←← ОБЯЗАТЕЛЬНО поставь точно такую же, как в version.json сейчас!
-
-  // Надёжное сравнение версий (работает даже если формат немного отличается)
-  function compareVersions(v1, v2) {
-    const a = v1.toString().split('.').map(Number);
-    const b = v2.toString().split('.').map(Number);
-    for (let i = 0; i < Math.max(a.length, b.length); i++) {
-      if ((a[i] || 0) > (b[i] || 0)) return 1;
-      if ((a[i] || 0) < (b[i] || 0)) return -1;
-    }
-    return 0;
-  }
+  const CURRENT_VERSION = "2025.02.26";   // ←←← ОБЯЗАТЕЛЬНО сделай ТОЧНО как в version.json!
 
   async function checkUpdate() {
     try {
       const res = await fetch('version.json?' + Date.now(), { cache: 'no-store' });
       const data = await res.json();
 
-      console.log(`[Проверка обновления] Текущая: ${CURRENT_VERSION} | На сервере: ${data.version}`);
+      console.clear();
+      console.log("=== ПРОВЕРКА ОБНОВЛЕНИЯ ===");
+      console.log("Текущая версия в приложении:", CURRENT_VERSION);
+      console.log("Версия на сервере:", data.version);
+      console.log("Результат сравнения:", data.version > CURRENT_VERSION ? "🚀 НОВАЯ ВЕРСИЯ" : "✅ АКТУАЛЬНАЯ");
 
-      // Если уже отклоняли эту версию
       if (localStorage.getItem('updateDismissed') === data.version) {
-        console.log('✅ Уведомление уже отклонено для этой версии');
+        console.log("Уже отклоняли эту версию — скрываем");
+        document.getElementById('update-notification').style.display = 'none';
         return;
       }
 
-      if (compareVersions(data.version, CURRENT_VERSION) > 0) {
-        console.log('🚀 Найдена НОВАЯ версия!');
+      if (data.version > CURRENT_VERSION) {
+        console.log("→ ПОКАЗЫВАЕМ уведомление");
         document.getElementById('update-notification').style.display = 'block';
-
-        document.getElementById('btn-update').onclick = () => {
-          window.open(data.releaseUrl, '_blank');
-        };
-
-        document.getElementById('btn-later').onclick = () => {
-          document.getElementById('update-notification').style.display = 'none';
-          localStorage.setItem('updateDismissed', data.version);
-          console.log('Уведомление скрыто до следующего обновления');
-        };
       } else {
-        console.log('✅ Версия актуальна — уведомление НЕ показываем');
+        console.log("→ Скрываем уведомление");
+        document.getElementById('update-notification').style.display = 'none';
       }
+
+      // Кнопки
+      document.getElementById('btn-update').onclick = () => {
+        window.open(data.releaseUrl, '_blank');
+      };
+
+      document.getElementById('btn-later').onclick = () => {
+        document.getElementById('update-notification').style.display = 'none';
+        localStorage.setItem('updateDismissed', data.version);
+        console.log("✅ Уведомление скрыто до следующего обновления");
+      };
+
     } catch (e) {
-      console.error('❌ Не удалось проверить обновление', e);
+      console.error("❌ Ошибка проверки:", e);
     }
   }
 
-  // Запуск
   window.addEventListener('load', checkUpdate);
 </script>
   
