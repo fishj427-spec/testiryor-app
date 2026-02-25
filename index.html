@@ -337,6 +337,58 @@
       .opt { padding: 16px 20px; }
       .q-item { padding: 20px; }
     }
+
+    /* Уведомление об обновлении */
+    .update-banner {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: var(--card-bg);
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      padding: 12px 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 1000;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .update-banner.hidden { display: none; }
+    .update-text {
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+    .update-text strong {
+      color: var(--primary);
+    }
+    .update-banner .btn {
+      padding: 6px 16px;
+      font-size: 0.9rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .update-banner .btn:hover {
+      background: var(--primary-hover);
+    }
+    .update-banner .btn-outline {
+      background: transparent;
+      border: 2px solid var(--border);
+      color: var(--text-main);
+      margin-left: 8px;
+    }
+    .update-banner .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
   </style>
 </head>
 <body>
@@ -364,7 +416,7 @@
         <!-- Уменьшенная карточка для патчей -->
         <div class="patches-card" onclick="showPatches()">
           <span class="patches-icon">📋</span>
-          <span class="patches-title">История измений</span>
+          <span class="patches-title">История изменений</span>
         </div>
       </div>
       <div class="quote-box" id="quoteBox">
@@ -444,7 +496,7 @@
 
     <!-- ===== ЭКРАН ПАТЧЕЙ (ИСТОРИЯ ИЗМЕНЕНИЙ) ===== -->
     <div id="patches" class="screen">
-      <h2 style="margin-bottom:16px">📋 История измений</h2>
+      <h2 style="margin-bottom:16px">📋 История изменений</h2>
       <div id="patchesContent" class="patches-list"></div>
       <div style="margin-top:20px; text-align:center">
         <button class="btn btn-outline" onclick="goHome()">← На главную</button>
@@ -454,13 +506,26 @@
 </div>
 
 <!-- Футер с версией вне контейнера -->
-<div class="version-footer">αlpha · build 2025.02.25</div>
+<div class="version-footer" id="versionFooter"></div>
+
+<!-- Уведомление об обновлении -->
+<div id="updateBanner" class="update-banner hidden">
+  <div class="update-text">
+    🚀 Доступна новая версия <strong id="newVersion"></strong>. Обновить?
+  </div>
+  <div>
+    <button class="btn" onclick="applyUpdate()">Обновить</button>
+    <button class="btn btn-outline" onclick="dismissUpdate()">Позже</button>
+  </div>
+</div>
 
 <script>
 /*
  * ═══════════════════════════════════════════════════════════════
- *  📦 БЛОК ДАННЫХ — МАССИВ ВОПРОСОВ (экономика)
+ *  📦 БЛОК ДАННЫХ — МАССИВ ВОПРОСОВ (пример)
  * ═══════════════════════════════════════════════════════════════
+ *  Добавьте сюда свои вопросы в формате:
+ *  { id: число, text: "текст вопроса", options: ["вар1","вар2",...], correct: индекс правильного (0-...) или массив индексов, topic: "тема" }
  */
  // ========== МАССИВ ВОПРОСОВ ==========
   // Вставь сюда свои 255 вопросов в формате:
@@ -3664,10 +3729,16 @@
 
 /*
  * ═══════════════════════════════════════════════════════════════
- *  ⚙️ ЛОГИКА ПРИЛОЖЕНИЯ
+ *  ⚙️ ЛОГИКА ПРИЛОЖЕНИЯ И УВЕДОМЛЕНИЕ ОБ ОБНОВЛЕНИЯХ
  * ═══════════════════════════════════════════════════════════════
  */
 
+// Версия приложения (синхронизировать с version.json)
+const APP_VERSION = '2025.02.25';
+const VERSION_CHECK_URL = 'version.json'; // путь к файлу в корне репозитория
+const STORAGE_KEY = 'dismissedVersion';
+
+// Глобальные переменные
 let globalMistakes = [];
 
 const state = {
@@ -3678,17 +3749,17 @@ const state = {
   score: 0,
   seconds: 0,
   mistakes: [],
-  userAnswers: {},          // хранит исходные индексы ответов для каждого вопроса
-  currentSelection: null,    // для текущего вопроса: отображаемые индексы (массив или число)
-  shuffledIndices: null,     // маппинг: отображаемый индекс -> исходный индекс
-  originalToShuffled: null,  // объект: исходный индекс -> отображаемый индекс
+  userAnswers: {},
+  currentSelection: null,
+  shuffledIndices: null,
+  originalToShuffled: null,
   questionChecked: false,
   timerId: null,
   autoTransitionTimer: null,
   currentSubject: 'economy'
 };
 
-// Данные для патчей — группированы по датам (без времени)
+// Данные для патчей
 const patchesData = [
   {
     date: "2025-02-25",
@@ -3709,24 +3780,16 @@ const quotes = [
   { text: "Экономика есть искусство удовлетворять безграничные потребности при помощи ограниченных ресурсов.", author: "Лоуренс Питер" },
   { text: "Бизнес — это сочетание войны и спорта.", author: "Андре Моруа" },
   { text: "Инвестиции должны быть похожи на наблюдение за высыхающей краской или растущей травой.", author: "Пол Самуэльсон" },
-  { text: "Самая трудная вещь в бизнесе — это зарабатывать деньги, не теряя души.", author: "Ричард Брэнсон" },
-  { text: "Рынок — это место, нарочно назначенное для обмана и обкрадывания друг друга.", author: "Анахарсис" },
-  { text: "Цена — это то, что вы платите. Ценность — это то, что вы получаете.", author: "Уоррен Баффет" },
-  { text: "В бизнесе вы получаете не то, что заслуживаете, а то, о чем договариваетесь.", author: "Честный принцип" },
-  { text: "Богатство — это не скопление материальных ценностей, а способность не думать о деньгах.", author: "Фернандо Пилоя" },
-  { text: "Инфляция — это когда денег больше, чем товаров; девальвация — когда товаров больше, чем денег.", author: "Народная мудрость" },
-  { text: "Капитал — это часть богатства, которой мы жертвуем, чтобы умножить свое богатство.", author: "Альфред Маршалл" },
-  { text: "Бюджет — это искусство равномерно распределять разочарования.", author: "Морис Станс" },
-  { text: "Кредит — это когда вы берете чужое, а отдаете свое с процентами.", author: "А. Кнышев" },
-  { text: "Тот, кто ищет миллионы, весьма редко их находит, но зато тот, кто их не ищет, не находит никогда!", author: "Оноре де Бальзак" },
-  { text: "Риск — это когда результат не совпадает с ожиданиями.", author: "Фрэнк Найт" },
-  { text: "Конкуренция — это централизованное планирование, осуществляемое множеством самостоятельных лиц.", author: "Фридрих Хайек" }
+  { text: "Самая трудная вещь в бизнесе — это зарабатывать деньги, не теряя души.", author: "Ричард Брэнсон" }
 ];
 
 let quoteInterval = null;
 let isPopStateEvent = false;
 
-// Функция для перемешивания массива (алгоритм Фишера-Йетса)
+// Установка версии в футер
+document.getElementById('versionFooter').textContent = `αlpha · build ${APP_VERSION}`;
+
+// Функции для перемешивания массива
 function shuffleArray(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -3745,7 +3808,7 @@ function displayedToOriginal(displayed, shuffledIndices) {
   }
 }
 
-// Преобразование исходных индексов в отображаемые (для восстановления ответа)
+// Преобразование исходных индексов в отображаемые
 function originalToDisplayed(original, originalToShuffled) {
   if (Array.isArray(original)) {
     return original.map(o => originalToShuffled[o]);
@@ -3754,6 +3817,7 @@ function originalToDisplayed(original, originalToShuffled) {
   }
 }
 
+// Подсчёт заработанных баллов (с учётом множественного выбора)
 function calculateEarnedPoints(question, originalUserAnswer) {
   const correct = question.correct;
   if (!Array.isArray(correct)) {
@@ -3768,10 +3832,11 @@ function calculateEarnedPoints(question, originalUserAnswer) {
   return correctCount / correct.length;
 }
 
+// Ротация цитат
 function startQuoteRotation() {
   if (quoteInterval) clearInterval(quoteInterval);
   setRandomQuote();
-  quoteInterval = setInterval(setRandomQuote, getRandomInterval(7000, 10000));
+  quoteInterval = setInterval(setRandomQuote, 7000);
 }
 
 function setRandomQuote() {
@@ -3781,10 +3846,6 @@ function setRandomQuote() {
   document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
 }
 
-function getRandomInterval(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 function stopQuoteRotation() {
   if (quoteInterval) {
     clearInterval(quoteInterval);
@@ -3792,6 +3853,7 @@ function stopQuoteRotation() {
   }
 }
 
+// Переключение экранов
 function show(id, options = {}) {
   const { updateHistory = true } = options;
 
@@ -3868,27 +3930,21 @@ function renderPatches() {
   });
 }
 
+// Тема
 function toggleTheme() {
   document.body.classList.toggle('light-theme');
   localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
 }
 if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme');
 
-function shuffle(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
+// Форматирование времени
 function fmtTime(sec) {
   const m = Math.floor(sec / 60).toString().padStart(2, '0');
   const s = (sec % 60).toString().padStart(2, '0');
   return `${m}:${s}`;
 }
 
+// Запуск теста
 function start(mode, showFeedback) {
   if (state.autoTransitionTimer) {
     clearTimeout(state.autoTransitionTimer);
@@ -3913,9 +3969,9 @@ function start(mode, showFeedback) {
   }
 
   if (mode === 'full') {
-    state.questions = shuffle(questions).slice(0, Math.min(20, questions.length));
+    state.questions = shuffleArray(questions).slice(0, Math.min(20, questions.length));
   } else if (mode === 'infinite') {
-    state.questions = shuffle(questions);
+    state.questions = shuffleArray(questions);
   } else if (mode === 'mistakes') {
     if (globalMistakes.length === 0) {
       alert('Нет сохранённых ошибок. Сначала пройдите тест и допустите ошибки.');
@@ -3959,7 +4015,7 @@ function loadQuestion() {
   // Генерируем случайный порядок индексов
   const indices = Array.from({ length: q.options.length }, (_, i) => i);
   state.shuffledIndices = shuffleArray(indices);
-  // Создаём обратный маппинг: исходный индекс -> отображаемый индекс
+  // Создаём обратный маппинг
   state.originalToShuffled = {};
   state.shuffledIndices.forEach((orig, disp) => {
     state.originalToShuffled[orig] = disp;
@@ -3982,7 +4038,6 @@ function loadQuestion() {
     const btn = document.createElement('button');
     btn.className = 'opt';
     btn.textContent = q.options[origIdx];
-    // При клике будем передавать отображаемый индекс
     btn.onclick = () => select(origIdx, btn, isMulti);
     container.appendChild(btn);
   });
@@ -4008,7 +4063,6 @@ function loadQuestion() {
 function select(origIdx, btn, isMulti) {
   if (state.questionChecked) return;
 
-  // Определяем отображаемый индекс этой кнопки
   const opts = document.querySelectorAll('.opt');
   let displayedIdx = -1;
   for (let i = 0; i < opts.length; i++) {
@@ -4020,7 +4074,6 @@ function select(origIdx, btn, isMulti) {
 
   if (isMulti) {
     btn.classList.toggle('selected');
-    // Собираем все выбранные отображаемые индексы
     const selectedDisplayed = [];
     opts.forEach((opt, i) => {
       if (opt.classList.contains('selected')) selectedDisplayed.push(i);
@@ -4051,15 +4104,12 @@ function next() {
 
   if ((!isMulti && displayedAnswer === null) || (isMulti && displayedAnswer.length === 0)) return;
 
-  // Преобразуем отображаемые индексы в исходные
   const originalAnswer = displayedToOriginal(displayedAnswer, state.shuffledIndices);
-
   const earned = calculateEarnedPoints(q, originalAnswer);
 
   state.questionChecked = true;
 
   if (!state.showFeedback) {
-    // Сохраняем ответ в исходных индексах
     state.userAnswers[state.currentIndex] = originalAnswer;
   }
 
@@ -4083,7 +4133,6 @@ function next() {
     const opts = document.querySelectorAll('.opt');
     opts.forEach(btn => { btn.style.pointerEvents = 'none'; });
 
-    // Подсвечиваем правильные ответы (в исходных индексах, но показываем на их отображаемых позициях)
     if (isMulti) {
       q.correct.forEach(origIdx => {
         const dispIdx = state.originalToShuffled[origIdx];
@@ -4199,6 +4248,7 @@ function showList() {
   show('list', { updateHistory: true });
 }
 
+// Обработка кнопки "Назад" браузера
 window.addEventListener('popstate', function(event) {
   isPopStateEvent = true;
   const stateObj = event.state;
@@ -4212,6 +4262,7 @@ window.addEventListener('popstate', function(event) {
 
 history.replaceState({ screen: 'subject' }, '', location.pathname);
 
+// Инициализация после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
   startQuoteRotation();
 
@@ -4219,8 +4270,47 @@ document.addEventListener('DOMContentLoaded', function() {
   if (searchInput) {
     searchInput.addEventListener('input', filterQuestions);
   }
+
+  // Проверка обновлений
+  checkForUpdates();
+  setInterval(checkForUpdates, 60 * 60 * 1000); // раз в час
 });
 
+// ========== ФУНКЦИИ ДЛЯ УВЕДОМЛЕНИЯ ОБ ОБНОВЛЕНИЯХ ==========
+async function checkForUpdates() {
+  const dismissed = localStorage.getItem(STORAGE_KEY);
+  if (dismissed === APP_VERSION) return;
+
+  try {
+    const response = await fetch(VERSION_CHECK_URL + '?t=' + Date.now()); // антикэш
+    if (!response.ok) return;
+    const data = await response.json();
+    const latestVersion = data.version;
+    if (latestVersion && latestVersion !== APP_VERSION) {
+      showUpdateBanner(latestVersion);
+    }
+  } catch (e) {
+    console.debug('Update check failed', e);
+  }
+}
+
+function showUpdateBanner(version) {
+  const banner = document.getElementById('updateBanner');
+  document.getElementById('newVersion').textContent = version;
+  banner.classList.remove('hidden');
+}
+
+function applyUpdate() {
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload(true);
+}
+
+function dismissUpdate() {
+  document.getElementById('updateBanner').classList.add('hidden');
+  localStorage.setItem(STORAGE_KEY, APP_VERSION);
+}
+
+// Экспорт функций в глобальную область (для onclick)
 window.start = start;
 window.prev = prev;
 window.next = next;
@@ -4231,6 +4321,8 @@ window.showPatches = showPatches;
 window.toggleTheme = toggleTheme;
 window.filterQuestions = filterQuestions;
 window.selectSubject = selectSubject;
+window.applyUpdate = applyUpdate;
+window.dismissUpdate = dismissUpdate;
 </script>
 </body>
 </html>
