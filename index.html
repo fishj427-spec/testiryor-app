@@ -4385,6 +4385,34 @@ async function checkForUpdate() {
 window.addEventListener('load', checkForUpdate);
 // =======================================================
 </script>
+
+<script>
+  const CURRENT_VERSION = "2026.02.25";   // ← должна совпадать с version.json
+
+  async function checkUpdate() {
+    try {
+      const res = await fetch('version.json?' + Date.now());
+      const data = await res.json();
+
+      if (data.version > CURRENT_VERSION) {
+        document.getElementById('update-notification').style.display = 'block';
+
+        // Кнопка "Обновить" → прямая ссылка на APK
+        document.getElementById('btn-update').onclick = () => {
+          window.open(data.releaseUrl, '_blank');   // открывает скачивание
+        };
+
+        document.getElementById('btn-later').onclick = () => {
+          document.getElementById('update-notification').style.display = 'none';
+        };
+      }
+    } catch(e) {
+      console.log('Не удалось проверить обновление');
+    }
+  }
+
+  window.addEventListener('load', checkUpdate);
+</script>
   
 </body>
 
