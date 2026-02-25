@@ -508,15 +508,42 @@
 <!-- Футер с версией вне контейнера -->
 <div class="version-footer" id="versionFooter"></div>
 
-<!-- ==================== БЛОК УВЕДОМЛЕНИЯ ОБ ОБНОВЛЕНИИ ==================== -->
-<div id="update-notification" style="display: none; text-align: center; margin: 20px auto; padding: 20px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-radius: 16px; max-width: 380px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-  <h3 style="margin: 0 0 8px 0; color: #1565c0;">🚀 Доступна новая версия <span id="new-version"></span></h3>
-  <p id="update-notes" style="margin: 0 0 15px 0; font-size: 14px; color: #424242;"></p>
+<!-- ==================== УВЕДОМЛЕНИЕ ОБ ОБНОВЛЕНИИ ==================== -->
+<div id="update-notification" 
+     style="display: none; 
+            position: fixed; 
+            top: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: linear-gradient(135deg, #4f46e5, #7c3aed); 
+            color: white; 
+            padding: 16px 24px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+            font-family: system-ui, sans-serif; 
+            text-align: center; 
+            z-index: 9999; 
+            max-width: 90%; 
+            width: 380px;">
   
-  <button id="update-btn" style="background:#4caf50; color:white; padding:14px 28px; font-size:16px; border:none; border-radius:12px; margin:5px; cursor:pointer;">Обновить сейчас</button>
-  <button id="later-btn" style="background:#f44336; color:white; padding:14px 28px; font-size:16px; border:none; border-radius:12px; margin:5px; cursor:pointer;">Позже</button>
+  <div style="margin-bottom: 12px; font-size: 18px;">
+    🚀 Доступна новая версия
+  </div>
+  
+  <div style="margin-bottom: 16px; font-size: 15px; opacity: 0.95;">
+    Обновить приложение?
+  </div>
+
+  <button id="btn-update" 
+          style="background: white; color: #4f46e5; border: none; padding: 10px 20px; margin: 0 6px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+    ✅ Обновить
+  </button>
+  
+  <button id="btn-later" 
+          style="background: transparent; color: white; border: 2px solid white; padding: 10px 20px; margin: 0 6px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+    Позже
+  </button>
 </div>
-<!-- ================================================================== -->
 
 <script>
 /*
@@ -4360,4 +4387,34 @@ window.addEventListener('load', checkForUpdate);
 </script>
   
 </body>
+
+  <script>
+  const CURRENT_VERSION = "2025.02.26";   // ← поменяй на свою текущую версию
+
+  async function checkUpdate() {
+    try {
+      const res = await fetch('version.json?' + Date.now()); // отключаем кэш
+      const data = await res.json();
+
+      if (data.version > CURRENT_VERSION) {
+        document.getElementById('update-notification').style.display = 'block';
+        
+        // Кнопка "Обновить"
+        document.getElementById('btn-update').onclick = () => {
+          window.location.href = data.releaseUrl || window.location.href;
+        };
+        
+        // Кнопка "Позже"
+        document.getElementById('btn-later').onclick = () => {
+          document.getElementById('update-notification').style.display = 'none';
+          // можно сохранить в localStorage, чтобы не показывать повторно
+        };
+      }
+    } catch(e) { console.log('Не удалось проверить обновление'); }
+  }
+
+  // Запускаем проверку при загрузке
+  window.addEventListener('load', checkUpdate);
+</script>
+  
 </html>
