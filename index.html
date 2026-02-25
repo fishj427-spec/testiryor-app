@@ -546,7 +546,7 @@
 </div>
 
 <script>
-  const CURRENT_VERSION = "2026.02.27";   // ←←← ТОЧНО такая же, как в version.json!
+  const CURRENT_VERSION = "2026.02.26";   // ←←← ТОЧНО такая же, как в version.json!
 
   async function checkUpdate() {
     try {
@@ -3799,7 +3799,7 @@
  */
 
 // Версия приложения (синхронизировать с version.json)
-const APP_VERSION = '2026.02.27';
+const APP_VERSION = '2026.02.26';
 const VERSION_CHECK_URL = 'version.json'; // путь к файлу в корне репозитория
 const STORAGE_KEY = 'dismissedVersion';
 
@@ -4398,7 +4398,7 @@ async function checkForUpdate() {
     const data = await res.json();
 
     // ←←← ИЗМЕНИ НА ТЕКУЩУЮ ВЕРСИЮ ТВОЕГО APK (та, что сейчас в приложении) ←←←
-    const CURRENT_VERSION = '2026.02.27';
+    const CURRENT_VERSION = '2026.02.26';
 
     if (data.version > CURRENT_VERSION) {
       document.getElementById('update-notification').style.display = 'block';
@@ -4426,7 +4426,7 @@ window.addEventListener('load', checkForUpdate);
 </script>
 
 <script>
-  const CURRENT_VERSION = "2026.02.27";   // ←←← ОБЯЗАТЕЛЬНО сделай ТОЧНО как в version.json!
+  const CURRENT_VERSION = "2026.02.26";   // ←←← ОБЯЗАТЕЛЬНО сделай ТОЧНО как в version.json!
 
   async function checkUpdate() {
     try {
@@ -4549,7 +4549,7 @@ window.addEventListener('load', checkForUpdate);
 </body>
 
   <script>
-  const CURRENT_VERSION = "2026.02.27";   // ← поменяй на свою текущую версию
+  const CURRENT_VERSION = "2026.02.26";   // ← поменяй на свою текущую версию
 
   async function checkUpdate() {
     try {
