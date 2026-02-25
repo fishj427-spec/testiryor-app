@@ -4399,10 +4399,10 @@ window.addEventListener('load', checkForUpdate);
       if (data.version > CURRENT_VERSION) {
         document.getElementById('update-notification').style.display = 'block';
         
-        // Кнопка "Обновить"
-        document.getElementById('btn-update').onclick = () => {
-          window.location.href = data.releaseUrl || window.location.href;
-        };
+        // Сделай так:
+document.getElementById('btn-update').onclick = () => {
+  window.location.reload(true);   // Жёсткая перезагрузка — всегда берёт самую свежую версию
+};
         
         // Кнопка "Позже"
         document.getElementById('btn-later').onclick = () => {
