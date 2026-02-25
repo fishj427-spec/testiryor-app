@@ -4323,5 +4323,41 @@ window.selectSubject = selectSubject;
 window.applyUpdate = applyUpdate;
 window.dismissUpdate = dismissUpdate;
 </script>
+
+<script>
+// ==================== ПРОВЕРКА ОБНОВЛЕНИЙ ====================
+async function checkForUpdate() {
+  try {
+    const res = await fetch('https://raw.githubusercontent.com/fishj427-spec/testiryor-app/main/version.json');
+    const data = await res.json();
+
+    // ←←← ИЗМЕНИ НА ТЕКУЩУЮ ВЕРСИЮ ТВОЕГО APK (та, что сейчас в приложении) ←←←
+    const CURRENT_VERSION = '2025.02.26';
+
+    if (data.version > CURRENT_VERSION) {
+      document.getElementById('update-notification').style.display = 'block';
+      
+      document.getElementById('new-version').textContent = data.version;
+      if (data.notes) {
+        document.getElementById('update-notes').innerHTML = '• ' + data.notes.replace(/\n/g, '<br>• ');
+      }
+
+      document.getElementById('update-btn').onclick = () => {
+        window.open(data.apkUrl, '_blank');
+      };
+
+      document.getElementById('later-btn').onclick = () => {
+        document.getElementById('update-notification').style.display = 'none';
+      };
+    }
+  } catch (e) {
+    console.log('Ошибка проверки обновлений');
+  }
+}
+
+window.addEventListener('load', checkForUpdate);
+// =======================================================
+</script>
+  
 </body>
 </html>
