@@ -1415,6 +1415,13 @@
         </div>
         <div class="setting-item">
           <div class="setting-info">
+            <span class="setting-label">Тест уведомления</span>
+            <span class="setting-desc">Проверить работу уведомлений</span>
+          </div>
+          <button class="btn btn-outline" onclick="showTestUpdateNotification()" style="padding: 10px 16px; font-size: 0.85rem;">🔔 Тест</button>
+        </div>
+        <div class="setting-item">
+          <div class="setting-info">
             <span class="setting-label">Версия</span>
             <span class="setting-desc">Текущая версия приложения</span>
           </div>
@@ -5209,8 +5216,8 @@ function refreshApp() {
 // ========== ПРОВЕРКА ОБНОВЛЕНИЙ ==========
 const CURRENT_VERSION = '2026.02.27';
 const GITHUB_RELEASES_URL = 'https://raw.githubusercontent.com/fishj427-spec/testiryor-app/main/version.json';
-const GITHUB_RELEASES_PAGE = 'https://github.com/fishj427-spec/testiryor-app/releases/download/app/Testier.apk';
-const DEBUG_UPDATES = true; // Установите true для тестирования уведомлений
+const GITHUB_RELEASES_PAGE = 'https://github.com/fishj427-spec/testiryor-app/releases';
+const DEBUG_UPDATES = false; // Установите true для тестирования уведомлений
 
 // Проверка обновлений при загрузке
 document.addEventListener('DOMContentLoaded', function() {
@@ -5231,11 +5238,15 @@ function checkForUpdates() {
 
   if (DEBUG_UPDATES) {
     console.log('🔍 [UPDATE] Проверка обновлений (DEBUG режим)');
+    alert('🔍 [UPDATE] Проверка обновлений...\nЛокальная версия: ' + CURRENT_VERSION);
   }
 
   // Не проверяем чаще чем раз в 24 часа (если не DEBUG)
   if (lastCheck && (now - parseInt(lastCheck)) < CHECK_INTERVAL) {
-    if (DEBUG_UPDATES) console.log('⏭️ [UPDATE] Пропуск проверки (кэш)');
+    if (DEBUG_UPDATES) {
+      console.log('⏭️ [UPDATE] Пропуск проверки (кэш)');
+      alert('⏭️ [UPDATE] Пропуск (кэш 24 часа)');
+    }
     return;
   }
 
@@ -5261,6 +5272,7 @@ function checkForUpdates() {
         console.log('📦 [UPDATE] Версия на GitHub:', latestVersion);
         console.log('📦 [UPDATE] Изменения:', changes);
         console.log('📦 [UPDATE] Пропущенная версия:', skippedVersion);
+        alert('📦 [UPDATE] Версия на GitHub: ' + latestVersion + '\nИзменения: ' + JSON.stringify(changes));
       }
 
       // Сравниваем версии
@@ -5277,14 +5289,17 @@ function checkForUpdates() {
           showUpdateNotification(latestVersion, changes);
         } else {
           if (DEBUG_UPDATES) console.log('⏭️ [UPDATE] Версия была пропущена');
+          if (DEBUG_UPDATES) alert('⏭️ [UPDATE] Версия была пропущена ранее');
         }
       } else {
         if (DEBUG_UPDATES) console.log('✅ [UPDATE] Версия актуальна');
+        if (DEBUG_UPDATES) alert('✅ [UPDATE] Версия актуальна (GitHub: ' + latestVersion + ')');
       }
     })
     .catch(error => {
       console.error('❌ [UPDATE] Ошибка проверки:', error);
       if (indicator) indicator.classList.remove('visible');
+      if (DEBUG_UPDATES) alert('❌ [UPDATE] Ошибка: ' + error.message);
     });
 }
 
@@ -5303,17 +5318,30 @@ function compareVersions(v1, v2) {
 }
 
 function showUpdateNotification(version, changes) {
-  document.getElementById('newVersionValue').textContent = version;
-
+  console.log('🔔 [UPDATE] Показ уведомления:', version, changes);
+  
+  const versionEl = document.getElementById('newVersionValue');
   const changesList = document.getElementById('updateChangesList');
-  if (changes && changes.length > 0) {
-    changesList.innerHTML = changes.map(change => `<li>${change}</li>`).join('');
-  } else {
-    changesList.innerHTML = '<li>Улучшения и исправления</li>';
-  }
-
   const notification = document.getElementById('updateNotification');
-  notification.classList.add('visible');
+  
+  console.log('🔍 [UPDATE] Элементы:', { versionEl, changesList, notification });
+  
+  if (versionEl) versionEl.textContent = version;
+  
+  if (changesList) {
+    if (changes && changes.length > 0) {
+      changesList.innerHTML = changes.map(change => `<li>${change}</li>`).join('');
+    } else {
+      changesList.innerHTML = '<li>Улучшения и исправления</li>';
+    }
+  }
+  
+  if (notification) {
+    notification.classList.add('visible');
+    console.log('✅ [UPDATE] Уведомление показано');
+  } else {
+    console.error('❌ [UPDATE] Элемент updateNotification не найден!');
+  }
 }
 
 function hideUpdateNotification() {
