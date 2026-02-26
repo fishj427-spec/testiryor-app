@@ -152,18 +152,16 @@
 
     .screen { 
       display: none; 
-      animation: fadeSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); 
+      animation: simpleFade 0.25s ease; 
     }
     .screen.active { display: block; }
 
-    @keyframes fadeSlide {
+    @keyframes simpleFade {
       from { 
         opacity: 0; 
-        transform: translateY(20px) scale(0.95); 
       }
       to { 
         opacity: 1; 
-        transform: translateY(0) scale(1); 
       }
     }
 
@@ -366,13 +364,7 @@
       flex-direction: column;
       justify-content: center;
       position: relative;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      animation: quoteFade 0.5s ease;
-    }
-
-    @keyframes quoteFade {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      transition: opacity 0.2s ease;
     }
 
     .quote-box::before {
@@ -781,16 +773,16 @@
       overflow-y: auto;
       box-shadow: var(--shadow-lg), var(--shadow-glow);
       z-index: 1001;
-      animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: modalFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    @keyframes modalSlideUp {
+    @keyframes modalFadeIn {
       from { 
-        transform: translateY(100%) scale(0.9);
+        transform: scale(0.95);
         opacity: 0;
       }
       to { 
-        transform: translateY(0) scale(1);
+        transform: scale(1);
         opacity: 1;
       }
     }
@@ -1072,24 +1064,36 @@
       z-index: 2000;
       max-width: 380px;
       overflow: hidden;
-      animation: slideInRight 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       display: none;
     }
 
     .update-notification.visible { display: block; }
 
-    @keyframes slideInRight {
-      from { transform: translateX(100%) scale(0.9); opacity: 0; }
-      to { transform: translateX(0) scale(1); opacity: 1; }
+    @keyframes fadeInUp {
+      from { 
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to { 
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
-    @keyframes slideOutRight {
-      from { transform: translateX(0) scale(1); opacity: 1; }
-      to { transform: translateX(100%) scale(0.9); opacity: 0; }
+    @keyframes fadeOutDown {
+      from { 
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to { 
+        transform: translateY(20px);
+        opacity: 0;
+      }
     }
 
     .update-notification.hiding {
-      animation: slideOutRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: fadeOutDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
     .update-header {
@@ -1103,12 +1107,18 @@
 
     .update-icon {
       font-size: 1.8rem;
-      animation: bounce 2s ease-in-out infinite;
+      animation: pulse 2s ease-in-out infinite;
     }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
+    @keyframes pulse {
+      0%, 100% { 
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% { 
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
     }
 
     .update-title {
@@ -4781,8 +4791,15 @@ function startQuoteRotation() {
 function setRandomQuote() {
   const randomIndex = Math.floor(Math.random() * quotes.length);
   const quote = quotes[randomIndex];
-  document.getElementById('quoteText').textContent = quote.text;
-  document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
+  const quoteBox = document.getElementById('quoteBox');
+  
+  // Анимация смены цитаты
+  quoteBox.style.opacity = '0';
+  setTimeout(() => {
+    document.getElementById('quoteText').textContent = quote.text;
+    document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
+    quoteBox.style.opacity = '1';
+  }, 200);
 }
 
 function stopQuoteRotation() {
@@ -5190,9 +5207,10 @@ function refreshApp() {
 }
 
 // ========== ПРОВЕРКА ОБНОВЛЕНИЙ ==========
-const CURRENT_VERSION = '2026.02.26';
+const CURRENT_VERSION = '2026.02.27';
 const GITHUB_RELEASES_URL = 'https://raw.githubusercontent.com/fishj427-spec/testiryor-app/main/version.json';
 const GITHUB_RELEASES_PAGE = 'https://github.com/fishj427-spec/testiryor-app/releases';
+const DEBUG_UPDATES = false; // Установите true для тестирования уведомлений
 
 // Проверка обновлений при загрузке
 document.addEventListener('DOMContentLoaded', function() {
@@ -5209,41 +5227,64 @@ function checkForUpdates() {
   const skippedVersion = localStorage.getItem('testier_skipped_version');
   const lastCheck = localStorage.getItem('testier_last_update_check');
   const now = Date.now();
-  const CHECK_INTERVAL = 24 * 60 * 60 * 1000; // 24 часа
+  const CHECK_INTERVAL = DEBUG_UPDATES ? 0 : (24 * 60 * 60 * 1000); // 24 часа или 0 для тестов
 
-  // Не проверяем чаще чем раз в 24 часа
+  if (DEBUG_UPDATES) {
+    console.log('🔍 [UPDATE] Проверка обновлений (DEBUG режим)');
+  }
+
+  // Не проверяем чаще чем раз в 24 часа (если не DEBUG)
   if (lastCheck && (now - parseInt(lastCheck)) < CHECK_INTERVAL) {
+    if (DEBUG_UPDATES) console.log('⏭️ [UPDATE] Пропуск проверки (кэш)');
     return;
   }
 
   // Показываем индикатор
   const indicator = document.getElementById('updateCheckIndicator');
-  indicator.classList.add('visible');
+  if (indicator) indicator.classList.add('visible');
 
   // Загружаем информацию о версии
   fetch(GITHUB_RELEASES_URL, { cache: 'no-cache' })
     .then(response => {
-      if (!response.ok) throw new Error('Network error');
+      if (!response.ok) throw new Error('Network error: ' + response.status);
       return response.json();
     })
     .then(data => {
-      indicator.classList.remove('visible');
+      if (indicator) indicator.classList.remove('visible');
       localStorage.setItem('testier_last_update_check', now.toString());
 
       const latestVersion = data.version;
       const changes = data.changes || [];
 
+      if (DEBUG_UPDATES) {
+        console.log('📦 [UPDATE] Локальная версия:', CURRENT_VERSION);
+        console.log('📦 [UPDATE] Версия на GitHub:', latestVersion);
+        console.log('📦 [UPDATE] Изменения:', changes);
+        console.log('📦 [UPDATE] Пропущенная версия:', skippedVersion);
+      }
+
       // Сравниваем версии
-      if (compareVersions(latestVersion, CURRENT_VERSION) > 0) {
+      const comparison = compareVersions(latestVersion, CURRENT_VERSION);
+      
+      if (DEBUG_UPDATES) {
+        console.log('📊 [UPDATE] Результат сравнения:', comparison, '(1 = новая версия доступна)');
+      }
+
+      if (comparison > 0) {
         // Новая версия доступна
         if (skippedVersion !== latestVersion) {
+          if (DEBUG_UPDATES) console.log('✅ [UPDATE] Показываем уведомление');
           showUpdateNotification(latestVersion, changes);
+        } else {
+          if (DEBUG_UPDATES) console.log('⏭️ [UPDATE] Версия была пропущена');
         }
+      } else {
+        if (DEBUG_UPDATES) console.log('✅ [UPDATE] Версия актуальна');
       }
     })
     .catch(error => {
-      console.log('Update check failed:', error);
-      indicator.classList.remove('visible');
+      console.error('❌ [UPDATE] Ошибка проверки:', error);
+      if (indicator) indicator.classList.remove('visible');
     });
 }
 
@@ -5292,6 +5333,25 @@ function skipThisVersion() {
 function downloadUpdate() {
   window.open(GITHUB_RELEASES_PAGE, '_blank');
   hideUpdateNotification();
+}
+
+// Тестовая функция для проверки уведомления
+function showTestUpdateNotification() {
+  const testVersion = '2026.02.28';
+  const testChanges = [
+    '🎨 Тестовое улучшение 1',
+    '⚡ Тестовое улучшение 2',
+    '🐛 Исправление тестовой ошибки'
+  ];
+  showUpdateNotification(testVersion, testChanges);
+}
+
+// Принудительный сброс кэша обновлений
+function resetUpdateCache() {
+  localStorage.removeItem('testier_last_update_check');
+  localStorage.removeItem('testier_skipped_version');
+  console.log('✅ Кэш обновлений сброшен');
+  checkForUpdates();
 }
 
 // Модифицируем функцию next для сохранения ошибок
