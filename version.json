@@ -1,5 +1,13 @@
 {
-  "version": "2026.02.26",
-  "notes": "Автообновление",
-  "releaseUrl": "https://github.com/fishj427-spec/testiryor-app/releases/download/app/Testier.apk"
+  "version": "2026.02.27",
+  "changes": [
+    "🎨 Улучшенный дизайн и анимации",
+    "⚡ Оптимизирована работа без hover-эффектов",
+    "📱 Улучшена мобильная версия",
+    "🔔 Добавлена система уведомлений об обновлениях",
+    "💾 Сохранение прогресса в localStorage",
+    "🐛 Исправлены ошибки в работе теста"
+  ],
+  "releaseUrl": "https://github.com/fishj427-spec/testiryor-app/releases/latest",
+  "downloadUrl": "https://github.com/fishj427-spec/testiryor-app/releases/download/app/Testier.apk"
 }
