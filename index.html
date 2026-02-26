@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Тестирьер — выбор предмета</title>
+  <title>Тестирьер — экономика</title>
   <style>
     /* ========== СТИЛИ ========== */
     :root {
@@ -29,7 +29,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-    
+
     body {
       background: var(--background);
       color: var(--text-main);
@@ -213,7 +213,7 @@
       word-break: break-word;
       padding-right: 5px;
     }
-    
+
     .options { display: flex; flex-direction: column; gap: 10px; }
     .opt {
       padding: 14px 18px;
@@ -337,58 +337,6 @@
       .opt { padding: 16px 20px; }
       .q-item { padding: 20px; }
     }
-
-    /* Уведомление об обновлении */
-    .update-banner {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      background: var(--card-bg);
-      border: 2px solid var(--primary);
-      border-radius: 12px;
-      padding: 12px 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      z-index: 1000;
-      animation: slideUp 0.3s ease;
-    }
-    @keyframes slideUp {
-      from { transform: translateY(100px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    .update-banner.hidden { display: none; }
-    .update-text {
-      color: var(--text-main);
-      font-size: 0.95rem;
-    }
-    .update-text strong {
-      color: var(--primary);
-    }
-    .update-banner .btn {
-      padding: 6px 16px;
-      font-size: 0.9rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .update-banner .btn:hover {
-      background: var(--primary-hover);
-    }
-    .update-banner .btn-outline {
-      background: transparent;
-      border: 2px solid var(--border);
-      color: var(--text-main);
-      margin-left: 8px;
-    }
-    .update-banner .btn-outline:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
   </style>
 </head>
 <body>
@@ -398,6 +346,7 @@
     <div class="logo">🥸 Тестирьер</div>
     <div style="display:flex; gap:8px; align-items:center;">
       <button class="theme-toggle" onclick="toggleTheme()" title="Тема">🌗</button>
+      <button class="theme-toggle" onclick="showSettings()" title="Настройки">⚙️</button>
       <button class="theme-toggle home-btn" id="homeBtn" onclick="goHome()" title="Домой">🏠</button>
     </div>
   </header>
@@ -502,97 +451,34 @@
         <button class="btn btn-outline" onclick="goHome()">← На главную</button>
       </div>
     </div>
+
+    <!-- ===== ЭКРАН НАСТРОЕК ===== -->
+    <div id="settings" class="screen">
+      <h2 style="margin-bottom:16px">⚙️ Настройки</h2>
+      <div class="menu-grid">
+        <button class="btn btn-primary" onclick="updateApp()">🔄 Обновить приложение</button>
+        <button class="btn btn-outline" onclick="window.location.href='mailto:support@testiryor.ru'">📧 Техническая поддержка</button>
+        <button class="btn btn-outline" onclick="showAppInfo()">ℹ️ Информация о приложении</button>
+      </div>
+      <div style="margin-top:20px; text-align:center">
+        <button class="btn btn-outline" onclick="goBack()">← Назад</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- Футер с версией вне контейнера -->
 <div class="version-footer" id="versionFooter"></div>
 
-<!-- ==================== УВЕДОМЛЕНИЕ ОБ ОБНОВЛЕНИИ ==================== -->
-<div id="update-notification" 
-     style="display: none; 
-            position: fixed; 
-            top: 20px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: linear-gradient(135deg, #4f46e5, #7c3aed); 
-            color: white; 
-            padding: 16px 24px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
-            font-family: system-ui, sans-serif; 
-            text-align: center; 
-            z-index: 9999; 
-            max-width: 90%; 
-            width: 380px;">
-  
-  <div style="margin-bottom: 12px; font-size: 18px;">
-    🚀 Доступна новая версия
-  </div>
-  
-  <div style="margin-bottom: 16px; font-size: 15px; opacity: 0.95;">
-    Обновить приложение?
-  </div>
-
-  <button id="btn-update" 
-          style="background: white; color: #4f46e5; border: none; padding: 10px 20px; margin: 0 6px; border-radius: 8px; font-weight: 600; cursor: pointer;">
-    ✅ Обновить
-  </button>
-  
-  <button id="btn-later" 
-          style="background: transparent; color: white; border: 2px solid white; padding: 10px 20px; margin: 0 6px; border-radius: 8px; font-weight: 600; cursor: pointer;">
-    Позже
-  </button>
-</div>
-
-<script>
-  const CURRENT_VERSION = "2026.02.26";   // ←←← ТОЧНО такая же, как в version.json!
-
-  async function checkUpdate() {
-    try {
-      console.clear();
-      console.log("=== ПРОВЕРКА ОБНОВЛЕНИЯ ===");
-      console.log("Текущая версия в приложении:", CURRENT_VERSION);
-
-      const res = await fetch('version.json?' + Date.now(), { cache: 'no-store' });
-      const data = await res.json();
-      
-      console.log("Версия на сервере:", data.version);
-
-      document.getElementById('update-notification').style.display = 'none';
-
-      if (data.version > CURRENT_VERSION) {
-        console.log("🚀 НОВАЯ версия — ПОКАЗЫВАЕМ");
-        document.getElementById('update-notification').style.display = 'block';
-        
-        document.getElementById('btn-update').onclick = () => {
-          window.open(data.releaseUrl, '_blank');
-        };
-        
-        document.getElementById('btn-later').onclick = () => {
-          document.getElementById('update-notification').style.display = 'none';
-          localStorage.setItem('updateDismissed', data.version);
-        };
-      } else {
-        console.log("✅ Версия актуальна — НЕ показываем");
-      }
-    } catch (e) {
-      console.error("❌ Ошибка:", e);
-    }
-  }
-
-  window.addEventListener('load', checkUpdate);
-</script>
-
 <script>
 /*
  * ═══════════════════════════════════════════════════════════════
- *  📦 БЛОК ДАННЫХ — МАССИВ ВОПРОСОВ (пример)
- * ═══════════════════════════════════════════════════════════════
- *  Добавьте сюда свои вопросы в формате:
+ *  📦 БЛОК ДАННЫХ — МАССИВ ВОПРОСОВ
+ *  Заполните этот массив своими вопросами в формате:
  *  { id: число, text: "текст вопроса", options: ["вар1","вар2",...], correct: индекс правильного (0-...) или массив индексов, topic: "тема" }
+ * ═══════════════════════════════════════════════════════════════
  */
- // ========== МАССИВ ВОПРОСОВ ==========
+   // ========== МАССИВ ВОПРОСОВ ==========
   // Вставь сюда свои 255 вопросов в формате:
   // { id: число, text: "текст вопроса", options: ["вар1","вар2",...], correct: индекс правильного (0-...), topic: "тема" }
   // Для демонстрации оставлен один вопрос.
@@ -3794,14 +3680,12 @@
 
 /*
  * ═══════════════════════════════════════════════════════════════
- *  ⚙️ ЛОГИКА ПРИЛОЖЕНИЯ И УВЕДОМЛЕНИЕ ОБ ОБНОВЛЕНИЯХ
+ *  ⚙️ ЛОГИКА ПРИЛОЖЕНИЯ
  * ═══════════════════════════════════════════════════════════════
  */
 
-// Версия приложения (синхронизировать с version.json)
+// Версия приложения
 const APP_VERSION = '2026.02.26';
-const VERSION_CHECK_URL = 'version.json'; // путь к файлу в корне репозитория
-const STORAGE_KEY = 'dismissedVersion';
 
 // Глобальные переменные
 let globalMistakes = [];
@@ -3836,6 +3720,15 @@ const patchesData = [
       "🧮 Добавлен дробный подсчёт баллов для вопросов с множественным выбором.",
       "🔍 Добавлен поиск на странице всех вопросов.",
       "🔀 Варианты ответов теперь отображаются в случайном порядке."
+    ]
+  },
+  {
+    date: "2026-02-26",
+    changes: [
+      "🗑️ Удалены все уведомления об обновлении (оставлена только ручная перезагрузка в настройках).",
+      "⚙️ Добавлена кнопка настроек в шапке рядом с переключателем темы.",
+      "🆕 Создан экран настроек с пунктами: 'Обновить приложение', 'Техническая поддержка', 'Информация о приложении'.",
+      "🔗 Ссылка для обновления заменена на короткую."
     ]
   }
 ];
@@ -4029,7 +3922,7 @@ function start(mode, showFeedback) {
   state.questionChecked = false;
 
   if (questions.length === 0) {
-    alert('Массив вопросов пуст. Пожалуйста, добавьте вопросы.');
+    alert('Нет вопросов. Добавьте вопросы в массив в коде.');
     return;
   }
 
@@ -4051,7 +3944,7 @@ function start(mode, showFeedback) {
 
   document.getElementById('modeBadge').textContent = showFeedback ? 'Тренировка' : 'Тест';
   document.getElementById('modeBadge').className = `badge ${showFeedback ? 'badge-mode' : 'badge-time'}`;
-  
+
   startTimer();
   show('quiz', { updateHistory: true });
   loadQuestion();
@@ -4076,7 +3969,7 @@ function loadQuestion() {
   }
 
   const q = state.questions[state.currentIndex];
-  
+
   // Генерируем случайный порядок индексов
   const indices = Array.from({ length: q.options.length }, (_, i) => i);
   state.shuffledIndices = shuffleArray(indices);
@@ -4089,15 +3982,15 @@ function loadQuestion() {
   document.getElementById('qCounter').textContent = `Вопрос ${state.currentIndex + 1}/${state.questions.length}`;
   document.getElementById('qText').textContent = q.text;
   document.getElementById('nextBtn').disabled = true;
-  
+
   document.getElementById('prevBtn').style.display = 
     (!state.showFeedback && state.currentIndex > 0) ? 'flex' : 'none';
 
   const container = document.getElementById('opts');
   container.innerHTML = '';
-  
+
   const isMulti = Array.isArray(q.correct);
-  
+
   // Отображаем варианты в перемешанном порядке
   state.shuffledIndices.forEach((origIdx) => {
     const btn = document.createElement('button');
@@ -4241,11 +4134,11 @@ function proceedToNext() {
 
 function finish() {
   clearInterval(state.timerId);
-  
+
   const total = state.questions.length;
   const percent = (state.score / total) * 100;
   const acc = percent.toFixed(1);
-  
+
   let grade = 2;
   if (percent >= 90) grade = 5;
   else if (percent >= 75) grade = 4;
@@ -4269,14 +4162,14 @@ function renderQuestionList(items) {
   container.innerHTML = '';
 
   if (items.length === 0) {
-    container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-light)">Нет вопросов, соответствующих запросу.</div>';
+    container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-light)">Вопросы отсутствуют. Добавьте их в массив questions.</div>';
     return;
   }
 
   items.forEach((q, i) => {
     const item = document.createElement('div');
     item.className = 'q-item';
-    
+
     let optsHtml = '';
     q.options.forEach((opt, idx) => {
       let isCorrect = false;
@@ -4313,6 +4206,11 @@ function showList() {
   show('list', { updateHistory: true });
 }
 
+// Функция обновления приложения (скачивание APK)
+function updateApp() {
+  window.open('https://github.com/fishj427-spec/testiryor-app/releases/download/app/Testier.apk', '_blank');
+}
+
 // Обработка кнопки "Назад" браузера
 window.addEventListener('popstate', function(event) {
   isPopStateEvent = true;
@@ -4327,6 +4225,23 @@ window.addEventListener('popstate', function(event) {
 
 history.replaceState({ screen: 'subject' }, '', location.pathname);
 
+// Функции для экрана настроек
+function showSettings() {
+  show('settings', { updateHistory: true });
+}
+
+function showAppInfo() {
+  alert(`Тестирьер\nВерсия: ${APP_VERSION}\n© 2026`);
+}
+
+function goBack() {
+  if (history.length > 1) {
+    history.back();
+  } else {
+    goHome();
+  }
+}
+
 // Инициализация после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
   startQuoteRotation();
@@ -4335,45 +4250,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (searchInput) {
     searchInput.addEventListener('input', filterQuestions);
   }
-
-  // Проверка обновлений
-  checkForUpdates();
-  setInterval(checkForUpdates, 60 * 60 * 1000); // раз в час
 });
-
-// ========== ФУНКЦИИ ДЛЯ УВЕДОМЛЕНИЯ ОБ ОБНОВЛЕНИЯХ ==========
-async function checkForUpdates() {
-  const dismissed = localStorage.getItem(STORAGE_KEY);
-  if (dismissed === APP_VERSION) return;
-
-  try {
-    const response = await fetch(VERSION_CHECK_URL + '?t=' + Date.now()); // антикэш
-    if (!response.ok) return;
-    const data = await response.json();
-    const latestVersion = data.version;
-    if (latestVersion && latestVersion !== APP_VERSION) {
-      showUpdateBanner(latestVersion);
-    }
-  } catch (e) {
-    console.debug('Update check failed', e);
-  }
-}
-
-function showUpdateBanner(version) {
-  const banner = document.getElementById('updateBanner');
-  document.getElementById('newVersion').textContent = version;
-  banner.classList.remove('hidden');
-}
-
-function applyUpdate() {
-  localStorage.removeItem(STORAGE_KEY);
-  location.reload(true);
-}
-
-function dismissUpdate() {
-  document.getElementById('updateBanner').classList.add('hidden');
-  localStorage.setItem(STORAGE_KEY, APP_VERSION);
-}
 
 // Экспорт функций в глобальную область (для onclick)
 window.start = start;
@@ -4386,195 +4263,11 @@ window.showPatches = showPatches;
 window.toggleTheme = toggleTheme;
 window.filterQuestions = filterQuestions;
 window.selectSubject = selectSubject;
-window.applyUpdate = applyUpdate;
-window.dismissUpdate = dismissUpdate;
+window.showSettings = showSettings;
+window.showAppInfo = showAppInfo;
+window.goBack = goBack;
+window.updateApp = updateApp;
 </script>
 
-<script>
-// ==================== ПРОВЕРКА ОБНОВЛЕНИЙ ====================
-async function checkForUpdate() {
-  try {
-    const res = await fetch('https://raw.githubusercontent.com/fishj427-spec/testiryor-app/main/version.json');
-    const data = await res.json();
-
-    // ←←← ИЗМЕНИ НА ТЕКУЩУЮ ВЕРСИЮ ТВОЕГО APK (та, что сейчас в приложении) ←←←
-    const CURRENT_VERSION = '2026.02.26';
-
-    if (data.version > CURRENT_VERSION) {
-      document.getElementById('update-notification').style.display = 'block';
-      
-      document.getElementById('new-version').textContent = data.version;
-      if (data.notes) {
-        document.getElementById('update-notes').innerHTML = '• ' + data.notes.replace(/\n/g, '<br>• ');
-      }
-
-      document.getElementById('update-btn').onclick = () => {
-        window.open(data.apkUrl, '_blank');
-      };
-
-      document.getElementById('later-btn').onclick = () => {
-        document.getElementById('update-notification').style.display = 'none';
-      };
-    }
-  } catch (e) {
-    console.log('Ошибка проверки обновлений');
-  }
-}
-
-window.addEventListener('load', checkForUpdate);
-// =======================================================
-</script>
-
-<script>
-  const CURRENT_VERSION = "2026.02.26";   // ←←← ОБЯЗАТЕЛЬНО сделай ТОЧНО как в version.json!
-
-  async function checkUpdate() {
-    try {
-      const res = await fetch('version.json?' + Date.now(), { cache: 'no-store' });
-      const data = await res.json();
-
-      console.clear();
-      console.log("=== ПРОВЕРКА ОБНОВЛЕНИЯ ===");
-      console.log("Текущая версия в приложении:", CURRENT_VERSION);
-      console.log("Версия на сервере:", data.version);
-      console.log("Результат сравнения:", data.version > CURRENT_VERSION ? "🚀 НОВАЯ ВЕРСИЯ" : "✅ АКТУАЛЬНАЯ");
-
-      if (localStorage.getItem('updateDismissed') === data.version) {
-        console.log("Уже отклоняли эту версию — скрываем");
-        document.getElementById('update-notification').style.display = 'none';
-        return;
-      }
-
-      if (data.version > CURRENT_VERSION) {
-        console.log("→ ПОКАЗЫВАЕМ уведомление");
-        document.getElementById('update-notification').style.display = 'block';
-      } else {
-        console.log("→ Скрываем уведомление");
-        document.getElementById('update-notification').style.display = 'none';
-      }
-
-      // Кнопки
-      document.getElementById('btn-update').onclick = () => {
-        window.open(data.releaseUrl, '_blank');
-      };
-
-      document.getElementById('btn-later').onclick = () => {
-        document.getElementById('update-notification').style.display = 'none';
-        localStorage.setItem('updateDismissed', data.version);
-        console.log("✅ Уведомление скрыто до следующего обновления");
-      };
-
-    } catch (e) {
-      console.error("❌ Ошибка проверки:", e);
-    }
-  }
-
-  window.addEventListener('load', checkUpdate);
-</script>
-
-<!-- ==================== АВТОМАТИЧЕСКОЕ ОБНОВЛЕНИЕ ==================== -->
-<div id="update-notification" 
-     style="display: none; 
-            position: fixed; 
-            top: 20px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: linear-gradient(135deg, #4f46e5, #7c3aed); 
-            color: white; 
-            padding: 16px 24px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
-            font-family: system-ui, sans-serif; 
-            text-align: center; 
-            z-index: 9999; 
-            max-width: 90%; 
-            width: 380px;">
-  
-  <div style="margin-bottom: 12px; font-size: 18px;">
-    🚀 Доступна новая версия
-  </div>
-  
-  <div style="margin-bottom: 16px; font-size: 15px; opacity: 0.95;">
-    Скачиваем обновление автоматически...
-  </div>
-
-  <button id="btn-update" 
-          style="background: white; color: #4f46e5; border: none; padding: 10px 20px; margin: 0 6px; border-radius: 8px; font-weight: 600; cursor: pointer;">
-    ✅ Скачать сейчас
-  </button>
-  
-  <button id="btn-later" 
-          style="background: transparent; color: white; border: 2px solid white; padding: 10px 20px; margin: 0 6px; border-radius: 8px; font-weight: 600; cursor: pointer;">
-    Позже
-  </button>
-</div>
-
-<script>
-  const CURRENT_VERSION = "2025.02.26";   // ← должна совпадать с version.json
-
-  async function checkUpdate() {
-    try {
-      const res = await fetch('version.json?' + Date.now(), { cache: 'no-store' });
-      const data = await res.json();
-
-      document.getElementById('update-notification').style.display = 'none';
-
-      if (data.version > CURRENT_VERSION) {
-        document.getElementById('update-notification').style.display = 'block';
-
-        // Автоматическое скачивание через 4 секунды
-        setTimeout(() => {
-          window.open(data.releaseUrl, '_blank');
-        }, 4000);
-
-        // Кнопка "Скачать сейчас"
-        document.getElementById('btn-update').onclick = () => {
-          window.open(data.releaseUrl, '_blank');
-        };
-
-        // Кнопка "Позже"
-        document.getElementById('btn-later').onclick = () => {
-          document.getElementById('update-notification').style.display = 'none';
-          localStorage.setItem('updateDismissed', data.version);
-        };
-      }
-    } catch (e) {
-      console.error("Ошибка проверки обновления:", e);
-    }
-  }
-
-  window.addEventListener('load', checkUpdate);
-</script>
-  
 </body>
-
-  <script>
-  const CURRENT_VERSION = "2026.02.26";   // ← поменяй на свою текущую версию
-
-  async function checkUpdate() {
-    try {
-      const res = await fetch('version.json?' + Date.now()); // отключаем кэш
-      const data = await res.json();
-
-      if (data.version > CURRENT_VERSION) {
-        document.getElementById('update-notification').style.display = 'block';
-        
-        // Сделай так:
-document.getElementById('btn-update').onclick = () => {
-  window.location.reload(true);   // Жёсткая перезагрузка — всегда берёт самую свежую версию
-};
-        
-        // Кнопка "Позже"
-        document.getElementById('btn-later').onclick = () => {
-          document.getElementById('update-notification').style.display = 'none';
-          // можно сохранить в localStorage, чтобы не показывать повторно
-        };
-      }
-    } catch(e) { console.log('Не удалось проверить обновление'); }
-  }
-
-  // Запускаем проверку при загрузке
-  window.addEventListener('load', checkUpdate);
-</script>
-  
 </html>
