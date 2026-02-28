@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Тестирьер — экономика</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     /* ========== СОВРЕМЕННЫЕ СТИЛИ ========== */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -601,6 +602,54 @@
       font-weight: 500;
     }
 
+    /* Графики */
+    .charts-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .chart-wrapper {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      position: relative;
+      height: 300px;
+      overflow: hidden;
+    }
+
+    .chart-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .chart-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+
+    .chart-actions .btn {
+      padding: 12px 20px;
+      font-size: 0.9rem;
+    }
+
+    .no-data {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-light);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
     /* Поиск */
     .search-box {
       width: 100%;
@@ -621,6 +670,15 @@
     }
 
     .search-box::placeholder { color: var(--text-light); }
+
+    /* Input для настроек */
+    input[type="number"].search-box {
+      width: 70px;
+      padding: 8px;
+      margin: 0;
+      text-align: center;
+      font-size: 0.95rem;
+    }
 
     .q-item {
       background: var(--card-bg-solid);
@@ -990,6 +1048,27 @@
 
       .q-item { padding: 14px; border-radius: 10px; margin-bottom: 12px; }
       .q-text { font-size: 0.95rem; margin-bottom: 10px; word-wrap: break-word; }
+
+      /* Графики на мобильных */
+      .chart-wrapper {
+        height: 250px;
+        padding: 14px;
+      }
+
+      .chart-title {
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+      }
+
+      .chart-actions {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .chart-actions .btn {
+        padding: 12px 16px;
+        font-size: 0.85rem;
+      }
       .q-opts { gap: 6px; }
       .q-opt { font-size: 0.85rem; padding: 6px 10px; border-radius: 6px; word-wrap: break-word; }
 
@@ -1023,6 +1102,16 @@
       .setting-item .version-badge {
         width: 100%;
         justify-content: center;
+      }
+
+      /* Настройки режимов на мобильных */
+      .setting-item div[style*="display: flex"] {
+        flex-wrap: wrap;
+      }
+
+      .setting-item input[type="number"].search-box {
+        width: 60px !important;
+        font-size: 0.85rem !important;
       }
     }
 
@@ -1095,7 +1184,7 @@
       <p class="subtitle">Выберите режим тренировки</p>
 
       <div class="menu-grid">
-        <button class="btn btn-primary full" onclick="start('full', false)">
+        <button class="btn btn-primary full" onclick="start('full', false)" id="fullTestBtn">
           🎓 Полный тест <small style="opacity:.7; font-weight:400">(20 случайных)</small>
         </button>
         <button class="btn btn-outline" onclick="start('infinite', true)">
@@ -1107,6 +1196,11 @@
         <button class="btn btn-outline full" onclick="showList()">
           📋 Все вопросы
         </button>
+      </div>
+      
+      <div class="chart-actions">
+        <button class="btn btn-outline" onclick="showStats()">📊 Статистика</button>
+        <button class="btn btn-outline" onclick="openModeSettings()">⚙️ Настройки</button>
       </div>
     </div>
 
@@ -1166,6 +1260,44 @@
         <button class="btn btn-outline" onclick="goHome()">← На главную</button>
       </div>
     </div>
+
+    <!-- ===== ЭКРАН СТАТИСТИКИ С ГРАФИКАМИ ===== -->
+    <div id="stats" class="screen">
+      <h2 style="margin-bottom:8px">📊 Статистика</h2>
+      <p class="subtitle">Аналитика вашей успеваемости</p>
+      
+      <div class="stats-grid" style="margin-bottom: 20px;">
+        <div class="stat"><div class="stat-val" id="totalTests">0</div><div class="stat-lbl">тестов пройдено</div></div>
+        <div class="stat"><div class="stat-val" id="avgScore">0%</div><div class="stat-lbl">средний балл</div></div>
+        <div class="stat"><div class="stat-val" id="bestScore">0%</div><div class="stat-lbl">лучший результат</div></div>
+        <div class="stat"><div class="stat-val" id="totalQuestions">0</div><div class="stat-lbl">вопросов решено</div></div>
+      </div>
+
+      <div class="charts-container">
+        <div class="chart-wrapper">
+          <div class="chart-title">📈 Результаты по темам</div>
+          <canvas id="topicsChart"></canvas>
+          <div id="topicsNoData" class="no-data" style="display: none;">Нет данных. Пройдите хотя бы один тест.</div>
+        </div>
+
+        <div class="chart-wrapper">
+          <div class="chart-title">🎯 Распределение оценок</div>
+          <canvas id="gradesChart"></canvas>
+          <div id="gradesNoData" class="no-data" style="display: none;">Нет данных. Пройдите хотя бы один тест.</div>
+        </div>
+
+        <div class="chart-wrapper">
+          <div class="chart-title">📊 Прогресс тестов</div>
+          <canvas id="progressChart"></canvas>
+          <div id="progressNoData" class="no-data" style="display: none;">Нет данных. Пройдите хотя бы один тест.</div>
+        </div>
+      </div>
+
+      <div class="chart-actions">
+        <button class="btn btn-outline" onclick="goToModeMenu()">🔙 Назад</button>
+        <button class="btn btn-primary" onclick="resetAllStats()">🗑️ Сбросить статистику</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1210,6 +1342,63 @@
       <div class="settings-section">
         <h3>ℹ️ О приложении</h3>
         <p class="about-text">Тестирьер — приложение для тестирования знаний по экономике. Содержит 255 вопросов с различными темами.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно настроек режимов -->
+<div id="modeSettingsModal" class="modal">
+  <div class="modal-overlay" onclick="closeModeSettings()"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>⚙️ Настройки режимов</h2>
+      <button class="modal-close" onclick="closeModeSettings()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="settings-section">
+        <h3>🎓 Полный тест</h3>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Количество вопросов</span>
+            <span class="setting-desc">От 1 до 100</span>
+          </div>
+          <input type="number" id="fullQuestions" class="search-box" style="width: 70px; margin: 0; padding: 8px;" value="20" min="1" max="100">
+        </div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Время на тест (минуты)</span>
+            <span class="setting-desc">От 1 до 60</span>
+          </div>
+          <input type="number" id="fullTime" class="search-box" style="width: 70px; margin: 0; padding: 8px;" value="10" min="1" max="60">
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>∞ Тренировка</h3>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Время на вопрос (сек)</span>
+            <span class="setting-desc">От 5 до 120</span>
+          </div>
+          <input type="number" id="infiniteTime" class="search-box" style="width: 70px; margin: 0; padding: 8px;" value="30" min="5" max="120">
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>❌ Исправить ошибки</h3>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Время на вопрос (сек)</span>
+            <span class="setting-desc">От 5 до 120</span>
+          </div>
+          <input type="number" id="mistakesTime" class="search-box" style="width: 70px; margin: 0; padding: 8px;" value="30" min="5" max="120">
+        </div>
+      </div>
+
+      <div class="chart-actions" style="margin-top: 20px;">
+        <button class="btn btn-primary full" onclick="saveModeSettings()">💾 Сохранить</button>
+        <button class="btn btn-outline full" onclick="closeModeSettings()">Отмена</button>
       </div>
     </div>
   </div>
@@ -4445,6 +4634,7 @@ const state = {
   currentIndex: 0,
   score: 0,
   seconds: 0,
+  maxTime: null,
   mistakes: [],
   userAnswers: {},
   currentSelection: null,
@@ -4456,8 +4646,33 @@ const state = {
   currentSubject: 'economy'
 };
 
+// Настройки режимов
+let modeSettings = {
+  full: { questions: 20, time: 10 },
+  infinite: { time: 30 },
+  mistakes: { time: 30 }
+};
+
 // Данные для патчей
 const patchesData = [
+  {
+    date: "2026-02-28",
+    changes: [
+      "📊 Добавлена страница статистики с графиками (Chart.js).",
+      "📈 График результатов по темам (столбчатая диаграмма).",
+      "🎯 График распределения оценок (кольцевая диаграмма).",
+      "📉 График прогресса тестов (линейный график).",
+      "⚙️ Добавлены настройки режимов тестирования.",
+      "⏱️ Добавлено ограниченное время для каждого режима.",
+      "🎓 Полный тест: настройка количества вопросов и времени.",
+      "∞ Тренировка: настройка времени на вопрос.",
+      "❌ Исправить ошибки: настройка времени на вопрос.",
+      "🗑️ Удалены уведомления об обновлениях.",
+      "🗑️ Удалена кнопка обновления приложения.",
+      "🎨 Градиент светлой темы изменён на соответствующий.",
+      "📱 Адаптивный дизайн для мобильных устройств."
+    ]
+  },
   {
     date: "2026-02-25",
     changes: [
@@ -4479,13 +4694,6 @@ const patchesData = [
       "🔗 Ссылка для обновления заменена на короткую."
     ]
   }
-  {
-    date: "2026-02-28",
-    changes: [
-      "☀️ Исправлена светлая тема",
-      "❌ Удалены лишние настройки",
-    ]
-  },
 ];
 
 // Цитаты
@@ -4651,8 +4859,77 @@ function renderPatches() {
 function toggleTheme() {
   document.body.classList.toggle('light-theme');
   localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+
+  // Перерисовка графиков с новыми цветами
+  const statsScreen = document.getElementById('stats');
+  if (statsScreen.classList.contains('active')) {
+    renderStats();
+  }
 }
 if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme');
+
+// ========== НАСТРОЙКИ РЕЖИМОВ ==========
+function openModeSettings() {
+  loadModeSettings();
+  document.getElementById('modeSettingsModal').classList.add('active');
+}
+
+function closeModeSettings() {
+  document.getElementById('modeSettingsModal').classList.remove('active');
+}
+
+function loadModeSettings() {
+  const saved = localStorage.getItem('testier_mode_settings');
+  if (saved) {
+    try {
+      modeSettings = JSON.parse(saved);
+    } catch (e) {
+      modeSettings = { full: { questions: 20, time: 10 }, infinite: { time: 30 }, mistakes: { time: 30 } };
+    }
+  }
+  
+  // Обновление полей ввода
+  const fullQ = document.getElementById('fullQuestions');
+  const fullT = document.getElementById('fullTime');
+  const infT = document.getElementById('infiniteTime');
+  const mistT = document.getElementById('mistakesTime');
+  
+  if (fullQ) fullQ.value = modeSettings.full.questions;
+  if (fullT) fullT.value = modeSettings.full.time;
+  if (infT) infT.value = modeSettings.infinite.time;
+  if (mistT) mistT.value = modeSettings.mistakes.time;
+  
+  // Обновление текста кнопки
+  const fullTestBtn = document.getElementById('fullTestBtn');
+  if (fullTestBtn) {
+    fullTestBtn.innerHTML = `🎓 Полный тест <small style="opacity:.7; font-weight:400">(${modeSettings.full.questions} вопросов, ${modeSettings.full.time} мин)</small>`;
+  }
+}
+
+function saveModeSettings() {
+  const fullQ = document.getElementById('fullQuestions');
+  const fullT = document.getElementById('fullTime');
+  const infT = document.getElementById('infiniteTime');
+  const mistT = document.getElementById('mistakesTime');
+  
+  modeSettings = {
+    full: {
+      questions: parseInt(fullQ?.value) || 20,
+      time: parseInt(fullT?.value) || 10
+    },
+    infinite: {
+      time: parseInt(infT?.value) || 30
+    },
+    mistakes: {
+      time: parseInt(mistT?.value) || 30
+    }
+  };
+  
+  localStorage.setItem('testier_mode_settings', JSON.stringify(modeSettings));
+  closeModeSettings();
+  loadModeSettings();
+  alert('✅ Настройки сохранены!');
+}
 
 // Форматирование времени
 function fmtTime(sec) {
@@ -4680,15 +4957,21 @@ function start(mode, showFeedback) {
   state.originalToShuffled = null;
   state.questionChecked = false;
 
+  // Загрузка настроек режимов
+  loadModeSettings();
+
   if (questions.length === 0) {
     alert('Нет вопросов. Добавьте вопросы в массив в коде.');
     return;
   }
 
   if (mode === 'full') {
-    state.questions = shuffleArray(questions).slice(0, Math.min(20, questions.length));
+    const qCount = modeSettings.full.questions || 20;
+    state.questions = shuffleArray(questions).slice(0, Math.min(qCount, questions.length));
+    state.maxTime = (modeSettings.full.time || 10) * 60; // минуты в секунды
   } else if (mode === 'infinite') {
     state.questions = shuffleArray(questions);
+    state.maxTime = (modeSettings.infinite.time || 30) * state.questions.length; // сек на вопрос
   } else if (mode === 'mistakes') {
     if (globalMistakes.length === 0) {
       alert('Нет сохранённых ошибок. Сначала пройдите тест и допустите ошибки.');
@@ -4699,6 +4982,7 @@ function start(mode, showFeedback) {
       alert('Вопросы с ошибками не найдены (возможно, они были удалены).');
       return;
     }
+    state.maxTime = (modeSettings.mistakes.time || 30) * state.questions.length;
   }
 
   document.getElementById('modeBadge').textContent = showFeedback ? 'Тренировка' : 'Тест';
@@ -4713,11 +4997,34 @@ function startTimer() {
   clearInterval(state.timerId);
   state.seconds = 0;
   updateTimer();
-  state.timerId = setInterval(() => { state.seconds++; updateTimer(); }, 1000);
+  state.timerId = setInterval(() => {
+    state.seconds++;
+    updateTimer();
+    
+    // Проверка ограничения по времени
+    if (state.maxTime && state.seconds >= state.maxTime) {
+      clearInterval(state.timerId);
+      alert('⏰ Время вышло!');
+      finish();
+    }
+  }, 1000);
 }
 
 function updateTimer() {
-  document.getElementById('timer').textContent = fmtTime(state.seconds);
+  const remaining = state.maxTime ? state.maxTime - state.seconds : state.seconds;
+  const displayTime = Math.max(0, remaining);
+  
+  const timerEl = document.getElementById('timer');
+  timerEl.textContent = fmtTime(displayTime);
+  
+  // Визуальное предупреждение когда мало времени
+  if (state.maxTime && remaining <= 30) {
+    timerEl.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(248, 113, 113, 0.2) 100%)';
+    timerEl.style.border = '1px solid rgba(239, 68, 68, 0.5)';
+  } else {
+    timerEl.style.background = '';
+    timerEl.style.border = '';
+  }
 }
 
 function loadQuestion() {
@@ -4913,6 +5220,9 @@ function finish() {
   const ring = document.getElementById('scoreRing');
   ring.style.background = `conic-gradient(var(--primary) ${percent}%, var(--border) ${percent}%)`;
 
+  // Сохранение статистики
+  saveTestResult(Math.round(percent), state.score, total, state.seconds, grade);
+
   saveMistakes();
   show('result', { updateHistory: true });
 }
@@ -4943,15 +5253,6 @@ function resetMistakes() {
   }
 }
 
-function showStats() {
-  const totalQuestions = questions.length;
-  const mistakesCount = globalMistakes.length;
-  const correctCount = totalQuestions - mistakesCount;
-  const accuracy = totalQuestions > 0 ? ((correctCount / totalQuestions) * 100).toFixed(1) : 0;
-  
-  alert(`📊 Общая статистика:\n\nВсего вопросов: ${totalQuestions}\nОшибок: ${mistakesCount}\nПравильных: ${correctCount}\nТочность: ${accuracy}%`);
-}
-
 // ========== МОДАЛЬНОЕ ОКНО ==========
 function openSettings() {
   document.getElementById('settingsModal').classList.add('active');
@@ -4969,6 +5270,7 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('input', filterQuestions);
   }
   loadMistakes();
+  loadModeSettings();
 });
 
 function renderQuestionList(items) {
@@ -5063,6 +5365,362 @@ window.openSettings = openSettings;
 window.closeSettings = closeSettings;
 window.resetMistakes = resetMistakes;
 window.showStats = showStats;
+window.resetAllStats = resetAllStats;
+window.saveModeSettings = saveModeSettings;
+window.openModeSettings = openModeSettings;
+window.closeModeSettings = closeModeSettings;
+
+// ========== СТАТИСТИКА И ГРАФИКИ ==========
+let charts = {
+  topics: null,
+  grades: null,
+  progress: null
+};
+
+// Загрузка статистики из localStorage
+function loadStats() {
+  const stats = localStorage.getItem('testier_stats');
+  if (!stats) {
+    return {
+      tests: [],
+      topicResults: {}
+    };
+  }
+  return JSON.parse(stats);
+}
+
+// Сохранение статистики
+function saveStats(stats) {
+  localStorage.setItem('testier_stats', JSON.stringify(stats));
+}
+
+// Сохранение результата теста
+function saveTestResult(score, correct, total, time, grade) {
+  const stats = loadStats();
+  const topic = state.currentSubject || 'Общая';
+  
+  stats.tests.push({
+    date: new Date().toISOString(),
+    score,
+    correct,
+    total,
+    time,
+    grade,
+    topic
+  });
+
+  // Обновление статистики по темам
+  if (!stats.topicResults[topic]) {
+    stats.topicResults[topic] = { scores: [], correct: 0, total: 0 };
+  }
+  stats.topicResults[topic].scores.push(score);
+  stats.topicResults[topic].correct += correct;
+  stats.topicResults[topic].total += total;
+
+  saveStats(stats);
+}
+
+// Показ статистики
+function showStats() {
+  show('stats', { updateHistory: true });
+  renderStats();
+}
+
+// Отрисовка статистики
+function renderStats() {
+  const stats = loadStats();
+  
+  // Общие показатели
+  const totalTests = stats.tests.length;
+  document.getElementById('totalTests').textContent = totalTests;
+  
+  if (totalTests === 0) {
+    document.getElementById('avgScore').textContent = '0%';
+    document.getElementById('bestScore').textContent = '0%';
+    document.getElementById('totalQuestions').textContent = '0';
+    
+    // Скрываем графики, показываем сообщения
+    document.getElementById('topicsNoData').style.display = 'flex';
+    document.getElementById('gradesNoData').style.display = 'flex';
+    document.getElementById('progressNoData').style.display = 'flex';
+    
+    // Уничтожаем графики если есть
+    destroyCharts();
+    return;
+  }
+  
+  // Скрываем сообщения "нет данных"
+  document.getElementById('topicsNoData').style.display = 'none';
+  document.getElementById('gradesNoData').style.display = 'none';
+  document.getElementById('progressNoData').style.display = 'none';
+  
+  // Средний балл
+  const avgScore = Math.round(stats.tests.reduce((sum, t) => sum + t.score, 0) / totalTests);
+  document.getElementById('avgScore').textContent = avgScore + '%';
+  
+  // Лучший результат
+  const bestScore = Math.max(...stats.tests.map(t => t.score));
+  document.getElementById('bestScore').textContent = bestScore + '%';
+  
+  // Всего вопросов решено
+  const totalQuestions = stats.tests.reduce((sum, t) => sum + t.correct, 0);
+  document.getElementById('totalQuestions').textContent = totalQuestions;
+  
+  // Отрисовка графиков
+  renderTopicsChart(stats);
+  renderGradesChart(stats);
+  renderProgressChart(stats);
+}
+
+// График по темам
+function renderTopicsChart(stats) {
+  const ctx = document.getElementById('topicsChart');
+  if (!ctx) return;
+
+  const topicData = stats.topicResults;
+  const topics = Object.keys(topicData);
+
+  if (topics.length === 0) {
+    document.getElementById('topicsNoData').style.display = 'flex';
+    return;
+  }
+
+  const data = topics.map(topic => {
+    const result = topicData[topic];
+    return Math.round(result.scores.reduce((a, b) => a + b, 0) / result.scores.length);
+  });
+
+  const colors = generateColors(topics.length);
+
+  if (charts.topics) charts.topics.destroy();
+
+  charts.topics = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: topics,
+      datasets: [{
+        label: 'Средний балл %',
+        data,
+        backgroundColor: colors.background,
+        borderColor: colors.border,
+        borderWidth: 2,
+        borderRadius: 8,
+        barThickness: 'flex',
+        maxBarThickness: 40
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          min: 0,
+          max: 100,
+          grid: { 
+            color: getGridColor(),
+            drawBorder: false
+          },
+          ticks: { 
+            color: getTextColor(),
+            padding: 8,
+            callback: function(value) {
+              return value + '%';
+            }
+          }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { 
+            color: getTextColor(),
+            padding: 8
+          }
+        }
+      },
+      layout: {
+        padding: {
+          top: 10,
+          bottom: 10,
+          left: 10,
+          right: 10
+        }
+      }
+    }
+  });
+}
+
+// График распределения оценок
+function renderGradesChart(stats) {
+  const ctx = document.getElementById('gradesChart');
+  if (!ctx) return;
+
+  const gradeCounts = { '2': 0, '3': 0, '4': 0, '5': 0 };
+  stats.tests.forEach(t => {
+    gradeCounts[t.grade] = (gradeCounts[t.grade] || 0) + 1;
+  });
+
+  const colors = ['#ef4444', '#f59e0b', '#10b981', '#6366f1'];
+
+  if (charts.grades) charts.grades.destroy();
+
+  charts.grades = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['2 (Неуд)', '3 (Удовл)', '4 (Хорошо)', '5 (Отлично)'],
+      datasets: [{
+        data: [gradeCounts['2'], gradeCounts['3'], gradeCounts['4'], gradeCounts['5']],
+        backgroundColor: colors,
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { 
+            color: getTextColor(), 
+            padding: 12,
+            font: {
+              size: 11
+            }
+          }
+        }
+      },
+      layout: {
+        padding: {
+          top: 10,
+          bottom: 10,
+          left: 10,
+          right: 10
+        }
+      }
+    }
+  });
+}
+
+// График прогресса
+function renderProgressChart(stats) {
+  const ctx = document.getElementById('progressChart');
+  if (!ctx) return;
+
+  // Берём последние 10 тестов
+  const recentTests = stats.tests.slice(-10);
+  const labels = recentTests.map((_, i) => `Тест ${i + 1}`);
+  const data = recentTests.map(t => t.score);
+
+  if (charts.progress) charts.progress.destroy();
+
+  charts.progress = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Результат %',
+        data,
+        borderColor: '#6366f1',
+        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#6366f1',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        clip: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          min: 0,
+          max: 100,
+          grid: { 
+            color: getGridColor(),
+            drawBorder: false
+          },
+          ticks: { 
+            color: getTextColor(),
+            padding: 8,
+            callback: function(value) {
+              return value + '%';
+            }
+          }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { 
+            color: getTextColor(),
+            padding: 8
+          }
+        }
+      },
+      layout: {
+        padding: {
+          top: 10,
+          bottom: 10,
+          left: 10,
+          right: 10
+        }
+      }
+    }
+  });
+}
+
+// Уничтожение всех графиков
+function destroyCharts() {
+  if (charts.topics) { charts.topics.destroy(); charts.topics = null; }
+  if (charts.grades) { charts.grades.destroy(); charts.grades = null; }
+  if (charts.progress) { charts.progress.destroy(); charts.progress = null; }
+}
+
+// Генерация цветов для графиков
+function generateColors(count) {
+  const hues = [230, 280, 340, 40, 160, 200, 260, 320];
+  const background = [];
+  const border = [];
+  
+  for (let i = 0; i < count; i++) {
+    const hue = hues[i % hues.length];
+    background.push(`hsla(${hue}, 70%, 60%, 0.7)`);
+    border.push(`hsl(${hue}, 70%, 50%)`);
+  }
+  
+  return { background, border };
+}
+
+// Получение цвета сетки в зависимости от темы
+function getGridColor() {
+  return document.body.classList.contains('light-theme') 
+    ? 'rgba(0, 0, 0, 0.1)' 
+    : 'rgba(255, 255, 255, 0.1)';
+}
+
+// Получение цвета текста в зависимости от темы
+function getTextColor() {
+  return document.body.classList.contains('light-theme') 
+    ? '#1e293b' 
+    : '#f1f5f9';
+}
+
+// Сброс всей статистики
+function resetAllStats() {
+  if (confirm('Вы уверены, что хотите сбросить всю статистику? Это действие нельзя отменить.')) {
+    localStorage.removeItem('testier_stats');
+    renderStats();
+  }
+}
 </script>
 
 </body>
