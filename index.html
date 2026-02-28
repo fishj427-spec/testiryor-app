@@ -36,7 +36,8 @@
       --primary: #6366f1;
       --primary-light: #818cf8;
       --primary-dark: #4f46e5;
-      --background: linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 50%, #f1f5f9 100%);
+      --background: #f1f5f9;
+      --background-gradient: linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 50%, #f1f5f9 100%);
       --card-bg: rgba(255, 255, 255, 0.9);
       --card-bg-solid: #ffffff;
       --text-main: #1e293b;
@@ -1051,204 +1052,6 @@
     @supports (-webkit-touch-callout: none) {
       .content { -webkit-overflow-scrolling: touch; }
     }
-
-    /* ========== УВЕДОМЛЕНИЕ ОБ ОБНОВЛЕНИИ ========== */
-    .update-notification {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--card-bg-solid);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-lg), 0 0 30px var(--primary-glow);
-      z-index: 2000;
-      max-width: 380px;
-      overflow: hidden;
-      animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: none;
-    }
-
-    .update-notification.visible { display: block; }
-
-    @keyframes fadeInUp {
-      from { 
-        transform: translateY(20px);
-        opacity: 0;
-      }
-      to { 
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeOutDown {
-      from { 
-        transform: translateY(0);
-        opacity: 1;
-      }
-      to { 
-        transform: translateY(20px);
-        opacity: 0;
-      }
-    }
-
-    .update-notification.hiding {
-      animation: fadeOutDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    .update-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .update-icon {
-      font-size: 1.8rem;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { 
-        transform: scale(1);
-        opacity: 1;
-      }
-      50% { 
-        transform: scale(1.1);
-        opacity: 0.8;
-      }
-    }
-
-    .update-title {
-      flex: 1;
-      font-weight: 700;
-      color: var(--text-main);
-      font-size: 1rem;
-    }
-
-    .update-close {
-      background: transparent;
-      border: none;
-      color: var(--text-light);
-      font-size: 1.2rem;
-      cursor: pointer;
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .update-close:active {
-      background: var(--card-bg);
-      color: var(--text-main);
-    }
-
-    .update-body { padding: 16px; }
-
-    .update-version {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .update-version-label {
-      font-size: 0.85rem;
-      color: var(--text-light);
-    }
-
-    .update-version-value {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--primary);
-      background: rgba(99, 102, 241, 0.1);
-      padding: 4px 10px;
-      border-radius: 6px;
-    }
-
-    .update-changes { margin-bottom: 16px; }
-
-    .update-changes-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-light);
-      margin-bottom: 8px;
-    }
-
-    .update-changes-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .update-changes-list li {
-      font-size: 0.85rem;
-      color: var(--text-main);
-      padding: 4px 0;
-      padding-left: 20px;
-      position: relative;
-    }
-
-    .update-changes-list li::before {
-      content: '✓';
-      position: absolute;
-      left: 0;
-      color: var(--success);
-      font-weight: 700;
-    }
-
-    .update-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .update-actions .btn {
-      flex: 1;
-      padding: 10px 14px;
-      font-size: 0.9rem;
-    }
-
-    .update-skip {
-      margin-top: 12px;
-      text-align: center;
-    }
-
-    .update-skip-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-light);
-      font-size: 0.8rem;
-      cursor: pointer;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: all 0.2s;
-    }
-
-    .update-skip-btn:active {
-      background: var(--card-bg);
-      color: var(--text-main);
-    }
-
-    .update-check-indicator {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      font-size: 0.75rem;
-      color: var(--text-light);
-      opacity: 0;
-      transition: opacity 0.3s;
-      z-index: 3000;
-      pointer-events: none;
-    }
-
-    .update-check-indicator.visible { opacity: 0.7; }
   </style>
 </head>
 <body>
@@ -1405,31 +1208,6 @@
       </div>
 
       <div class="settings-section">
-        <h3>🔄 Приложение</h3>
-        <div class="setting-item">
-          <div class="setting-info">
-            <span class="setting-label">Обновить приложение</span>
-            <span class="setting-desc">Перезагрузить страницу</span>
-          </div>
-          <button class="btn btn-primary" onclick="refreshApp()" style="padding: 10px 16px; font-size: 0.85rem;">🔄 Обновить</button>
-        </div>
-        <div class="setting-item">
-          <div class="setting-info">
-            <span class="setting-label">Тест уведомления</span>
-            <span class="setting-desc">Проверить работу уведомлений</span>
-          </div>
-          <button class="btn btn-outline" onclick="showTestUpdateNotification()" style="padding: 10px 16px; font-size: 0.85rem;">🔔 Тест</button>
-        </div>
-        <div class="setting-item">
-          <div class="setting-info">
-            <span class="setting-label">Версия</span>
-            <span class="setting-desc">Текущая версия приложения</span>
-          </div>
-          <span class="version-badge">αlpha · build 2026.02.27</span>
-        </div>
-      </div>
-
-      <div class="settings-section">
         <h3>ℹ️ О приложении</h3>
         <p class="about-text">Тестирьер — приложение для тестирования знаний по экономике. Содержит 255 вопросов с различными темами.</p>
       </div>
@@ -1439,37 +1217,6 @@
 
 <!-- Футер с версией вне контейнера -->
 <div class="version-footer">αlpha · build 2026.02.27</div>
-
-<!-- Уведомление об обновлении -->
-<div id="updateNotification" class="update-notification">
-  <div class="update-header">
-    <span class="update-icon">🎉</span>
-    <span class="update-title">Доступно обновление!</span>
-    <button class="update-close" onclick="hideUpdateNotification()">✕</button>
-  </div>
-  <div class="update-body">
-    <div class="update-version">
-      <span class="update-version-label">Новая версия:</span>
-      <span class="update-version-value" id="newVersionValue">-</span>
-    </div>
-    <div class="update-changes">
-      <div class="update-changes-title">Что нового:</div>
-      <ul class="update-changes-list" id="updateChangesList">
-        <li>Загрузка...</li>
-      </ul>
-    </div>
-    <div class="update-actions">
-      <button class="btn btn-primary" onclick="downloadUpdate()">📥 Обновить</button>
-      <button class="btn btn-outline" onclick="hideUpdateNotification()">Позже</button>
-    </div>
-    <div class="update-skip">
-      <button class="update-skip-btn" onclick="skipThisVersion()">Не показывать для этой версии</button>
-    </div>
-  </div>
-</div>
-
-<!-- Индикатор проверки -->
-<div id="updateCheckIndicator" class="update-check-indicator">🔄 Проверка обновлений...</div>
 
 <script>
 /*
@@ -5207,19 +4954,7 @@ function closeSettings() {
   document.getElementById('settingsModal').classList.remove('active');
 }
 
-function refreshApp() {
-  if (confirm('Перезагрузить страницу?')) {
-    location.reload();
-  }
-}
-
-// ========== ПРОВЕРКА ОБНОВЛЕНИЙ ==========
-const CURRENT_VERSION = '2026.02.27';
-const GITHUB_RELEASES_URL = 'https://github.com/fishj427-spec/testiryor-app/releases/download/app/Testier.apk';
-const GITHUB_RELEASES_PAGE = 'https://github.com/fishj427-spec/testiryor-app/releases/download/app/Testier.apk';
-const DEBUG_UPDATES = false; // Установите true для тестирования уведомлений
-
-// Проверка обновлений при загрузке
+// ========== ИНИЦИАЛИЗАЦИЯ ==========
 document.addEventListener('DOMContentLoaded', function() {
   startQuoteRotation();
   const searchInput = document.getElementById('searchQuestions');
@@ -5227,167 +4962,7 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('input', filterQuestions);
   }
   loadMistakes();
-  checkForUpdates();
 });
-
-function checkForUpdates() {
-  const skippedVersion = localStorage.getItem('testier_skipped_version');
-  const lastCheck = localStorage.getItem('testier_last_update_check');
-  const now = Date.now();
-  const CHECK_INTERVAL = DEBUG_UPDATES ? 0 : (24 * 60 * 60 * 1000); // 24 часа или 0 для тестов
-
-  if (DEBUG_UPDATES) {
-    console.log('🔍 [UPDATE] Проверка обновлений (DEBUG режим)');
-    alert('🔍 [UPDATE] Проверка обновлений...\nЛокальная версия: ' + CURRENT_VERSION);
-  }
-
-  // Не проверяем чаще чем раз в 24 часа (если не DEBUG)
-  if (lastCheck && (now - parseInt(lastCheck)) < CHECK_INTERVAL) {
-    if (DEBUG_UPDATES) {
-      console.log('⏭️ [UPDATE] Пропуск проверки (кэш)');
-      alert('⏭️ [UPDATE] Пропуск (кэш 24 часа)');
-    }
-    return;
-  }
-
-  // Показываем индикатор
-  const indicator = document.getElementById('updateCheckIndicator');
-  if (indicator) indicator.classList.add('visible');
-
-  // Загружаем информацию о версии
-  fetch(GITHUB_RELEASES_URL, { cache: 'no-cache' })
-    .then(response => {
-      if (!response.ok) throw new Error('Network error: ' + response.status);
-      return response.json();
-    })
-    .then(data => {
-      if (indicator) indicator.classList.remove('visible');
-      localStorage.setItem('testier_last_update_check', now.toString());
-
-      const latestVersion = data.version;
-      const changes = data.changes || [];
-
-      if (DEBUG_UPDATES) {
-        console.log('📦 [UPDATE] Локальная версия:', CURRENT_VERSION);
-        console.log('📦 [UPDATE] Версия на GitHub:', latestVersion);
-        console.log('📦 [UPDATE] Изменения:', changes);
-        console.log('📦 [UPDATE] Пропущенная версия:', skippedVersion);
-        alert('📦 [UPDATE] Версия на GitHub: ' + latestVersion + '\nИзменения: ' + JSON.stringify(changes));
-      }
-
-      // Сравниваем версии
-      const comparison = compareVersions(latestVersion, CURRENT_VERSION);
-      
-      if (DEBUG_UPDATES) {
-        console.log('📊 [UPDATE] Результат сравнения:', comparison, '(1 = новая версия доступна)');
-      }
-
-      if (comparison > 0) {
-        // Новая версия доступна
-        if (skippedVersion !== latestVersion) {
-          if (DEBUG_UPDATES) console.log('✅ [UPDATE] Показываем уведомление');
-          showUpdateNotification(latestVersion, changes);
-        } else {
-          if (DEBUG_UPDATES) console.log('⏭️ [UPDATE] Версия была пропущена');
-          if (DEBUG_UPDATES) alert('⏭️ [UPDATE] Версия была пропущена ранее');
-        }
-      } else {
-        if (DEBUG_UPDATES) console.log('✅ [UPDATE] Версия актуальна');
-        if (DEBUG_UPDATES) alert('✅ [UPDATE] Версия актуальна (GitHub: ' + latestVersion + ')');
-      }
-    })
-    .catch(error => {
-      console.error('❌ [UPDATE] Ошибка проверки:', error);
-      if (indicator) indicator.classList.remove('visible');
-      if (DEBUG_UPDATES) alert('❌ [UPDATE] Ошибка: ' + error.message);
-    });
-}
-
-function compareVersions(v1, v2) {
-  const parts1 = v1.split('.').map(Number);
-  const parts2 = v2.split('.').map(Number);
-  const len = Math.max(parts1.length, parts2.length);
-
-  for (let i = 0; i < len; i++) {
-    const n1 = parts1[i] || 0;
-    const n2 = parts2[i] || 0;
-    if (n1 > n2) return 1;
-    if (n1 < n2) return -1;
-  }
-  return 0;
-}
-
-function showUpdateNotification(version, changes) {
-  console.log('🔔 [UPDATE] Показ уведомления:', version, changes);
-  
-  const versionEl = document.getElementById('newVersionValue');
-  const changesList = document.getElementById('updateChangesList');
-  const notification = document.getElementById('updateNotification');
-  
-  console.log('🔍 [UPDATE] Элементы:', { versionEl, changesList, notification });
-  
-  if (versionEl) versionEl.textContent = version;
-  
-  if (changesList) {
-    if (changes && changes.length > 0) {
-      changesList.innerHTML = changes.map(change => `<li>${change}</li>`).join('');
-    } else {
-      changesList.innerHTML = '<li>Улучшения и исправления</li>';
-    }
-  }
-  
-  if (notification) {
-    notification.classList.add('visible');
-    console.log('✅ [UPDATE] Уведомление показано');
-  } else {
-    console.error('❌ [UPDATE] Элемент updateNotification не найден!');
-  }
-}
-
-function hideUpdateNotification() {
-  const notification = document.getElementById('updateNotification');
-  notification.classList.add('hiding');
-  setTimeout(() => {
-    notification.classList.remove('visible', 'hiding');
-  }, 400);
-}
-
-function skipThisVersion() {
-  const version = document.getElementById('newVersionValue').textContent;
-  localStorage.setItem('testier_skipped_version', version);
-  hideUpdateNotification();
-}
-
-function downloadUpdate() {
-  window.open(GITHUB_RELEASES_PAGE, '_blank');
-  hideUpdateNotification();
-}
-
-// Тестовая функция для проверки уведомления
-function showTestUpdateNotification() {
-  const testVersion = '2026.02.28';
-  const testChanges = [
-    '🎨 Тестовое улучшение 1',
-    '⚡ Тестовое улучшение 2',
-    '🐛 Исправление тестовой ошибки'
-  ];
-  showUpdateNotification(testVersion, testChanges);
-}
-
-// Принудительный сброс кэша обновлений
-function resetUpdateCache() {
-  localStorage.removeItem('testier_last_update_check');
-  localStorage.removeItem('testier_skipped_version');
-  console.log('✅ Кэш обновлений сброшен');
-  checkForUpdates();
-}
-
-// Модифицируем функцию next для сохранения ошибок
-const originalNextFunc = next;
-next = function wrappedNext() {
-  originalNextFunc();
-  saveMistakes();
-};
 
 function renderQuestionList(items) {
   const container = document.getElementById('listContent');
@@ -5464,18 +5039,6 @@ function goBack() {
   }
 }
 
-// Инициализация после загрузки DOM
-document.addEventListener('DOMContentLoaded', function() {
-  startQuoteRotation();
-
-  const searchInput = document.getElementById('searchQuestions');
-  if (searchInput) {
-    searchInput.addEventListener('input', filterQuestions);
-  }
-  
-  loadMistakes();
-});
-
 // Экспорт функций в глобальную область (для onclick)
 window.start = start;
 window.prev = prev;
@@ -5491,7 +5054,6 @@ window.showAppInfo = showAppInfo;
 window.goBack = goBack;
 window.openSettings = openSettings;
 window.closeSettings = closeSettings;
-window.refreshApp = refreshApp;
 window.resetMistakes = resetMistakes;
 window.showStats = showStats;
 </script>
