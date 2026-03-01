@@ -1335,10 +1335,9 @@
 
     <!-- ===== ЭКРАН СТАТИСТИКИ ===== -->
     <div id="stats" class="screen">
-      <h2 style="margin-bottom:8px">📊 Статистика</h2>
+      <h2 style="margin-bottom:8px">Статистика</h2>
 
       <div class="stats-grid" style="margin-bottom: 20px;">
-        <div class="stat"><div class="stat-val" id="totalTests">0</div><div class="stat-lbl">тестов пройдено</div></div>
         <div class="stat"><div class="stat-val" id="avgScore">0</div><div class="stat-lbl">средняя оценка</div></div>
         <div class="stat"><div class="stat-val" id="bestScore">0</div><div class="stat-lbl">лучший результат</div></div>
       </div>
@@ -5495,14 +5494,13 @@ function saveTestResult(score, correct, total, time, grade) {
 // Показ статистики
 function showStats() {
   show('stats', { updateHistory: true });
-  setTimeout(renderStats, 100);
+  renderStats();
 }
 
 // Отрисовка статистики
 function renderStats() {
   const stats = loadStats();
   const totalTests = stats.tests.length;
-  document.getElementById('totalTests').textContent = totalTests;
 
   if (totalTests === 0) {
     document.getElementById('avgScore').textContent = '0';
