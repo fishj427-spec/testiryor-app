@@ -1335,9 +1335,10 @@
 
     <!-- ===== ЭКРАН СТАТИСТИКИ ===== -->
     <div id="stats" class="screen">
-      <h2 style="margin-bottom:8px">Статистика</h2>
+      <h2 style="margin-bottom:8px">📊 Статистика</h2>
 
       <div class="stats-grid" style="margin-bottom: 20px;">
+        <div class="stat"><div class="stat-val" id="totalTests">0</div><div class="stat-lbl">тестов пройдено</div></div>
         <div class="stat"><div class="stat-val" id="avgScore">0</div><div class="stat-lbl">средняя оценка</div></div>
         <div class="stat"><div class="stat-val" id="bestScore">0</div><div class="stat-lbl">лучший результат</div></div>
       </div>
@@ -4837,6 +4838,16 @@ function show(id, options = {}) {
   // Обновляем активную кнопку навигации
   updateNavActive(id);
 
+  // Скрываем навигацию на экранах теста и результатов
+  const nav = document.getElementById('bottomNav');
+  if (nav) {
+    if (id === 'quiz' || id === 'result') {
+      nav.style.display = 'none';
+    } else {
+      nav.style.display = 'flex';
+    }
+  }
+
   if (id === 'subject') {
     startQuoteRotation();
   } else {
@@ -5302,11 +5313,15 @@ function resetMistakes() {
 function openSettings() {
   loadModeSettings();
   document.getElementById('settingsModal').classList.add('active');
+  history.pushState({ screen: 'settings' }, '', location.pathname);
 }
 
 function closeSettings() {
   saveModeSettings();
   document.getElementById('settingsModal').classList.remove('active');
+  if (history.length > 1) {
+    history.back();
+  }
 }
 
 // ========== ИНИЦИАЛИЗАЦИЯ ==========
@@ -5372,6 +5387,23 @@ function showList() {
 // Обработка кнопки "Назад" браузера
 window.addEventListener('popstate', function(event) {
   isPopStateEvent = true;
+  
+  // Закрываем модальные окна если открыты
+  const settingsModal = document.getElementById('settingsModal');
+  const modeSettingsModal = document.getElementById('modeSettingsModal');
+  
+  if (settingsModal && settingsModal.classList.contains('active')) {
+    settingsModal.classList.remove('active');
+    isPopStateEvent = false;
+    return;
+  }
+  
+  if (modeSettingsModal && modeSettingsModal.classList.contains('active')) {
+    modeSettingsModal.classList.remove('active');
+    isPopStateEvent = false;
+    return;
+  }
+  
   const stateObj = event.state;
   if (stateObj && stateObj.screen) {
     show(stateObj.screen, { updateHistory: false });
@@ -5463,7 +5495,7 @@ function saveTestResult(score, correct, total, time, grade) {
 // Показ статистики
 function showStats() {
   show('stats', { updateHistory: true });
-  renderStats();
+  setTimeout(renderStats, 100);
 }
 
 // Отрисовка статистики
