@@ -47,8 +47,8 @@
         }
         *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
         body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,var(--bg-base),var(--bg-surface));min-height:100vh;display:flex;align-items:center;justify-content:center;padding:0;color:var(--text-primary);overflow:hidden;transition:background .5s,color .5s}
-        .phone-container{width:100%;max-width:420px;height:100dvh;background:var(--bg-surface);border-radius:32px;box-shadow:var(--shadow-lg),0 0 0 1px var(--card-border);overflow:hidden;position:relative;border:1px solid var(--card-border);display:flex;flex-direction:column}
-        @media (min-width: 481px) { body{padding:20px} .phone-container{max-height:780px;height:85vh;border-radius:32px;border:1px solid var(--card-border)} }
+        .phone-container{width:100%;max-width:420px;height:100dvh;background:var(--bg-surface);border-radius:0px;box-shadow:var(--shadow-lg),0 0 0 1px var(--card-border);overflow:hidden;position:relative;border:1px solid var(--card-border);display:flex;flex-direction:column}
+        @media (min-width: 481px) { body{padding:20px} .phone-container{max-height:780px;height:85vh;border-radius:0px;border:1px solid var(--card-border)} }
         .content-area{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column}
         .screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:20px 18px max(80px, calc(env(safe-area-inset-bottom) + 70px));opacity:0;transform:translateY(24px) scale(0.97);transition:opacity .45s ease,transform .45s cubic-bezier(0.4,0,0.2,1);pointer-events:none;overflow-y:auto}
         .screen.active{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
