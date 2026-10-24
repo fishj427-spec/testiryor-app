@@ -19,7 +19,7 @@ function navigateTo(screenId, addToHistory = true) {
     if (addToHistory && screenHistory[screenHistory.length - 1] !== screenId) {
         screenHistory.push(screenId);
         try {
-            window.history.pushState({ screen: screenId }, "", "#" + screenId);
+            window.history.pushState({ screen: screenId }, "", window.location.href);
         } catch (e) {}
     }
     updateTelegramBackButton();
@@ -30,6 +30,9 @@ function navigateTo(screenId, addToHistory = true) {
         activeTab = document.querySelector(`.tab-item[data-tab="disciplines"]`);
     }
     if (activeTab) activeTab.classList.add("active");
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    const target = document.getElementById(screenId);
+    if (target) setTimeout(() => target.classList.add("active"), 50);
     if (screenId === "screen-home") renderHome();
     if (screenId === "screen-stats") renderStats();
     if (screenId === "screen-settings") renderSettings();
@@ -45,17 +48,6 @@ function navigateTo(screenId, addToHistory = true) {
         renderAllQuestions();
     }
     if (screenId === "screen-review") renderTestReview();
-
-    requestAnimationFrame(() => {
-        document.querySelectorAll(".screen").forEach(s => {
-            if (s.id !== screenId) s.classList.remove("active");
-        });
-        const target = document.getElementById(screenId);
-        if (target) {
-            target.classList.add("active");
-            target.scrollTop = 0;
-        }
-    });
 }
 function canGoBack() {
     const modal = document.getElementById("exam-config-modal");
@@ -70,9 +62,6 @@ function canGoBack() {
     return false;
 }
 function handleBackGesture() {
-    goBack();
-}
-function goBack() {
     const modal = document.getElementById("exam-config-modal");
     if (modal && modal.classList.contains("active")) {
         closeExamModal();
@@ -98,59 +87,48 @@ function goBack() {
         setTimeout(() => document.getElementById("screen-onboard-1")?.classList.add("active"), 50);
         return;
     }
+    goBack();
+}
+function goBack() {
+    const modal = document.getElementById("exam-config-modal");
+    if (modal && modal.classList.contains("active")) {
+        closeExamModal();
+        return;
+    }
+    const rehearsalModal = document.getElementById("rehearsal-config-modal");
+    if (rehearsalModal && rehearsalModal.classList.contains("active")) {
+        closeRehearsalModal();
+        return;
+    }
+    const aboutModal = document.getElementById("about-info-modal");
+    if (aboutModal && aboutModal.classList.contains("active")) {
+        closeAboutModal();
+        return;
+    }
     if (screenHistory.length > 1) {
-        window.history.back();
+        if (window.history.state && window.history.state.screen) {
+            window.history.back();
+        } else {
+            screenHistory.pop();
+            const prev = screenHistory[screenHistory.length - 1];
+            navigateTo(prev, false);
+        }
     }
 }
 function goHome() {
     screenHistory = ["screen-home"];
     state.reviewMode = false;
     try {
-        window.history.pushState({ screen: "screen-home" }, "", "#screen-home");
+        window.history.pushState({ screen: "screen-home" }, "", window.location.href);
     } catch (e) {}
     navigateTo("screen-home", false);
 }
 // Слушатель системного жеста «Назад» / кнопки браузера (Android / iOS)
 window.addEventListener("popstate", (e) => {
-    // 1. Модальные окна закрываются в первую очередь
-    const modal = document.getElementById("exam-config-modal");
-    if (modal && modal.classList.contains("active")) {
-        modal.classList.remove("active");
-        updateTelegramBackButton();
-        return;
-    }
-    const rehearsalModal = document.getElementById("rehearsal-config-modal");
-    if (rehearsalModal && rehearsalModal.classList.contains("active")) {
-        rehearsalModal.classList.remove("active");
-        updateTelegramBackButton();
-        return;
-    }
-    const aboutModal = document.getElementById("about-info-modal");
-    if (aboutModal && aboutModal.classList.contains("active")) {
-        aboutModal.classList.remove("active");
-        updateTelegramBackButton();
-        return;
-    }
-
-    // 2. Шаги онбординга
-    if (document.getElementById("screen-onboard-3")?.classList.contains("active")) {
-        document.getElementById("screen-onboard-3").classList.remove("active");
-        document.getElementById("screen-onboard-2")?.classList.add("active");
-        return;
-    }
-    if (document.getElementById("screen-onboard-2")?.classList.contains("active")) {
-        document.getElementById("screen-onboard-2").classList.remove("active");
-        document.getElementById("screen-onboard-1")?.classList.add("active");
-        return;
-    }
-
-    // 3. Навигация по экранам
     if (screenHistory.length > 1) {
         screenHistory.pop();
-        const prev = (e.state && e.state.screen) || screenHistory[screenHistory.length - 1] || "screen-disciplines";
+        const prev = screenHistory[screenHistory.length - 1] || "screen-disciplines";
         navigateTo(prev, false);
-    } else if (e.state && e.state.screen && e.state.screen !== screenHistory[0]) {
-        navigateTo(e.state.screen, false);
     }
 });
 function initBackGesture() {}
