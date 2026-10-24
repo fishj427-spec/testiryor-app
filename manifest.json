@@ -5,9 +5,9 @@
   "description": "Приложение для подготовки и тестирования по экономике и другим дисциплинам",
   "start_url": "./index.html",
   "scope": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#0B1120",
-  "theme_color": "#6366F1",
+  "theme_color": "#0B1120",
   "orientation": "portrait",
   "icons": [
     {

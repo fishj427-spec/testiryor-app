@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hasVisited === "true") {
         screenHistory = ["screen-disciplines"];
         try {
-            window.history.replaceState({ screen: "screen-disciplines" }, "", window.location.href);
+            window.history.replaceState({ screen: "screen-disciplines" }, "", "#screen-disciplines");
         } catch (e) {}
         navigateTo("screen-disciplines", false);
     } else {

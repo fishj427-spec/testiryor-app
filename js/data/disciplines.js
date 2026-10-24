@@ -566,7 +566,6 @@ function setActiveDiscipline(id, silent = false) {
     }
     updateAppForActiveDiscipline();
     if (!silent) {
-        showDisciplineToast(`Выбрана дисциплина: «${disc.title}» (${disc.questions.length} вопр.)`);
         vibrate(15);
     }
 }
@@ -627,19 +626,7 @@ function updateAppForActiveDiscipline() {
     }
 }
 function showDisciplineToast(message) {
-    let toast = document.getElementById("discipline-toast");
-    if (!toast) {
-        toast = document.createElement("div");
-        toast.id = "discipline-toast";
-        toast.className = "discipline-toast";
-        document.body.appendChild(toast);
-    }
-    toast.textContent = message;
-    toast.classList.add("visible");
-    clearTimeout(toast._timeout);
-    toast._timeout = setTimeout(() => {
-        toast.classList.remove("visible");
-    }, 2400);
+    // Disabled toast notification
 }
 if (typeof window !== "undefined") {
     window.DISCIPLINES_DATA = DISCIPLINES_DATA;
