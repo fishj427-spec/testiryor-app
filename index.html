@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QuizApp — Экономика</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-512.png">
+    <meta name="theme-color" content="#6366F1">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+  }
+</script>
+</head>
+<body class="theme-dark">
+<div class="phone-container" id="app">
+    <div class="content-area">
+        <div class="screen onboarding" id="screen-onboard-1">
+            <button class="skip-btn" onclick="skipOnboarding()">Пропустить</button>
+            <div class="onboarding-center">
+                <div class="onboarding-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/></svg></div>
+                <h2 class="onboarding-title">Тесты по экономике</h2>
+                <p class="onboarding-desc">255 вопросов для проверки знаний. Выбери режим и начни!</p>
+                <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
+            </div>
+            <div class="onboarding-bottom">
+                <button class="btn btn-primary onboarding-btn" onclick="goToOnboarding(2)">Далее →</button>
+            </div>
+        </div>
+        <div class="screen onboarding" id="screen-onboard-2">
+            <button class="skip-btn" onclick="skipOnboarding()">Пропустить</button>
+            <div class="onboarding-center">
+                <div class="onboarding-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+                <h2 class="onboarding-title">Контрольная</h2>
+                <p class="onboarding-desc">20 вопросов за 45 минут. Ответы не подсвечиваются.</p>
+                <div class="dots"><span class="dot"></span><span class="dot active"></span><span class="dot"></span></div>
+            </div>
+            <div class="onboarding-bottom">
+                <button class="btn btn-primary onboarding-btn" onclick="goToOnboarding(3)">Далее →</button>
+            </div>
+        </div>
+        <div class="screen onboarding" id="screen-onboard-3">
+            <div class="onboarding-center">
+                <div class="onboarding-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+                <h2 class="onboarding-title">Репетиционный</h2>
+                <p class="onboarding-desc">Учись без ограничений. Сразу видно правильный ответ.</p>
+                <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot active"></span></div>
+            </div>
+            <div class="onboarding-bottom">
+                <button class="btn btn-primary onboarding-btn" onclick="finishOnboarding()">Начать <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></button>
+            </div>
+        </div>
+        <div class="screen" id="screen-home">
+            <div class="home-top-bar anim-fadeInUp" style="display:flex;align-items:center;margin-bottom:12px;">
+                <button type="button" class="discipline-badge-btn" onclick="navigateTo('screen-disciplines')" title="Выбрать другую дисциплину" aria-label="Выбрать дисциплину">
+                    <span class="discipline-badge-icon" id="home-discipline-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </span>
+                    <span class="discipline-badge-name" id="home-discipline-name">Экономика</span>
+                    <svg class="discipline-badge-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+            </div>
+            <div class="home-header anim-fadeInUp">
+                <h1 class="home-title" id="home-main-title">Экономика <span>и финансы</span></h1>
+                <p class="home-subtitle" id="home-main-subtitle">Выбери формат тестирования</p>
+            </div>
+            <div class="week-calendar" id="week-calendar"></div>
+            <div class="milestone-badge" id="milestone-badge">
+                <span class="milestone-fire"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
+                <div class="milestone-text"><span class="milestone-days" id="milestone-days"></span><span class="milestone-label" id="milestone-label"></span></div>
+            </div>
+            <div class="section-label anim-fadeInUp anim-fadeInUp-d1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;color:var(--primary);flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Режим тестирования</div>
+            <div class="mode-options anim-fadeInUp anim-fadeInUp-d2">
+                <div class="mode-card-large card-exam" onclick="openExamModal()" role="button" tabindex="0">
+                    <div class="mode-icon-box icon-box-exam">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <div class="mode-info">
+                        <div class="mode-title-row">
+                            <h3 class="mode-title">Контрольная</h3>
+                            <span class="mode-badge-large badge-exam">Экзамен</span>
+                        </div>
+                        <p class="mode-subtitle" id="exam-mode-subtitle">20 вопросов · 45 минут</p>
+                    </div>
+                </div>
+                <div class="mode-card-large card-rehearsal" onclick="openRehearsalModal()" role="button" tabindex="0">
+                    <div class="mode-icon-box icon-box-rehearsal">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                    </div>
+                    <div class="mode-info">
+                        <div class="mode-title-row">
+                            <h3 class="mode-title">Репетиционный</h3>
+                            <span class="mode-badge-large badge-rehearsal">Обучение</span>
+                        </div>
+                        <p class="mode-subtitle" id="rehearsal-mode-subtitle">Все вопросы · без ограничения времени</p>
+                    </div>
+                </div>
+                <div class="mode-card-large card-questions" onclick="navigateTo('screen-questions')" role="button" tabindex="0">
+                    <div class="mode-icon-box icon-box-questions">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                            <line x1="8" y1="11" x2="16" y2="11"/>
+                            <line x1="8" y1="15" x2="16" y2="15"/>
+                        </svg>
+                    </div>
+                    <div class="mode-info">
+                        <div class="mode-title-row">
+                            <h3 class="mode-title">Список вопросов</h3>
+                            <span class="mode-badge-large badge-questions">Справочник</span>
+                        </div>
+                        <p class="mode-subtitle">Просмотр всех вопросов</p>
+                    </div>
+                </div>
+            </div>
+            <div id="home-discipline-notice" class="home-discipline-notice anim-fadeInUp anim-fadeInUp-d3" style="display:none;"></div>
+        </div>
+        <div class="screen" id="screen-questions">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--card-border);flex-shrink:0"><button class="back-btn" onclick="goBack()" aria-label="Назад" title="Назад"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><h1 style="font-size:18px;font-weight:700">Список вопросов</h1></div>
+            <div class="search-container" style="flex-shrink:0"><span class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><input type="text" class="search-input" id="search-input" placeholder="Поиск по вопросам..." oninput="filterQuestions()"></div>
+            <div class="questions-tag-filter" id="questions-tag-filter"></div>
+            <div class="search-count" id="search-count" style="flex-shrink:0"></div>
+            <div id="questions-list-container" style="flex:1"></div>
+        </div>
+        <div class="screen" id="screen-review">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--card-border)"><button class="back-btn" onclick="goBack()" aria-label="Назад" title="Назад"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><h1 style="font-size:18px;font-weight:700">Разбор теста</h1></div>
+            <div class="search-count" id="review-count"></div>
+            <div id="review-list-container" style="flex:1;overflow-y:full"></div>
+        </div>
+        <div class="screen" id="screen-stats">
+            <div class="stats-header"><div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><button class="back-btn" onclick="goBack()" aria-label="Назад" title="Назад"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><h1 style="font-size:20px;font-weight:800;display:flex;align-items:center;gap:8px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;color:var(--primary);flex-shrink:0"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg> Статистика</h1></div></div>
+            <div id="stats-content"></div>
+        </div>
+        <div class="screen" id="screen-settings">
+            <div class="stats-header"><div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><button class="back-btn" onclick="goBack()" aria-label="Назад" title="Назад"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><h1 style="font-size:20px;font-weight:800;display:flex;align-items:center;gap:8px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;color:var(--primary);flex-shrink:0"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Настройки</h1></div></div>
+            <div id="settings-content"></div>
+        </div>
+        <div class="screen" id="screen-changelog">
+            <div class="stats-header"><div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><button class="back-btn" onclick="goBack()" aria-label="Назад" title="Назад"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><h1 style="font-size:20px;font-weight:800;display:flex;align-items:center;gap:8px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;color:var(--primary);flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Список изменений</h1></div></div>
+            <div id="changelog-content"></div>
+        </div>
+        <div class="screen" id="screen-disciplines">
+            <div class="disciplines-header">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                    <button class="back-btn" id="disciplines-back-btn" onclick="goBack()" aria-label="Назад" title="Назад">
+                        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <div>
+                        <h1 style="font-size:20px;font-weight:800;display:flex;align-items:center;gap:8px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;color:var(--primary);flex-shrink:0"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                            Выбор дисциплины
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div id="disciplines-list" class="disciplines-list"></div>
+        </div>
+        <div class="screen quiz-screen" id="screen-quiz">
+            <div class="quiz-top-bar"><div class="quiz-top-bar-left"><button class="back-btn" onclick="goBack()" aria-label="Назад" title="Назад"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><span class="quiz-mode-badge" id="quiz-mode-badge">Контрольная</span></div><span class="quiz-timer" id="quiz-timer" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="timer-svg"><circle cx="12" cy="14" r="8"/><line x1="12" y1="14" x2="12" y2="10"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="10" y1="2" x2="14" y2="2"/></svg><span id="quiz-timer-text">45:00</span></span></div>
+            <div class="progress-section"><div class="progress-info"><span class="progress-label">Прогресс</span><span class="progress-counter" id="progress-counter">1 / 20</span></div><div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:5%"></div></div></div>
+            <div class="question-text" id="question-text"></div>
+            <div class="question-hint" id="question-hint" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hint-svg"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span id="hint-text"></span></div>
+            <div class="answers-list" id="answers-list"></div>
+            <div class="quiz-nav" id="quiz-nav"><button class="btn btn-prev" id="btn-prev" onclick="goToPrevQuestion()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="svg-inline" style="margin-right:4px"><polyline points="15 18 9 12 15 6"/></svg> Назад</button><button class="btn btn-next" id="btn-next" onclick="goToNextQuestion()">Далее <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="svg-inline" style="margin-left:4px"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+        </div>
+        <div class="screen results-screen" id="screen-results">
+            <div class="results-icon" id="results-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-inline is-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
+            <div class="score-circle"><svg viewBox="0 0 130 130"><defs><linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#818CF8"/><stop offset="100%" stop-color="#06B6D4"/></linearGradient></defs><circle class="score-circle-bg" cx="65" cy="65" r="60"/><circle class="score-circle-fill" id="score-circle-fill" cx="65" cy="65" r="60"/></svg><div class="score-circle-text" id="score-circle-text">0%</div></div>
+            <h2 class="results-title" id="results-title">Отлично!</h2>
+            <p class="results-subtitle" id="results-subtitle"></p>
+            <div class="results-stats"><div class="stat-card"><div class="stat-value" id="stat-correct">0</div><div class="stat-label">Правильно</div></div><div class="stat-card"><div class="stat-value" id="stat-grade">0</div><div class="stat-label">Оценка</div></div><div class="stat-card"><div class="stat-value" id="stat-total">0</div><div class="stat-label">Всего</div></div></div>
+            <div class="results-actions">
+                <button class="btn btn-primary" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> На главную</button>
+                <button class="btn btn-secondary" onclick="openTestReview()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Разобрать вопросы теста</button>
+            </div>
+        </div>
+        <div class="exam-overlay" id="timeup-overlay"><div class="timeup-icon" style="margin-bottom:16px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><polyline points="12 9 12 13 15 15"/><line x1="5" y1="3" x2="2" y2="6"/><line x1="19" y1="3" x2="22" y2="6"/><line x1="6.38" y1="18.7" x2="4.5" y2="21"/><line x1="17.64" y1="18.7" x2="19.5" y2="21"/></svg></div><h2>Время вышло!</h2><p id="timeup-desc">Время истекло. Посмотрим твой результат.</p><button class="btn btn-primary" onclick="showResults()" style="width:auto;padding:14px 40px">Результаты</button></div>
+        <!-- [МОДАЛКА] Настройка параметров контрольного теста -->
+        <div class="exam-modal-overlay" id="exam-config-modal" onclick="onExamModalOverlayClick(event)">
+            <div class="exam-modal-card" id="exam-modal-card">
+                <div class="modal-drag-handle"></div>
+                <div class="exam-modal-header">
+                    <div class="exam-modal-header-left">
+                        <div class="exam-modal-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <h2 class="exam-modal-title">Контрольная</h2>
+                                <span class="mode-badge-large badge-exam">Экзамен</span>
+                            </div>
+                            <p class="exam-modal-subtitle">Настройка параметров тестирования</p>
+                        </div>
+                    </div>
+                    <button type="button" class="exam-modal-close" onclick="closeExamModal()" aria-label="Закрыть" title="Закрыть">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="exam-modal-body">
+                    <!-- Количество вопросов -->
+                    <div class="exam-modal-section">
+                        <div class="exam-modal-section-header">
+                            <span class="exam-modal-section-label">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                Количество вопросов
+                            </span>
+                            <div class="exam-stepper">
+                                <button type="button" class="stepper-btn" onclick="stepExamQCount(-5)" aria-label="Меньше">−</button>
+                                <span class="stepper-val" id="exam-stepper-q-val">20</span>
+                                <button type="button" class="stepper-btn" onclick="stepExamQCount(5)" aria-label="Больше">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ограничение по времени -->
+                    <div class="exam-modal-section">
+                        <div class="exam-modal-section-header">
+                            <span class="exam-modal-section-label">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                Время на тест
+                            </span>
+                            <div class="exam-stepper">
+                                <button type="button" class="stepper-btn" onclick="stepExamTime(-5)" aria-label="Меньше">−</button>
+                                <span class="stepper-val" id="exam-stepper-time-val">45 мин</span>
+                                <button type="button" class="stepper-btn" onclick="stepExamTime(5)" aria-label="Больше">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Показ верных ответов -->
+                    <div class="exam-modal-section">
+                        <div class="exam-modal-section-header" style="cursor:pointer;" onclick="toggleExamInstantFeedback()">
+                            <span class="exam-modal-section-label" style="display:flex;align-items:center;gap:8px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                Показ верных ответов
+                            </span>
+                            <label class="switch-toggle" onclick="event.stopPropagation()">
+                                <input type="checkbox" id="exam-instant-feedback-toggle" onchange="setExamInstantFeedback(this.checked)">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Итоговая карточка-сводка -->
+                    <div class="exam-modal-summary" id="exam-modal-summary">
+                        <div class="exam-summary-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                        <div class="exam-summary-text">
+                            <div class="exam-summary-title" id="exam-summary-title">20 вопросов · 45 минут</div>
+                            <div class="exam-summary-sub" id="exam-summary-sub">В среднем ~2.2 мин на 1 вопрос</div>
+                        </div>
+                    </div>
+                    <!-- Кнопка запуска -->
+                    <button type="button" class="btn btn-primary exam-start-btn" onclick="confirmStartExam()">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        Начать контрольную
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- [МОДАЛКА] Настройка параметров репетиционного теста -->
+        <div class="exam-modal-overlay" id="rehearsal-config-modal" onclick="onRehearsalModalOverlayClick(event)">
+            <div class="exam-modal-card" id="rehearsal-modal-card">
+                <div class="modal-drag-handle"></div>
+                <div class="exam-modal-header">
+                    <div class="exam-modal-header-left">
+                        <div class="exam-modal-icon" style="background:rgba(6,182,212,0.14);border-color:rgba(6,182,212,0.3);color:var(--accent);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <h2 class="exam-modal-title">Репетиционный</h2>
+                                <span class="mode-badge-large badge-rehearsal">Обучение</span>
+                            </div>
+                            <p class="exam-modal-subtitle">Выбор темы или всей базы вопросов</p>
+                        </div>
+                    </div>
+                    <button type="button" class="exam-modal-close" onclick="closeRehearsalModal()" aria-label="Закрыть" title="Закрыть">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="exam-modal-body">
+                    <div class="rehearsal-options-list" id="rehearsal-options-list"></div>
+                    <!-- Итоговая карточка-сводка -->
+                    <div class="exam-modal-summary" style="background:rgba(6,182,212,0.08);border-color:rgba(6,182,212,0.25);">
+                        <div class="exam-summary-icon" style="background:rgba(6,182,212,0.16);color:var(--accent);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                        </div>
+                        <div class="exam-summary-text">
+                            <div class="exam-summary-title" id="rehearsal-summary-title">Все вопросы · 255 заданий</div>
+                            <div class="exam-summary-sub" id="rehearsal-summary-sub">Полная база: теория, задачи и формулы</div>
+                        </div>
+                    </div>
+                    <!-- Кнопка запуска -->
+                    <button type="button" class="btn btn-primary rehearsal-start-btn" onclick="confirmStartRehearsal()">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        Начать тренировку
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- [МОДАЛКА] Подробная информация о проекте -->
+        <div class="about-modal-overlay" id="about-info-modal" onclick="onAboutModalOverlayClick(event)">
+            <div class="about-modal-card">
+                <div class="modal-drag-handle"></div>
+                <div class="exam-modal-header">
+                    <div class="exam-modal-header-left">
+                        <div class="about-app-icon" style="width:40px;height:40px;border-radius:11px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <h2 class="exam-modal-title">О проекте</h2>
+                                <span class="about-badge">Справка</span>
+                            </div>
+                            <p class="exam-modal-subtitle">QuizApp v2.9.0</p>
+                        </div>
+                    </div>
+                    <button type="button" class="exam-modal-close" onclick="closeAboutModal()" aria-label="Закрыть" title="Закрыть">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="about-detail-section">
+                    <span class="about-detail-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                        Назначение тренажёра
+                    </span>
+                    <div class="about-detail-box">
+                        Приложение создано для глубокого освоения и оперативного закрепления учебного материала по курсу <strong>«Экономика»</strong>. Включает 255 верифицированных вопросов, задачи с расчётами и формулы.
+                    </div>
+                </div>
+                <div class="about-detail-section">
+                    <span class="about-detail-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        Критерии оценивания (5-балльная шкала)
+                    </span>
+                    <div class="about-detail-box" style="padding:4px 10px;">
+                        <table class="grade-table">
+                            <thead>
+                                <tr><th>Результат</th><th>Процент</th><th>Оценка</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Отлично</td><td>85% — 100%</td><td><span class="grade-tag grade-5">5</span></td></tr>
+                                <tr><td>Хорошо</td><td>70% — 84%</td><td><span class="grade-tag grade-4">4</span></td></tr>
+                                <tr><td>Удовлетворительно</td><td>50% — 69%</td><td><span class="grade-tag grade-3">3</span></td></tr>
+                                <tr><td>Неудовлетворительно</td><td>0% — 49%</td><td><span class="grade-tag grade-2">2</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="about-detail-section">
+                    <span class="about-detail-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        Режимы подготовки
+                    </span>
+                    <div class="about-detail-box">
+                        • <strong>Контрольная:</strong> тест с выбором количества вопросов и лимита времени (или без него) для приближения к реальному экзамену.<br>
+                        • <strong>Репетиционный:</strong> прохождение всей базы вопросов с мгновенной проверкой каждого ответа.<br>
+                        • <strong>Список вопросов:</strong> справочник всех заданий с правильными ответами и фильтрацией по темам и задачам.
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="closeAboutModal()" style="margin-top:6px;width:100%;border-radius:var(--radius-full)">
+                    Понятно
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="tab-bar" id="tab-bar">
+        <button class="tab-item active" data-tab="disciplines" onclick="navigateTo('screen-disciplines')" aria-label="Выбор дисциплин"><div class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><span class="tab-label">Дисциплины</span></button>
+        <button class="tab-item" data-tab="stats" onclick="navigateTo('screen-stats')" aria-label="Статистика"><div class="tab-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><span class="tab-label">Статистика</span></button>
+        <button class="tab-item" data-tab="settings" onclick="navigateTo('screen-settings')" aria-label="Настройки"><div class="tab-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div><span class="tab-label">Настройки</span></button>
+        <button class="tab-item" data-tab="changelog" onclick="navigateTo('screen-changelog')" aria-label="Список изменений"><div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><span class="tab-label">Изменения</span></button>
+    </div>
+</div>
+<canvas id="confetti-canvas"></canvas>
+    <!-- 1. Банк данных и иконки -->
+    <script src="js/data/questions.js"></script>
+    <script src="js/data/disciplines.js"></script>
+    <script src="js/data/icons.js"></script>
+    <!-- 2. Ядро и управление состоянием -->
+    <script src="js/core/utils.js"></script>
+    <script src="js/core/state.js"></script>
+    <script src="js/core/navigation.js"></script>
+    <!-- 3. Модальные окна конфигурации -->
+    <script src="js/modals/exam-modal.js"></script>
+    <script src="js/modals/rehearsal-modal.js"></script>
+    <script src="js/modals/about-modal.js"></script>
+    <!-- 4. Экраны приложения -->
+    <script src="js/screens/onboarding.js"></script>
+    <script src="js/screens/home.js"></script>
+    <script src="js/screens/questions.js"></script>
+    <script src="js/screens/review.js"></script>
+    <script src="js/screens/quiz.js"></script>
+    <script src="js/screens/stats.js"></script>
+    <script src="js/screens/settings.js"></script>
+    <script src="js/screens/changelog.js"></script>
+    <script src="js/screens/disciplines.js"></script>
+    <!-- 5. Главная точка входа приложения -->
+    <script src="js/app.js"></script>
+</body>
+</html>

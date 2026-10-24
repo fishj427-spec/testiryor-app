@@ -1,0 +1,4 @@
+function goToOnboarding(step) { document.getElementById(`screen-onboard-${step-1}`).classList.remove("active"); setTimeout(() => document.getElementById(`screen-onboard-${step}`).classList.add("active"), 300); }
+function skipOnboarding() { localStorage.setItem("visited","true"); screenHistory = ["screen-disciplines"]; try { window.history.replaceState({ screen: "screen-disciplines" }, "", window.location.href); } catch (e) {} navigateTo("screen-disciplines", false); }
+function finishOnboarding() { localStorage.setItem("visited","true"); screenHistory = ["screen-disciplines"]; try { window.history.replaceState({ screen: "screen-disciplines" }, "", window.location.href); } catch (e) {} navigateTo("screen-disciplines", false); }
+// [ЭКРАН] Главный экран — Календарь недели с прокруткой прошлых недель
