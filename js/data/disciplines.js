@@ -399,7 +399,7 @@ const DISCIPLINES_DATA = {
         heroTitle: "Экономика <span>и финансы</span>",
         category: "economics",
         categoryLabel: "ЭКОНОМИКА",
-        iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>',
+        iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M3 10h18"/><path d="M12 3l9 4H3l9-4z"/><line x1="6" y1="10" x2="6" y2="21"/><line x1="10" y1="10" x2="10" y2="21"/><line x1="14" y1="10" x2="14" y2="21"/><line x1="18" y1="10" x2="18" y2="21"/></svg>',
         color: "#4F46E5",
         gradient: "linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)",
         accentLight: "rgba(79, 70, 229, 0.12)",
@@ -491,7 +491,7 @@ const DISCIPLINES_DATA = {
         heroTitle: "Санитария <span>и гигиена труда</span>",
         category: "safety",
         categoryLabel: "ГИГИЕНА ТРУДА",
-        iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/><line x1="12" y1="8" x2="12" y2="14"/><line x1="9" y1="11" x2="15" y2="11"/></svg>',
+        iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.5"/><path d="M12 9.5V3a9 9 0 0 1 7.79 4.5l-5.63 3.25a3 3 0 0 0-2.16-1.25z" fill="currentColor"/><path d="M9.84 13.25L4.21 16.5A9 9 0 0 1 4.21 7.5l5.63 3.25a3 3 0 0 0 0 2.5z" fill="currentColor"/><path d="M14.16 13.25l5.63 3.25a9 9 0 0 1-7.79 4.5v-6.5a3 3 0 0 0 2.16-1.25z" fill="currentColor"/></svg>',
         color: "#059669",
         gradient: "linear-gradient(135deg, #059669 0%, #0D9488 100%)",
         accentLight: "rgba(5, 150, 105, 0.15)",
@@ -499,51 +499,59 @@ const DISCIPLINES_DATA = {
         description: "Официальные тестовые билеты: Вариант 1 (13 вопросов) и Вариант 2 (13 вопросов). Ионизирующие излучения, дозиметрия, источники радиации и лазерная безопасность.",
         homeNotice: {
             title: "Обратите внимание",
-            text: "Здесь собраны билеты Вариантов 1 и 2. Это <strong>не все вопросы курса</strong> — преподаватель может дать задания из других вариантов. Рекомендуем также повторить лекции!"
+            text: "Это <strong>не все вопросы по тестам</strong>, поэтому следует повторить лекции."
         },
-        tags: ["Вариант 1", "Вариант 2"],
+        tags: ["Дозиметрия", "Виды излучений", "Источники излучения", "Лазерная безопасность"],
         tagFilters: [
             {
                 id: "all",
-                label: "Все билеты",
-                pluralName: "всех заданий билетов",
+                label: "Все вопросы",
+                pluralName: "всех заданий теста",
                 iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
                 badgeClass: "q-badge-all",
-                desc: "Полный комплект билетов: Вариант 1 и Вариант 2 (всего 26 заданий)"
+                desc: "Полная база вопросов по санитарии и гигиене труда (26 заданий)"
             },
             {
-                id: "var1",
-                label: "Вариант 1",
-                pluralName: "вопросов Варианта 1",
-                iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M11 9h2v6m-2 0h4"/></svg>',
-                badgeClass: "q-badge-var1",
-                desc: "Тестовый билет №1: 13 вопросов (№1–6, №14–20)"
+                id: "dosimetry",
+                label: "Дозиметрия",
+                pluralName: "по дозиметрии",
+                iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>',
+                badgeClass: "q-badge-dosimetry",
+                desc: "Единицы измерения доз, дозиметрические приборы и нормы радиации"
             },
             {
-                id: "var2",
-                label: "Вариант 2",
-                pluralName: "вопросов Варианта 2",
-                iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 10a2 2 0 1 1 4 0c0 1.5-2 2.5-2 3.5h2.5"/></svg>',
-                badgeClass: "q-badge-var2",
-                desc: "Тестовый билет №2: 13 вопросов (№1–6, №14–20)"
+                id: "radiation_types",
+                label: "Виды излучений",
+                pluralName: "по видам излучений",
+                iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m4.93 19.07 4.24-4.24"/></svg>',
+                badgeClass: "q-badge-radtypes",
+                desc: "Ионизирующие, альфа, бета, гамма, нейтронные и электромагнитные излучения"
+            },
+            {
+                id: "sources",
+                label: "Источники излучения",
+                pluralName: "по источникам",
+                iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>',
+                badgeClass: "q-badge-sources",
+                desc: "Естественные и техногенные радиоактивные источники и рентген"
+            },
+            {
+                id: "laser",
+                label: "Лазерная безопасность",
+                pluralName: "по лазерной безопасности",
+                iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+                badgeClass: "q-badge-laser",
+                desc: "Классы лазеров и защита от опасных оптических излучений"
             }
         ],
         getTagForQuestion(q) {
-            if (!q) return { id: "var1", label: "Вариант 1", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M11 9h2v6m-2 0h4"/></svg>' };
-            if (q.variant === 2 || (q.variantLabel && q.variantLabel.includes("Вариант 2"))) {
-                return {
-                    id: "var2",
-                    label: "Вариант 2",
-                    pluralName: "по Варианту 2",
-                    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M10 10a2 2 0 1 1 4 0c0 1.5-2 2.5-2 3.5h2.5"/></svg>'
-                };
-            }
-            return {
-                id: "var1",
-                label: "Вариант 1",
-                pluralName: "по Варианту 1",
-                icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M11 9h2v6m-2 0h4"/></svg>'
-            };
+            if (!q) return { id: "dosimetry", label: "Дозиметрия", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>' };
+            const t = (q.topic || "").toLowerCase();
+            if (t.includes("дозиметр")) return { id: "dosimetry", label: "Дозиметрия", pluralName: "по дозиметрии", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>' };
+            if (t.includes("виды") || t.includes("ионизирующ") || t.includes("электромагнитн")) return { id: "radiation_types", label: "Виды излучений", pluralName: "по видам излучений", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m4.93 19.07 4.24-4.24"/></svg>' };
+            if (t.includes("источник") || t.includes("радиоактивност") || t.includes("рентген")) return { id: "sources", label: "Источники", pluralName: "по источникам", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/></svg>' };
+            if (t.includes("лазер")) return { id: "laser", label: "Лазеры", pluralName: "по лазерам", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>' };
+            return { id: "dosimetry", label: q.topic || "Дозиметрия", pluralName: `по теме «${q.topic || 'Дозиметрия'}»`, icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>' };
         },
         questions: PSIGT_QUESTIONS
     }

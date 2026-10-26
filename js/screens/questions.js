@@ -130,7 +130,7 @@ function renderAllQuestions(filter = "") {
         const badgeText = q.variantLabel || typeInfo.label;
         html += `<div class="question-list-item">
             <div class="question-list-num">
-                <span>Вопрос ${realIdx + 1}</span>
+                <span class="q-num-text">${realIdx + 1}</span>
                 <span class="q-type-badge q-badge-${typeInfo.id}" onclick="setQuestionTagFilter('${typeInfo.id}')" title="Фильтровать по: ${typeInfo.label}">${typeInfo.icon} ${badgeText}</span>
                 ${multiBadge}
             </div>

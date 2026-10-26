@@ -1,4 +1,4 @@
-var screenHistory = ["screen-disciplines"];
+var screenHistory = ["screen-home"];
 function updateTelegramBackButton() {
     try {
         if (window.Telegram?.WebApp?.BackButton) {
@@ -26,8 +26,8 @@ function navigateTo(screenId, addToHistory = true) {
     document.querySelectorAll(".tab-item").forEach(t => t.classList.remove("active"));
     const tabId = screenId.replace('screen-', '');
     let activeTab = document.querySelector(`.tab-item[data-tab="${tabId}"]`);
-    if (!activeTab && (screenId === "screen-home" || screenId === "screen-disciplines" || screenId === "screen-questions" || screenId === "screen-review")) {
-        activeTab = document.querySelector(`.tab-item[data-tab="disciplines"]`);
+    if (!activeTab && (screenId === "screen-questions" || screenId === "screen-review")) {
+        activeTab = document.querySelector(`.tab-item[data-tab="home"]`);
     }
     if (activeTab) activeTab.classList.add("active");
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
@@ -127,9 +127,193 @@ function goHome() {
 window.addEventListener("popstate", (e) => {
     if (screenHistory.length > 1) {
         screenHistory.pop();
-        const prev = screenHistory[screenHistory.length - 1] || "screen-disciplines";
+        const prev = screenHistory[screenHistory.length - 1] || "screen-home";
         navigateTo(prev, false);
     }
 });
-function initBackGesture() {}
-// [СОСТОЯНИЕ] Состояние приложения
+// [СМАХИВАНИЕ ВНИЗ: ЗАКРЫТИЕ ШТОРОК/МОДАЛОК ЖЕСТОМ]
+function initModalDragToDismiss() {
+    const configs = [
+        { overlayId: "about-info-modal", cardSelector: ".about-modal-card", closeFn: () => (typeof closeAboutModal === "function" ? closeAboutModal() : null) },
+        { overlayId: "exam-config-modal", cardSelector: ".exam-modal-card", closeFn: () => (typeof closeExamModal === "function" ? closeExamModal() : null) },
+        { overlayId: "rehearsal-config-modal", cardSelector: ".rehearsal-modal-card", closeFn: () => (typeof closeRehearsalModal === "function" ? closeRehearsalModal() : null) },
+        { overlayId: "welcome-discipline-modal", cardSelector: ".welcome-discipline-modal-card", closeFn: () => (typeof closeWelcomeDisciplineModal === "function" ? closeWelcomeDisciplineModal() : null) }
+    ];
+
+    configs.forEach(cfg => {
+        const overlay = document.getElementById(cfg.overlayId);
+        if (!overlay || overlay._dragInitialized) return;
+        overlay._dragInitialized = true;
+
+        const card = overlay.querySelector(cfg.cardSelector);
+        if (!card) return;
+
+        let startY = 0;
+        let startX = 0;
+        let isDragging = false;
+        let startTime = 0;
+        let startedOnHandle = false;
+
+        function getY(e) {
+            if (e.touches && e.touches.length > 0) return e.touches[0].clientY;
+            if (e.changedTouches && e.changedTouches.length > 0) return e.changedTouches[0].clientY;
+            return e.clientY;
+        }
+
+        function getX(e) {
+            if (e.touches && e.touches.length > 0) return e.touches[0].clientX;
+            if (e.changedTouches && e.changedTouches.length > 0) return e.changedTouches[0].clientX;
+            return e.clientX;
+        }
+
+        function onStart(e) {
+            if (!overlay.classList.contains("active")) return;
+            const target = e.target;
+            if (target.closest("button, input, select, textarea, .stepper-btn, .theme-mode-btn, a, .exam-modal-close")) {
+                return;
+            }
+
+            const handle = card.querySelector(".modal-drag-handle");
+            const header = card.querySelector(".exam-modal-header");
+            const isHandle = handle && (handle === target || handle.contains(target));
+            const isHeader = header && (header === target || header.contains(target));
+
+            startedOnHandle = !!(isHandle || isHeader);
+
+            // Если касание внутри контента, разрешаем жест только при прокрутке в самом верху
+            if (!startedOnHandle && card.scrollTop > 5) {
+                return;
+            }
+
+            startY = getY(e);
+            startX = getX(e);
+            startTime = Date.now();
+            isDragging = false;
+        }
+
+        function onMove(e) {
+            if (startY === 0) return;
+            const y = getY(e);
+            const x = getX(e);
+            const deltaY = y - startY;
+            const deltaX = x - startX;
+
+            if (!startedOnHandle && card.scrollTop > 5) {
+                startY = 0;
+                isDragging = false;
+                return;
+            }
+
+            if (!isDragging) {
+                // Если преобладает горизонтальное движение при старте вне хэндла, игнорируем
+                if (!startedOnHandle && Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 8) {
+                    startY = 0;
+                    return;
+                }
+
+                if (deltaY > 6) {
+                    isDragging = true;
+                    card.style.transition = "none";
+                    overlay.style.transition = "none";
+                    document.body.style.userSelect = "none";
+                    document.body.style.webkitUserSelect = "none";
+                    const handle = card.querySelector(".modal-drag-handle");
+                    if (handle) handle.classList.add("is-dragging");
+                } else if (deltaY < -6 && !startedOnHandle) {
+                    startY = 0;
+                    return;
+                }
+            }
+
+            if (isDragging) {
+                if (e.cancelable) e.preventDefault();
+                if (deltaY > 0) {
+                    card.style.transform = `translateY(${deltaY}px)`;
+                    const progress = Math.min(1, deltaY / 320);
+                    overlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.max(0.12, 0.65 * (1 - progress * 0.75))})`;
+                } else {
+                    card.style.transform = `translateY(${deltaY * 0.15}px)`;
+                }
+            }
+        }
+
+        function onEnd(e) {
+            if (startY === 0 && !isDragging) return;
+            const y = getY(e);
+            const deltaY = y - startY;
+            const timeDiff = Math.max(1, Date.now() - startTime);
+            const velocity = deltaY / timeDiff;
+
+            const handle = card.querySelector(".modal-drag-handle");
+            if (handle) handle.classList.remove("is-dragging");
+            document.body.style.userSelect = "";
+            document.body.style.webkitUserSelect = "";
+
+            startY = 0;
+
+            if (isDragging) {
+                isDragging = false;
+                // Порог закрытия: сдвиг вниз > 75px или резкий смах (velocity > 0.35)
+                const shouldDismiss = deltaY > 75 || (velocity > 0.35 && deltaY > 25);
+
+                if (shouldDismiss) {
+                    card.style.transition = "transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)";
+                    card.style.transform = "translateY(110%)";
+                    overlay.style.transition = "opacity 0.22s ease";
+                    overlay.style.opacity = "0";
+                    if (typeof vibrate === "function") vibrate(10);
+
+                    setTimeout(() => {
+                        cfg.closeFn();
+                        card.style.transform = "";
+                        card.style.transition = "";
+                        overlay.style.opacity = "";
+                        overlay.style.transition = "";
+                        overlay.style.backgroundColor = "";
+                    }, 220);
+                } else {
+                    card.style.transition = "transform 0.26s cubic-bezier(0.16, 1, 0.3, 1)";
+                    card.style.transform = "translateY(0)";
+                    overlay.style.transition = "background-color 0.26s ease";
+                    overlay.style.backgroundColor = "";
+
+                    setTimeout(() => {
+                        card.style.transition = "";
+                        overlay.style.transition = "";
+                    }, 270);
+                }
+            }
+        }
+
+        // Слушатели touch для мобильных устройств
+        card.addEventListener("touchstart", onStart, { passive: true });
+        window.addEventListener("touchmove", onMove, { passive: false });
+        window.addEventListener("touchend", onEnd, { passive: true });
+        window.addEventListener("touchcancel", onEnd, { passive: true });
+
+        // Слушатели мыши / pointer для десктопа
+        card.addEventListener("mousedown", onStart);
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("mouseup", onEnd);
+
+        // Тап по самой плашке ручки также мягко закрывает модалку
+        const handleEl = card.querySelector(".modal-drag-handle");
+        if (handleEl) {
+            handleEl.addEventListener("click", () => {
+                if (!isDragging) {
+                    if (typeof vibrate === "function") vibrate(8);
+                    cfg.closeFn();
+                }
+            });
+        }
+    });
+}
+function initBackGesture() {
+    initModalDragToDismiss();
+}
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initModalDragToDismiss);
+} else {
+    initModalDragToDismiss();
+}
+

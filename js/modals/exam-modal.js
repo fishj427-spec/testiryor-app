@@ -34,6 +34,12 @@ function updateExamCardSubtitle() {
     el.textContent = `${qStr} · ${tStr}${instantStr}`;
 }
 function openExamModal() {
+    if (localStorage.getItem("quiz_discipline_chosen") !== "true") {
+        if (typeof openWelcomeDisciplineModal === "function") {
+            openWelcomeDisciplineModal();
+            return;
+        }
+    }
     vibrate(10);
     currentExamQCount = getSavedExamQCount();
     currentExamTimeMinutes = getSavedExamTimeMinutes();

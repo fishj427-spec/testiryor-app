@@ -3,12 +3,16 @@ window.addEventListener("keydown", (e) => {
         closeExamModal();
         closeRehearsalModal();
         closeAboutModal();
+        if (typeof closeWelcomeDisciplineModal === "function") {
+            closeWelcomeDisciplineModal();
+        }
     }
 });
 // [ИНИЦИАЛИЗАЦИЯ] Старт приложения
 document.addEventListener("DOMContentLoaded", () => {
     applyTheme(getSavedTheme());
     loadSettings();
+    if (typeof initModalDragToDismiss === "function") initModalDragToDismiss();
     if (typeof setActiveDiscipline === "function") {
         setActiveDiscipline(getActiveDisciplineId(), true);
     }
@@ -27,12 +31,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     } catch (e) {}
     const hasVisited = localStorage.getItem("visited");
+    const hasChosenDiscipline = localStorage.getItem("quiz_discipline_chosen") === "true";
     if (hasVisited === "true") {
-        screenHistory = ["screen-disciplines"];
+        screenHistory = ["screen-home"];
         try {
-            window.history.replaceState({ screen: "screen-disciplines" }, "", window.location.href);
+            window.history.replaceState({ screen: "screen-home" }, "", window.location.href);
         } catch (e) {}
-        navigateTo("screen-disciplines", false);
+        navigateTo("screen-home", false);
+        if (!hasChosenDiscipline) {
+            setTimeout(() => {
+                if (typeof openWelcomeDisciplineModal === "function") {
+                    openWelcomeDisciplineModal();
+                }
+            }, 250);
+        }
     } else {
         screenHistory = [];
         document.getElementById("screen-onboard-1").classList.add("active");

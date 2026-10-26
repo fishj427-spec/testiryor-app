@@ -6,3 +6,4 @@ with open(r'C:\Users\Марсель\.gemini\antigravity-ide\brain\0685015c-b814-
         c = str(obj.get('content', ''))
         if 'PSIGT_QUESTIONS' in c or 'media_1792773045' in c or '25 вопросов' in c:
             print(f"Step {obj.get('step_index')}: {c[:250]}\n---")
+По

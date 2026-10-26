@@ -5,7 +5,7 @@ function openAboutModal() {
         const disc = typeof getActiveDiscipline === "function" ? getActiveDiscipline() : null;
         const sub = modal.querySelector(".exam-modal-subtitle");
         if (sub && disc) {
-            sub.textContent = `QuizApp: ${disc.title} v2.9.0`;
+            sub.textContent = `QuizApp: ${disc.title}`;
         }
         modal.classList.add("active");
         updateTelegramBackButton();

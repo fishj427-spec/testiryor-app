@@ -1,4 +1,4 @@
-let changelogExpandedState = { "2.9.0": true };
+let changelogExpandedState = { "3.0.0": true };
 
 function toggleChangelogEntry(version) {
     vibrate(8);
@@ -66,31 +66,96 @@ function renderChangelog() {
     const el = document.getElementById("changelog-content");
     const CHANGELOG = [
         {
+            version: "3.0.0",
+            date: "26 октября 2026",
+            badge: "major",
+            badgeText: "Крупное обновление",
+            groups: [
+                {
+                    type: "new",
+                    label: "Нововведения",
+                    items: [
+                        "Закрытие смахиванием вниз: открытые шторки и окна («О проекте», «Контрольная», «Репетиционный») теперь можно закрывать движением пальца или мыши вниз (Drag-to-dismiss) либо нажатием на индикаторную плашку",
+                        "Новая навигация: вкладка «Тест» (режимы тестирования) вынесена на 1-е место, а «Предмет» (выбор дисциплин) расположен ровно по центру панели",
+                        "Специализированные иконки предметов: классическое Казначейство/Банк для «Экономики» и официальный Знак радиационной опасности ☢️ для «Санитарии и гигиены труда»"
+                    ]
+                },
+                {
+                    type: "change",
+                    label: "Изменения",
+                    items: [
+                        "Экран предметов: главный заголовок переименован в «Выбор предмета» для гармоничности с нижней навигацией",
+                        "Тематические фильтры: теги вопросов распределены по темам билетов («Дозиметрия», «Виды излучений», «Источники излучения», «Лазерная безопасность»)",
+                        "Компактный переключатель темы: кнопки «Тёмная» и «Светлая» объединены в одну удобную строку без лишних подпанелей",
+                        "Фирменный дизайн модалок: карточка «О проекте» обновлена с акцентной подсветкой и чистой таблицей критериев оценок"
+                    ]
+                },
+                {
+                    type: "fix",
+                    label: "Исправления",
+                    items: [
+                        "Стандартизация скруглений: все закругления интерфейса, кнопок и шторок приведены к единому стандарту 5–10 px",
+                        "Очистка интерфейса: убран счётчик количества изменений, удалены лишние кнопки «Назад» в заголовках основных экранов"
+                    ]
+                }
+            ]
+        },
+        {
             version: "2.9.0",
             date: "24 октября 2026",
             badge: "update",
             badgeText: "Обновление",
-            changes: [
-                "Санитария и гигиена труда: полная синхронизация базы с официальными билетами (26 заданий, Вариант 1 и 2)",
-                "Множественный выбор: поддержка вопросов с несколькими правильными ответами и честным подсчётом баллов",
-                "Формулы и степени: корректное отображение научных величин и физических констант (10⁻¹⁰ м, 10⁻¹²...10⁻¹⁵ см)",
-                "Умные бейджи билетов: компактное отображение варианта и номера вопроса без дублирования с быстрой фильтрацией",
-                "Линейный график статистики: минималистичный векторный график динамики без лишней анимации точек",
-                "Предупреждение к зачёту: информационная подсказка на главном экране Санитарии для комплексной подготовки"
+            groups: [
+                {
+                    type: "new",
+                    label: "Нововведения",
+                    items: [
+                        "Санитария и гигиена труда: синхронизация базы с официальными билетами (26 заданий, Варианты 1 и 2)",
+                        "Множественный выбор: поддержка вопросов с несколькими правильными ответами и честным подсчётом баллов"
+                    ]
+                },
+                {
+                    type: "change",
+                    label: "Изменения",
+                    items: [
+                        "Формулы и степени: корректное отображение научных величин и физических констант (10⁻¹⁰ м, 10⁻¹²...10⁻¹⁵ см)",
+                        "Умные бейджи билетов: компактное отображение варианта и номера вопроса с фильтрацией",
+                        "Линейный график статистики: минималистичный векторный график динамики",
+                        "Предупреждение к тестированию: информационная подсказка на главном экране Санитарии"
+                    ]
+                }
             ]
         },
         {
             version: "2.8.0",
             date: "22 октября 2026",
-            badge: "major",
-            badgeText: "Крупное обновление",
-            changes: [
-                "Экран статистики: интерактивный линейный график выполнения и компактный ряд ключевых показателей",
-                "Список вопросов: быстрые фильтры по темам (Теория, Задачи, Формулы) и режим показа только верных ответов",
-                "Календарь активности: просмотр истории прошлых недель стрелками и свайпами с кнопкой возврата к сегодняшнему дню",
-                "Результаты и разбор: расчет итоговой оценки по 5-балльной шкале и лаконичный разбор теста",
-                "Навигация и жесты: возврат назад свайпом от левого края экрана на смартфонах и обновлённые векторные кнопки",
-                "Интерфейс: чистый полноэкранный вид без лишних рамок и комфортная светлая тема в тёплых тонах"
+            badge: "update",
+            badgeText: "Обновление",
+            groups: [
+                {
+                    type: "new",
+                    label: "Нововведения",
+                    items: [
+                        "Экран статистики: интерактивный график выполнения и ключевые показатели",
+                        "Список вопросов: быстрые фильтры по темам и режим показа только верных ответов",
+                        "Календарь активности: просмотр истории прошлых недель стрелками и свайпами"
+                    ]
+                },
+                {
+                    type: "change",
+                    label: "Изменения",
+                    items: [
+                        "Результаты и разбор: расчет итоговой оценки по 5-балльной шкале",
+                        "Навигация: возврат назад свайпом от левого края экрана на смартфонах"
+                    ]
+                },
+                {
+                    type: "fix",
+                    label: "Исправления",
+                    items: [
+                        "Интерфейс: чистый полноэкранный вид без лишних рамок и комфортная тёплая светлая тема"
+                    ]
+                }
             ]
         },
         {
@@ -98,11 +163,23 @@ function renderChangelog() {
             date: "10 мая 2026",
             badge: "update",
             badgeText: "Обновление",
-            changes: [
-                "Исправлено: возможность посмотреть вопросы по пройденому тесту",
-                "Разделены экраны: Список вопросов и Разбор теста",
-                "В списке: все вопросы, только верные ответы",
-                "В разборе: только вопросы теста, выбор пользователя и правильный"
+            groups: [
+                {
+                    type: "change",
+                    label: "Изменения",
+                    items: [
+                        "Разделены экраны: «Список вопросов» и «Разбор теста»",
+                        "В списке: все вопросы и показ только верных ответов",
+                        "В разборе: только вопросы теста, выбор пользователя и правильный ответ"
+                    ]
+                },
+                {
+                    type: "fix",
+                    label: "Исправления",
+                    items: [
+                        "Возможность посмотреть и разобрать вопросы по только что пройденному тесту"
+                    ]
+                }
             ]
         },
         {
@@ -110,11 +187,23 @@ function renderChangelog() {
             date: "11 мая 2026",
             badge: "update",
             badgeText: "Обновление",
-            changes: [
-                "Исправлена навигация: кнопка «Домой» работает корректно",
-                "Скролл для длинных текстов вопросов",
-                "Ответы на вопросы исправлены на корректные ответы",
-                "Косметическое изменение экрана списков вопросов"
+            groups: [
+                {
+                    type: "change",
+                    label: "Изменения",
+                    items: [
+                        "Скролл для длинных формулировок и текстов вопросов",
+                        "Косметическое улучшение экрана списков вопросов"
+                    ]
+                },
+                {
+                    type: "fix",
+                    label: "Исправления",
+                    items: [
+                        "Навигация: кнопка «Домой» работает корректно",
+                        "Ответы на вопросы исправлены на верифицированные правильные"
+                    ]
+                }
             ]
         },
         {
@@ -122,16 +211,30 @@ function renderChangelog() {
             date: "10 марта 2026",
             badge: "new",
             badgeText: "Новое",
-            changes: [
-                "Полный редизайн приложения для тестирования",
-                "Bottom tab bar",
-                "Настройки и changelog",
-                "Изменены режимы тестирования"
+            groups: [
+                {
+                    type: "new",
+                    label: "Нововведения",
+                    items: [
+                        "Полный редизайн приложения для подготовки к тестированию",
+                        "Нижняя панель навигации (Bottom tab bar)",
+                        "Экран настроек и список изменений",
+                        "Режимы тестирования: Контрольная и Репетиционный"
+                    ]
+                }
             ]
         }
     ];
 
-    const totalChanges = CHANGELOG.reduce((acc, cur) => acc + cur.changes.length, 0);
+    let totalChanges = 0;
+    CHANGELOG.forEach(e => {
+        if (e.groups) {
+            e.groups.forEach(g => totalChanges += g.items.length);
+        } else if (e.changes) {
+            totalChanges += e.changes.length;
+        }
+    });
+
     const totalVersions = CHANGELOG.length;
     const anyExpanded = CHANGELOG.some((e, idx) => changelogExpandedState[e.version] !== false && (changelogExpandedState[e.version] === true || idx === 0));
 
@@ -140,7 +243,7 @@ function renderChangelog() {
         <div class="changelog-toolbar-info">
             <span class="changelog-toolbar-badge">${totalVersions} ${pluralRu(totalVersions, "версия", "версии", "версий")}</span>
             <span class="changelog-toolbar-dot">·</span>
-            <span class="changelog-toolbar-count">${totalChanges} ${pluralRu(totalChanges, "изменение", "изменения", "изменений")}</span>
+            
         </div>
         <button class="changelog-toggle-all-btn ${anyExpanded ? '' : 'all-collapsed'}" id="changelog-toggle-all-btn" onclick="toggleAllChangelog()" aria-label="Свернуть или развернуть все версии">
             <span id="changelog-toggle-all-text">${anyExpanded ? "Свернуть всё" : "Развернуть всё"}</span>
@@ -156,7 +259,6 @@ function renderChangelog() {
         const isExp = changelogExpandedState[entry.version] !== undefined ? changelogExpandedState[entry.version] : (idx === 0);
         changelogExpandedState[entry.version] = isExp;
         const entryId = "changelog-entry-" + entry.version.replace(/\./g, "-");
-        const countText = `${entry.changes.length} ${pluralRu(entry.changes.length, "изменение", "изменения", "изменений")}`;
 
         html += `
         <div class="changelog-entry ${isExp ? 'expanded' : ''}" id="${entryId}" data-version="${entry.version}">
@@ -166,7 +268,6 @@ function renderChangelog() {
                     <div class="changelog-version-row">
                         <h3 class="changelog-version-title">v${entry.version}</h3>
                         <span class="version-badge ${bc}">${entry.badgeText}</span>
-                        <span class="changelog-count-pill">${countText}</span>
                     </div>
                     <div class="changelog-date">
                         <span>${entry.date}</span>
@@ -182,9 +283,34 @@ function renderChangelog() {
             <div class="changelog-body">
                 <div class="changelog-body-inner">
                     <div class="changelog-changes">`;
-        entry.changes.forEach(c => {
-            html += `<div class="change-item">${c}</div>`;
-        });
+
+        if (entry.groups) {
+            entry.groups.forEach(group => {
+                const typeClass = group.type === "new" ? "tag-new" : group.type === "fix" ? "tag-fix" : "tag-change";
+                const dotClass = group.type === "new" ? "dot-new" : group.type === "fix" ? "dot-fix" : "dot-change";
+                const tagLabel = group.type === "new" ? "Новое" : group.type === "fix" ? "Исправлено" : "Изменение";
+
+                html += `
+                        <div class="change-group">
+                            <div class="change-group-title">
+                                <span class="change-group-dot ${dotClass}"></span>
+                                <span>${group.label}</span>
+                            </div>`;
+                group.items.forEach(item => {
+                    html += `
+                            <div class="change-item">
+                                <span class="change-tag ${typeClass}">${tagLabel}</span>
+                                <span class="change-item-text">${item}</span>
+                            </div>`;
+                });
+                html += `       </div>`;
+            });
+        } else if (entry.changes) {
+            entry.changes.forEach(c => {
+                html += `<div class="change-item"><span class="change-item-text">${c}</span></div>`;
+            });
+        }
+
         html += `   </div>
                 </div>
             </div>

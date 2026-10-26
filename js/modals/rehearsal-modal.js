@@ -23,6 +23,12 @@ function updateRehearsalCardSubtitle() {
     el.textContent = `${label} (${count}) · без ограничений`;
 }
 function openRehearsalModal() {
+    if (localStorage.getItem("quiz_discipline_chosen") !== "true") {
+        if (typeof openWelcomeDisciplineModal === "function") {
+            openWelcomeDisciplineModal();
+            return;
+        }
+    }
     vibrate(10);
     currentRehearsalTag = getSavedRehearsalTag();
     syncRehearsalModalUI();
@@ -88,7 +94,7 @@ function syncRehearsalModalUI() {
     const meta = tags.find(t => t.id === currentRehearsalTag) || tags[0] || { label: "Все вопросы", desc: "Полная база" };
     const count = counts[currentRehearsalTag] ?? counts.all ?? 0;
     if (sumTitle) {
-        sumTitle.textContent = `${meta.label} · ${count} ${pluralRu(count, 'задание', 'задания', 'заданий')}`;
+        sumTitle.textContent = `${meta.label} - ${count} ${pluralRu(count, 'задание', 'задания', 'заданий')}`;
     }
     if (sumSub) {
         sumSub.textContent = meta.desc || "Тренировка без ограничения по времени";
