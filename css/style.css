@@ -1,4 +1,4 @@
-:root {
+﻿:root {
             --grad-primary: linear-gradient(135deg, #EF4444, #DC2626);
             --grad-accent: linear-gradient(135deg, #EF4444, #B91C1C);
             --grad-warm: linear-gradient(135deg, #F59E0B, #EF4444);
@@ -65,10 +65,10 @@
         .theme-light .phone-container{background-image:radial-gradient(rgba(0,0,0,0.1) 1px,transparent 1px)}
         @media (min-width: 481px) { body{padding:0} .phone-container{max-height:none;height:100vh;height:100dvh;border-radius:0;border:none;box-shadow:none} }
         .content-area{flex:1 1 0%;min-height:0;position:relative;overflow:hidden;display:flex;flex-direction:column;width:100%}
-        .screen{position:absolute;top:80px;left:0;right:0;bottom:0;display:flex;flex-direction:column;padding:20px 18px max(14px, calc(env(safe-area-inset-bottom) + 6px));opacity:0;transform:translateY(24px) scale(0.97);transition:opacity .45s ease,transform .45s cubic-bezier(0.4,0,0.2,1);pointer-events:none;overflow-y:auto}
+        .screen{position:absolute;top:65px;left:0;right:0;bottom:0;display:flex;flex-direction:column;padding:20px 18px max(14px, calc(env(safe-area-inset-bottom) + 6px));opacity:0;transform:translateY(24px) scale(0.97);transition:opacity .45s ease,transform .45s cubic-bezier(0.4,0,0.2,1);pointer-events:none;overflow-y:auto}
 .is-telegram .back-btn { display: none !important; }
         .screen.active{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
-        /* [СКРОЛЛБАРЫ] Ползунки полностью скрыты везде, кроме длинных вопросов */
+        /* [РЎРљР РћР›Р›Р‘РђР Р«] РџРѕР»Р·СѓРЅРєРё РїРѕР»РЅРѕСЃС‚СЊСЋ СЃРєСЂС‹С‚С‹ РІРµР·РґРµ, РєСЂРѕРјРµ РґР»РёРЅРЅС‹С… РІРѕРїСЂРѕСЃРѕРІ */
         html, body, .phone-container, .content-area, .screen, .exam-modal-card, .about-modal-card, .questions-tag-filter, div:not(.question-text) {
             scrollbar-width: none !important;
             -ms-overflow-style: none !important;
@@ -78,7 +78,7 @@
             width: 0 !important;
             height: 0 !important;
         }
-        /* Исключение: аккуратный ползунок только для длинных вопросов в тесте */
+        /* РСЃРєР»СЋС‡РµРЅРёРµ: Р°РєРєСѓСЂР°С‚РЅС‹Р№ РїРѕР»Р·СѓРЅРѕРє С‚РѕР»СЊРєРѕ РґР»СЏ РґР»РёРЅРЅС‹С… РІРѕРїСЂРѕСЃРѕРІ РІ С‚РµСЃС‚Рµ */
         .question-text {
             scrollbar-width: thin !important;
             scrollbar-color: var(--text-muted) transparent !important;
@@ -260,9 +260,9 @@
         .results-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;margin:4px 0;animation:fadeInScale .5s ease .5s both}.stat-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;padding:14px 6px;text-align:center;transition:var(--transition);min-width:0}.stat-card:hover{transform:translateY(-1px);border-color:var(--card-border-hover)}
         .stat-value{font-size:26px;font-weight:800;background:var(--grad-hero);background-size:200% 200%;animation:gradientShift 3s ease infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.stat-label{font-size:11px;color:var(--text-muted);margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .results-actions{display:flex;flex-direction:column;gap:8px;width:100%;margin-top:auto;padding-bottom:12px;animation:fadeInUp .5s ease .6s both}
-        /* [BOTTOM BAR: ТАКТИЧЕСКИЙ МИНИМАЛИЗМ С КРАСНОЙ ТОЧКОЙ ВНИЗУ] */
+        /* [BOTTOM BAR: РўРђРљРўРР§Р•РЎРљРР™ РњРРќРРњРђР›РР—Рњ РЎ РљР РђРЎРќРћР™ РўРћР§РљРћР™ Р’РќРР—РЈ] */
         .tab-bar {
-            height: 60px;
+            height: 52px;
             background: var(--tab-bg);
             border-top: 1px solid var(--card-border);
             display: none;
@@ -435,8 +435,8 @@
         .theme-toggle-container{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--card-border)}.theme-selector{display:flex;gap:8px}
         .theme-option{width:28px;height:28px;border-radius:6px;cursor:pointer;transition:var(--spring);border:2px solid transparent;display:flex;align-items:center;justify-content:center;font-size:14px}.theme-option:hover{transform:scale(1.1)}.theme-option.selected{border-color:var(--primary);transform:scale(1.15)}.theme-dark-opt{background:linear-gradient(135deg,#1E293B,#0F172A)}.theme-light-opt{background:linear-gradient(135deg,#F3EDE4,#E5DCCF);border-color:rgba(145,115,85,0.28)}
         .settings-footer{margin-top:12px;margin-bottom:20px}.app-version{text-align:center;font-size:12px;color:var(--text-muted);padding:12px}
-        /* [СПИСОК ИЗМЕНЕНИЙ / CHANGELOG] */
-        /* [CHANGELOG: ТАКТИЧЕСКИЙ ТАЙМЛАЙН СООТВЕТСТВУЮЩИЙ СКРИНШОТУ] */
+        /* [РЎРџРРЎРћРљ РР—РњР•РќР•РќРР™ / CHANGELOG] */
+        /* [CHANGELOG: РўРђРљРўРР§Р•РЎРљРР™ РўРђР™РњР›РђР™Рќ РЎРћРћРўР’Р•РўРЎРўР’РЈР®Р©РР™ РЎРљР РРќРЁРћРўРЈ] */
         .changelog-toolbar{display:flex;align-items:center;justify-content:space-between;padding:2px 0 14px;margin-bottom:14px;border-bottom:1px solid var(--card-border);gap:10px}
         .changelog-toolbar-info{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);font-weight:500}
         .changelog-toolbar-badge{font-size:14px;font-weight:700;color:var(--text-primary)}
@@ -484,7 +484,7 @@
         .changelog-entry.expanded .changelog-body{grid-template-rows:1fr;opacity:1;transition:grid-template-rows 0.4s cubic-bezier(0.16,1,0.3,1),opacity 0.35s ease}
         .changelog-body-inner{min-height:0;overflow:hidden;transform:translateY(-6px);opacity:0.8;transition:transform 0.4s cubic-bezier(0.16,1,0.3,1),opacity 0.35s ease;will-change:transform,opacity}
         .changelog-entry.expanded .changelog-body-inner{transform:translateY(0);opacity:1}
-        /* [СПИСОК ИЗМЕНЕНИЙ: ГРУППЫ И ТЕГИ] */
+        /* [РЎРџРРЎРћРљ РР—РњР•РќР•РќРР™: Р“Р РЈРџРџР« Р РўР•Р“Р] */
         .changelog-changes{display:flex;flex-direction:column;gap:12px;padding:8px 0 10px}
         .change-group{display:flex;flex-direction:column;gap:7px}
         .change-group-title{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;display:flex;align-items:center;gap:6px;margin-bottom:2px}
@@ -504,13 +504,13 @@
         .change-item-text{flex:1;min-width:0}
         .exam-overlay{position:absolute;inset:0;background:var(--overlay-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;opacity:0;pointer-events:none;transition:opacity .4s;z-index:10;backdrop-filter:blur(8px)}.exam-overlay.active{opacity:1;pointer-events:all}
         .exam-overlay h2{font-size:22px;font-weight:800;margin-bottom:8px}.exam-overlay p{color:var(--text-secondary);margin-bottom:24px;font-size:14px}
-        /* [ПЛАЖКА НАСТРОЙКИ КОНТРОЛЬНОЙ] */
+        /* [РџР›РђР–РљРђ РќРђРЎРўР РћР™РљР РљРћРќРўР РћР›Р¬РќРћР™] */
         .exam-modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .28s cubic-bezier(0.4,0,0.2,1);z-index:100}
         .exam-modal-overlay.active{opacity:1;pointer-events:all}
         .exam-modal-card{width:100%;max-width:480px;background:var(--bg-surface);border:1px solid var(--card-border);border-bottom:none;border-radius:10px 10px 0 0;padding:16px 20px calc(24px + env(safe-area-inset-bottom, 0px));box-shadow:0 -12px 48px rgba(0,0,0,0.45);transform:translateY(105%);transition:transform .36s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column;gap:16px;max-height:90vh;overflow-y:auto}
         .theme-light .exam-modal-card{background:#F3EDE4;border-color:rgba(145,115,85,0.22);box-shadow:0 -12px 40px rgba(60,45,30,0.12)}
         .exam-modal-overlay.active .exam-modal-card{transform:translateY(0)}
-        /* [ПЕРЕТАСКИВАНИЕ И ЗАКРЫТИЕ СМАХИВАНИЕМ ВНИЗ] */
+        /* [РџР•Р Р•РўРђРЎРљРР’РђРќРР• Р Р—РђРљР Р«РўРР• РЎРњРђРҐРР’РђРќРР•Рњ Р’РќРР—] */
         .modal-drag-handle {
             width: 40px;
             height: 5px;
@@ -573,7 +573,7 @@
         .exam-summary-sub{font-size:11px;color:var(--text-muted);margin-top:1px}
         .exam-start-btn{width:100%;margin-top:2px;padding:14px;font-size:15px;border-radius:var(--radius-full);background:linear-gradient(135deg,#F59E0B,#EF4444);box-shadow:0 4px 20px rgba(245,158,11,0.35);gap:8px;color:#fff}
         .exam-start-btn:hover{box-shadow:0 6px 28px rgba(245,158,11,0.45);transform:translateY(-2px)}
-        /* [ПЛАЖКА РЕПЕТИЦИОННОГО] */
+        /* [РџР›РђР–РљРђ Р Р•РџР•РўРР¦РРћРќРќРћР“Рћ] */
         .rehearsal-options-list{display:flex;flex-direction:column;gap:10px}
         .rehearsal-option-card{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:10px;background:var(--input-bg);border:1px solid var(--card-border);cursor:pointer;transition:all .2s ease;-webkit-tap-highlight-color:transparent}
         .theme-light .rehearsal-option-card{background:rgba(145,115,85,0.06);border-color:rgba(145,115,85,0.18)}
@@ -593,7 +593,7 @@
         .rehearsal-option-card.active .rehearsal-opt-badge{background:var(--accent);color:#fff;border-color:transparent}
         .rehearsal-start-btn{width:100%;margin-top:2px;padding:14px;font-size:15px;border-radius:var(--radius-full);background:linear-gradient(135deg,#06B6D4,#0EA5E9);box-shadow:0 4px 20px rgba(6,182,212,0.35);gap:8px;color:#fff}
         .rehearsal-start-btn:hover{box-shadow:0 6px 28px rgba(6,182,212,0.45);transform:translateY(-2px)}
-        /* [О ПРОЕКТЕ В НАСТРОЙКАХ] */
+        /* [Рћ РџР РћР•РљРўР• Р’ РќРђРЎРўР РћР™РљРђРҐ] */
         .about-project-card{padding:18px;display:flex;flex-direction:column;gap:14px}
         .about-hero{display:flex;align-items:center;gap:14px}
         .about-app-icon{width:40px;height:40px;border-radius:8px;background:rgba(20,20,48,0.6);border:1px solid rgba(99,102,241,0.38);color:#F87171;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px rgba(99,102,241,0.18)}
@@ -610,7 +610,7 @@
         .about-links{display:flex;flex-direction:column;border-top:1px solid var(--card-border);margin:2px -18px -18px}
         .about-links .settings-item{padding:14px 18px}
         .about-links .settings-item:last-child{border-bottom:none}
-        /* [МОДАЛКА] Подробности о проекте */
+        /* [РњРћР”РђР›РљРђ] РџРѕРґСЂРѕР±РЅРѕСЃС‚Рё Рѕ РїСЂРѕРµРєС‚Рµ */
         .about-modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .28s cubic-bezier(0.4,0,0.2,1);z-index:100}
         .about-modal-overlay.active{opacity:1;pointer-events:all}
         .about-modal-card{width:100%;max-width:480px;background:var(--bg-surface);border:1px solid var(--card-border);border-bottom:none;border-radius:10px 10px 0 0;padding:16px 20px calc(24px + env(safe-area-inset-bottom, 0px));box-shadow:0 -12px 48px rgba(0,0,0,0.45);transform:translateY(105%);transition:transform .36s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column;gap:14px;max-height:85vh;overflow-y:auto}
@@ -661,7 +661,7 @@
         .review-prefix-icon{display:inline-flex;align-items:center;margin-right:4px}
         .review-prefix-icon svg{width:14px;height:14px}
         .btn-icon{width:16px;height:16px;vertical-align:middle;margin-left:4px}
-        /* [ДИСЦИПЛИНЫ] Стили для экрана выбора дисциплин и бейджа */
+        /* [Р”РРЎР¦РРџР›РРќР«] РЎС‚РёР»Рё РґР»СЏ СЌРєСЂР°РЅР° РІС‹Р±РѕСЂР° РґРёСЃС†РёРїР»РёРЅ Рё Р±РµР№РґР¶Р° */
         .home-top-bar{display:flex;align-items:center;justify-content:flex-start;margin-bottom:12px}
         .discipline-badge-btn{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-full);cursor:pointer;color:var(--text-primary);transition:all .24s cubic-bezier(0.16,1,0.3,1);font-family:inherit;font-size:13px;font-weight:600;box-shadow:var(--shadow-sm);outline:none}
         .discipline-badge-btn:hover{background:var(--card-bg-hover);border-color:var(--card-border-hover);transform:translateY(-1px)}
@@ -739,7 +739,7 @@
         .rehearsal-opt-icon.dosimetry{background:rgba(16,185,129,0.14);color:#34D399}
         .rehearsal-opt-icon.safety{background:rgba(59,130,246,0.14);color:#60A5FA}
         .rehearsal-opt-icon.laser{background:rgba(245,158,11,0.14);color:#FBBF24}
-        /* [ПРОФИЛЬ СТУДЕНТА В СТИЛЕ СКРИНШОТА] */
+        /* [РџР РћР¤РР›Р¬ РЎРўРЈР”Р•РќРўРђ Р’ РЎРўРР›Р• РЎРљР РРќРЁРћРўРђ] */
         .profile-header-title{font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-primary);margin-bottom:18px;padding-top:4px}
         .student-profile-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;padding:18px;margin-bottom:14px;position:relative;cursor:pointer;transition:var(--transition);text-align:left}
         .student-profile-card:hover{border-color:rgba(255,255,255,0.25);background:var(--card-bg-hover)}
@@ -776,7 +776,7 @@
         .student-input-field:focus{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary)}
 
 
-        /* [РЕПЕТИЦИОННЫЙ МОДАЛ В СООТВЕТСТВУЮЩЕМ ДИЗАЙНЕ] */
+        /* [Р Р•РџР•РўРР¦РРћРќРќР«Р™ РњРћР”РђР› Р’ РЎРћРћРўР’Р•РўРЎРўР’РЈР®Р©Р•Рњ Р”РР—РђР™РќР•] */
         .rehearsal-option-card.active{background:rgba(239,68,68,0.06) !important;border-color:#EF4444 !important;box-shadow:0 0 16px rgba(239,68,68,0.3) !important}
         .theme-light .rehearsal-option-card.active{background:rgba(239,68,68,0.06) !important;border-color:#DC2626 !important;box-shadow:0 0 12px rgba(220,38,38,0.2) !important}
         .rehearsal-option-card.active .rehearsal-opt-badge{background:#EF4444 !important;color:#ffffff !important;border-color:transparent !important}
@@ -788,14 +788,14 @@
         .rehearsal-start-btn:hover{box-shadow:0 6px 28px rgba(0,163,224,0.45) !important;transform:translateY(-2px)}
         .exam-start-btn{width:100%;margin-top:2px;padding:14px;font-size:15px;font-weight:800;border-radius:var(--radius-full);background:linear-gradient(135deg,#F59E0B,#EF4444) !important;box-shadow:0 4px 20px rgba(239,68,68,0.35) !important;gap:8px;color:#fff;letter-spacing:0.04em;text-transform:uppercase}
         
-        /* [ВОПРОС И БЕЙДЖИ В СООТВЕТСТВУЮЩЕМ ДИЗАЙНЕ] */
+        /* [Р’РћРџР РћРЎ Р Р‘Р•Р™Р”Р–Р Р’ РЎРћРћРўР’Р•РўРЎРўР’РЈР®Р©Р•Рњ Р”РР—РђР™РќР•] */
         .question-list-num{font-size:13px;font-weight:800;color:#EF4444;margin-bottom:8px;display:flex;align-items:center;gap:8px}
         .q-num-text{font-size:14px;font-weight:800;color:#EF4444}
         .q-type-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);cursor:pointer;transition:transform .15s ease,opacity .15s ease;text-transform:uppercase;letter-spacing:.4px}
         .q-badge-question{background:rgba(239,68,68,0.12);color:#F87171;border:1px solid rgba(239,68,68,0.3)}
         .theme-light .q-badge-question{background:rgba(220,38,38,0.1);color:#DC2626;border-color:rgba(220,38,38,0.3)}
 
-        /* [НАСТРОЙКИ: ПОДПАНЕЛЬ ТЕМЫ] */
+        /* [РќРђРЎРўР РћР™РљР: РџРћР”РџРђРќР•Р›Р¬ РўР•РњР«] */
         .theme-mode-subbar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:var(--input-bg);border-top:1px solid rgba(255,255,255,0.06)}
         .theme-light .theme-mode-subbar{background:rgba(0,0,0,0.03);border-top-color:rgba(0,0,0,0.06)}
         .theme-status-text{font-size:11px;font-weight:600;color:var(--text-muted)}
@@ -807,7 +807,7 @@
         .theme-mode-btn svg{width:13px;height:13px}
     
 
-/* [ПРОСЬБА ВЫБРАТЬ ПРЕДМЕТ ПРИ ПЕРВОМ ОТКРЫТИИ] */
+/* [РџР РћРЎР¬Р‘Рђ Р’Р«Р‘Р РђРўР¬ РџР Р•Р”РњР•Рў РџР Р РџР•Р Р’РћРњ РћРўРљР Р«РўРР] */
 .welcome-discipline-modal-card {
     gap: 16px;
     padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
@@ -1017,7 +1017,7 @@
     margin: 0;
 }
 
-/* [БАННЕР-ПОДСКАЗКА ВО ВКЛАДКЕ ВЫБОР ПРЕДМЕТА] */
+/* [Р‘РђРќРќР•Р -РџРћР”РЎРљРђР—РљРђ Р’Рћ Р’РљР›РђР”РљР• Р’Р«Р‘РћР  РџР Р•Р”РњР•РўРђ] */
 .disciplines-prompt-banner {
     display: flex;
     align-items: center;
@@ -1081,7 +1081,7 @@
 }
 
 
-/* [ПУСТОЕ СОСТОЯНИЕ ВКЛАДКИ ТЕСТ ДО ВЫБОРА ПРЕДМЕТА] */
+/* [РџРЈРЎРўРћР• РЎРћРЎРўРћРЇРќРР• Р’РљР›РђР”РљР РўР•РЎРў Р”Рћ Р’Р«Р‘РћР Рђ РџР Р•Р”РњР•РўРђ] */
 .home-empty-state {
     display: flex;
     flex-direction: column;
