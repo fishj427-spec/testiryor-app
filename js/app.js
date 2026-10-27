@@ -1,4 +1,12 @@
+// Инициализация Telegram WebApp
+if (window.Telegram && window.Telegram.WebApp) {
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.ready();
+}
+
 window.addEventListener("keydown", (e) => {
+
     if (e.key === "Escape") {
         closeExamModal();
         closeRehearsalModal();
