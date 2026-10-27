@@ -64,8 +64,9 @@
         .phone-container{width:100%;max-width:480px;height:100vh;height:100dvh;background-color:var(--bg-base);background-image:radial-gradient(rgba(255,255,255,0.12) 1px,transparent 1px);background-size:20px 20px;overflow:hidden;position:relative;border:none;display:flex;flex-direction:column;margin:0 auto}
         .theme-light .phone-container{background-image:radial-gradient(rgba(0,0,0,0.1) 1px,transparent 1px)}
         @media (min-width: 481px) { body{padding:0} .phone-container{max-height:none;height:100vh;height:100dvh;border-radius:0;border:none;box-shadow:none} }
-        .content-area{flex:1 1 0%;min-height:0;position:relative;overflow:hidden;display:flex;flex-direction:column;width:100%;padding-top:var(--tg-safe-area-inset-top, env(safe-area-inset-top, 0px))}
-        .screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:20px 18px max(24px, calc(env(safe-area-inset-bottom) + 16px));opacity:0;transform:translateY(24px) scale(0.97);transition:opacity .45s ease,transform .45s cubic-bezier(0.4,0,0.2,1);pointer-events:none;overflow-y:auto}
+        .content-area{flex:1 1 0%;min-height:0;position:relative;overflow:hidden;display:flex;flex-direction:column;width:100%}
+        .screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:calc(20px + var(--tg-safe-area-inset-top, 0px)) 18px max(24px, calc(env(safe-area-inset-bottom) + 16px));opacity:0;transform:translateY(24px) scale(0.97);transition:opacity .45s ease,transform .45s cubic-bezier(0.4,0,0.2,1);pointer-events:none;overflow-y:auto}
+.is-telegram .back-btn { display: none !important; }
         .screen.active{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
         /* [СКРОЛЛБАРЫ] Ползунки полностью скрыты везде, кроме длинных вопросов */
         html, body, .phone-container, .content-area, .screen, .exam-modal-card, .about-modal-card, .questions-tag-filter, div:not(.question-text) {
