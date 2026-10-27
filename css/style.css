@@ -269,7 +269,7 @@
             align-items: center;
             justify-content: space-around;
             padding: 0 4px;
-            padding-bottom: max(6px, env(safe-area-inset-bottom, 0px));
+            padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
             flex-shrink: 0;
             position: relative;
             z-index: 20;
