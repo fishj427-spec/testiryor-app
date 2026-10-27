@@ -63,6 +63,7 @@ function selectDisciplineAndFeedback(id) {
         closeWelcomeDisciplineModal();
     }
     renderDisciplines();
+    if (typeof renderHome === "function") renderHome();
     setTimeout(() => {
         navigateTo("screen-home");
     }, 200);
@@ -135,6 +136,9 @@ function selectDisciplineFromWelcomeModal(id) {
     if (banner) banner.style.display = "none";
     if (typeof renderDisciplines === "function") {
         renderDisciplines();
+    }
+    if (typeof renderHome === "function") {
+        renderHome();
     }
 }
 

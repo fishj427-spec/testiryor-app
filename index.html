@@ -63,64 +63,83 @@
                 <h1 class="home-title" id="home-main-title">Экономика <span>и финансы</span></h1>
                 <p class="home-subtitle" id="home-main-subtitle">Выбери формат тестирования</p>
             </div>
-            <div class="week-calendar" id="week-calendar"></div>
-            <div class="milestone-badge" id="milestone-badge">
-                <span class="milestone-fire"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
-                <div class="milestone-text"><span class="milestone-days" id="milestone-days"></span><span class="milestone-label" id="milestone-label"></span></div>
-            </div>
-            <div class="section-label anim-fadeInUp anim-fadeInUp-d1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;color:var(--primary);flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Режим тестирования</div>
-            <div class="mode-options anim-fadeInUp anim-fadeInUp-d2">
-                <div class="mode-card-large card-exam" onclick="openExamModal()" role="button" tabindex="0">
-                    <div class="mode-icon-box icon-box-exam">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
+
+            <!-- [ПУСТОЕ СОСТОЯНИЕ] Отображается до выбора предмета -->
+            <div id="home-empty-state" class="home-empty-state" style="display:none;">
+                <div class="home-empty-card">
+                    <div class="home-empty-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
                         </svg>
                     </div>
-                    <div class="mode-info">
-                        <div class="mode-title-row">
-                            <h3 class="mode-title">Контрольная</h3>
-                            <span class="mode-badge-large badge-exam">ЭКЗАМЕН</span>
-                        </div>
-                        <p class="mode-subtitle" id="exam-mode-subtitle">20 вопросов · 45 минут</p>
-                    </div>
-                </div>
-                <div class="mode-card-large card-rehearsal" onclick="openRehearsalModal()" role="button" tabindex="0">
-                    <div class="mode-icon-box icon-box-rehearsal">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                        </svg>
-                    </div>
-                    <div class="mode-info">
-                        <div class="mode-title-row">
-                            <h3 class="mode-title">Репетиционный</h3>
-                            <span class="mode-badge-large badge-rehearsal">ОБУЧЕНИЕ</span>
-                        </div>
-                        <p class="mode-subtitle" id="rehearsal-mode-subtitle">Все вопросы · без ограничения времени</p>
-                    </div>
-                </div>
-                <div class="mode-card-large card-questions" onclick="onQuestionsCardClick()" role="button" tabindex="0">
-                    <div class="mode-icon-box icon-box-questions">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-                            <line x1="8" y1="11" x2="16" y2="11"/>
-                            <line x1="8" y1="15" x2="16" y2="15"/>
-                        </svg>
-                    </div>
-                    <div class="mode-info">
-                        <div class="mode-title-row">
-                            <h3 class="mode-title">Список вопросов</h3>
-                            <span class="mode-badge-large badge-questions">Справочник</span>
-                        </div>
-                        <p class="mode-subtitle">Просмотр всех вопросов</p>
-                    </div>
+                    <h2 class="home-empty-title">Предмет не выбран</h2>
+                    <p class="home-empty-desc">Пожалуйста, выберите учебную дисциплину для начала тестирования и отслеживания прогресса:</p>
+                    <div class="home-empty-list" id="home-empty-list"></div>
                 </div>
             </div>
-            <div id="home-discipline-notice" class="home-discipline-notice anim-fadeInUp anim-fadeInUp-d3" style="display:none;"></div>
+
+            <!-- [АКТИВНОЕ СОДЕРЖИМОЕ] Отображается после выбора предмета -->
+            <div id="home-active-content" class="home-active-content">
+                <div class="week-calendar" id="week-calendar"></div>
+                <div class="milestone-badge" id="milestone-badge">
+                    <span class="milestone-fire"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
+                    <div class="milestone-text"><span class="milestone-days" id="milestone-days"></span><span class="milestone-label" id="milestone-label"></span></div>
+                </div>
+                <div class="section-label anim-fadeInUp anim-fadeInUp-d1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;color:var(--primary);flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Режим тестирования</div>
+                <div class="mode-options anim-fadeInUp anim-fadeInUp-d2">
+                    <div class="mode-card-large card-exam" onclick="openExamModal()" role="button" tabindex="0">
+                        <div class="mode-icon-box icon-box-exam">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <div class="mode-info">
+                            <div class="mode-title-row">
+                                <h3 class="mode-title">Контрольная</h3>
+                                <span class="mode-badge-large badge-exam">ЭКЗАМЕН</span>
+                            </div>
+                            <p class="mode-subtitle" id="exam-mode-subtitle">20 вопросов · 45 минут</p>
+                        </div>
+                    </div>
+                    <div class="mode-card-large card-rehearsal" onclick="openRehearsalModal()" role="button" tabindex="0">
+                        <div class="mode-icon-box icon-box-rehearsal">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            </svg>
+                        </div>
+                        <div class="mode-info">
+                            <div class="mode-title-row">
+                                <h3 class="mode-title">Репетиционный</h3>
+                                <span class="mode-badge-large badge-rehearsal">ОБУЧЕНИЕ</span>
+                            </div>
+                            <p class="mode-subtitle" id="rehearsal-mode-subtitle">Все вопросы · без ограничения времени</p>
+                        </div>
+                    </div>
+                    <div class="mode-card-large card-questions" onclick="onQuestionsCardClick()" role="button" tabindex="0">
+                        <div class="mode-icon-box icon-box-questions">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                                <line x1="8" y1="11" x2="16" y2="11"/>
+                                <line x1="8" y1="15" x2="16" y2="15"/>
+                            </svg>
+                        </div>
+                        <div class="mode-info">
+                            <div class="mode-title-row">
+                                <h3 class="mode-title">Список вопросов</h3>
+                                <span class="mode-badge-large badge-questions">Справочник</span>
+                            </div>
+                            <p class="mode-subtitle">Просмотр всех вопросов</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="home-discipline-notice" class="home-discipline-notice anim-fadeInUp anim-fadeInUp-d3" style="display:none;"></div>
+            </div>
         </div>
         <div class="screen" id="screen-questions">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--card-border);flex-shrink:0"><button class="back-btn" onclick="goBack()" aria-label="Назад" title="Назад"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><h1 style="font-size:18px;font-weight:700">Список вопросов</h1></div>

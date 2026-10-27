@@ -127,11 +127,93 @@ function renderWeekCalendar() {
     html += '</div>';
     container.innerHTML = html;
 }
-function renderMilestone() { const streak = parseInt(localStorage.getItem("quiz_streak") || "0"); const badge = document.getElementById("milestone-badge"); const daysEl = document.getElementById("milestone-days"); const labelEl = document.getElementById("milestone-label"); if (streak >= 100) { badge.className = "milestone-badge visible m100"; daysEl.innerHTML = `${SVG_ICONS.fire} 100 дней!`; labelEl.textContent = "Легендарная серия!"; } else if (streak >= 50) { badge.className = "milestone-badge visible m50"; daysEl.innerHTML = `${SVG_ICONS.fire} 50 дней!`; labelEl.textContent = "Невероятная серия!"; } else if (streak >= 10) { badge.className = "milestone-badge visible m10"; daysEl.innerHTML = `${SVG_ICONS.fire} ${streak} дней`; labelEl.textContent = "Отличная серия!"; } else { badge.className = "milestone-badge"; } }
+function renderMilestone() {
+    const streak = parseInt(localStorage.getItem("quiz_streak") || "0");
+    const badge = document.getElementById("milestone-badge");
+    const daysEl = document.getElementById("milestone-days");
+    const labelEl = document.getElementById("milestone-label");
+    if (!badge || !daysEl || !labelEl) return;
+    if (streak >= 100) {
+        badge.className = "milestone-badge visible m100";
+        daysEl.innerHTML = `${SVG_ICONS.fire} 100 дней!`;
+        labelEl.textContent = "Легендарная серия!";
+    } else if (streak >= 50) {
+        badge.className = "milestone-badge visible m50";
+        daysEl.innerHTML = `${SVG_ICONS.fire} 50 дней!`;
+        labelEl.textContent = "Невероятная серия!";
+    } else if (streak >= 10) {
+        badge.className = "milestone-badge visible m10";
+        daysEl.innerHTML = `${SVG_ICONS.fire} ${streak} дней`;
+        labelEl.textContent = "Отличная серия!";
+    } else {
+        badge.className = "milestone-badge";
+    }
+}
+
+function renderHomeEmptyDisciplines() {
+    const list = document.getElementById("home-empty-list");
+    if (!list) return;
+    const disciplines = Object.values(window.DISCIPLINES_DATA || {});
+    let html = "";
+    disciplines.forEach(d => {
+        const qCount = d.questions ? d.questions.length : 0;
+        const tags = (d.tags || []).slice(0, 3).join(" • ");
+        html += `
+        <div class="home-empty-item" onclick="selectDisciplineAndFeedback('${d.id}')" role="button" tabindex="0">
+            <div class="home-empty-item-icon" style="background:${d.gradient};box-shadow:0 6px 16px ${d.accentLight}">
+                ${d.iconSvg}
+            </div>
+            <div class="home-empty-item-body">
+                <div class="home-empty-item-header">
+                    <h3 class="home-empty-item-title">${d.title}</h3>
+                    <span class="home-empty-item-count">${qCount} ${pluralRu(qCount, 'вопрос', 'вопроса', 'вопросов')}</span>
+                </div>
+                <div class="home-empty-item-desc">${d.fullTitle}</div>
+                ${tags ? `<div class="home-empty-item-tags">${tags}</div>` : ''}
+            </div>
+            <div class="home-empty-item-action">
+                <span class="home-empty-item-btn">
+                    Выбрать
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </span>
+            </div>
+        </div>
+        `;
+    });
+    list.innerHTML = html;
+}
+
 function renderHome() {
+    const hasChosen = localStorage.getItem("quiz_discipline_chosen") === "true";
+    const emptyState = document.getElementById("home-empty-state");
+    const activeContent = document.getElementById("home-active-content");
+    const mainTitle = document.getElementById("home-main-title");
+    const mainSubtitle = document.getElementById("home-main-subtitle");
+
+    if (!hasChosen) {
+        if (emptyState) {
+            emptyState.style.display = "flex";
+            renderHomeEmptyDisciplines();
+        }
+        if (activeContent) activeContent.style.display = "none";
+        if (mainTitle) mainTitle.innerHTML = "Тестирование <span>и подготовка</span>";
+        if (mainSubtitle) mainSubtitle.textContent = "Пожалуйста, выберите предмет для начала обучения";
+        return;
+    }
+
+    if (emptyState) emptyState.style.display = "none";
+    if (activeContent) activeContent.style.display = "block";
     if (typeof updateAppForActiveDiscipline === "function") updateAppForActiveDiscipline();
+    if (mainSubtitle) mainSubtitle.textContent = "Выбери формат тестирования";
     renderWeekCalendar();
     renderMilestone();
-    updateExamCardSubtitle();
-    updateRehearsalCardSubtitle();
+    if (typeof updateExamCardSubtitle === "function") updateExamCardSubtitle();
+    if (typeof updateRehearsalCardSubtitle === "function") updateRehearsalCardSubtitle();
+}
+
+if (typeof window !== "undefined") {
+    window.renderHome = renderHome;
+    window.renderHomeEmptyDisciplines = renderHomeEmptyDisciplines;
+    window.renderWeekCalendar = renderWeekCalendar;
+    window.renderMilestone = renderMilestone;
 }

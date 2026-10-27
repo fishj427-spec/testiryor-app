@@ -31,20 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     } catch (e) {}
     const hasVisited = localStorage.getItem("visited");
-    const hasChosenDiscipline = localStorage.getItem("quiz_discipline_chosen") === "true";
     if (hasVisited === "true") {
         screenHistory = ["screen-home"];
         try {
             window.history.replaceState({ screen: "screen-home" }, "", window.location.href);
         } catch (e) {}
         navigateTo("screen-home", false);
-        if (!hasChosenDiscipline) {
-            setTimeout(() => {
-                if (typeof openWelcomeDisciplineModal === "function") {
-                    openWelcomeDisciplineModal();
-                }
-            }, 250);
-        }
     } else {
         screenHistory = [];
         document.getElementById("screen-onboard-1").classList.add("active");
