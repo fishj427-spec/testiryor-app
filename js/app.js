@@ -2,6 +2,7 @@
 if (window.Telegram && window.Telegram.WebApp) {
     const tg = window.Telegram.WebApp;
     tg.expand();
+    tg.setHeaderColor('#000000');
     tg.ready();
 }
 
