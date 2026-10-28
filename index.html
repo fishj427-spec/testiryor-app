@@ -20,20 +20,6 @@
     });
   }
 </script>
-<script>
-  (function() {
-    try {
-      var m = localStorage.getItem("quiz_theme_mode") || "system";
-      var e = m;
-      if (m === "system") {
-        e = (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) ? "light" : "dark";
-      }
-      if (window.location.search.includes("theme=light")) e = "light";
-      if (window.location.search.includes("theme=dark")) e = "dark";
-      document.documentElement.className = "theme-" + e;
-    } catch(x) {}
-  })();
-</script>
 </head>
 <body class="theme-dark">
 <div class="phone-container" id="app">

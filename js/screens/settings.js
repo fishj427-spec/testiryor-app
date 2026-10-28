@@ -2,29 +2,8 @@
 function renderSettings() {
     const el = document.getElementById("settings-content");
     if (!el) return;
-    const mode = typeof getThemeMode === "function" ? getThemeMode() : (localStorage.getItem("quiz_theme_mode") || "system");
-    const effective = typeof getEffectiveTheme === "function" ? getEffectiveTheme() : (localStorage.getItem("quiz_theme") || "dark");
-    const isSystem = mode === "system";
-
     el.innerHTML = `
-        <!-- Карточка 1: Переключение темы в одну строчку -->
-        <div class="profile-menu-group">
-            <div class="profile-theme-row">
-                <span class="profile-menu-title">ТЕМА</span>
-                <div class="theme-buttons-row">
-                    <button type="button" class="theme-mode-btn ${effective === 'dark' ? 'is-active' : ''}" onclick="setThemeMode('dark')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-                        ТЁМНАЯ
-                    </button>
-                    <button type="button" class="theme-mode-btn ${effective === 'light' ? 'is-active' : ''}" onclick="setThemeMode('light')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                        СВЕТЛАЯ
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Карточка 2: Сбросить статистику тестирования -->
+        <!-- Карточка 1: Сбросить статистику тестирования -->
         <button type="button" class="profile-danger-btn" onclick="confirmResetSession()">
             СБРОСИТЬ СТАТИСТИКУ ТЕСТИРОВАНИЯ
         </button>
