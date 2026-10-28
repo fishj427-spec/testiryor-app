@@ -26,30 +26,30 @@
         }
         .theme-light {
             --bg-base: #F4F4F5;
-            --bg-surface: #FFFFFF;
-            --bg-elevated: #F4F4F5;
-            --card-bg: #FFFFFF;
-            --card-bg-hover: #F8F8F9;
-            --card-border: rgba(0, 0, 0, 0.12);
-            --card-border-hover: rgba(0, 0, 0, 0.22);
+            --bg-surface: #FAF5EE;
+            --bg-elevated: #FAF5EE;
+            --card-bg: #FAF5EE;
+            --card-bg-hover: #FDFBF7;
+            --card-border: #E7DED2;
+            --card-border-hover: #DDD2C4;
             --text-primary: #111111;
             --text-secondary: #555555;
             --text-muted: #888888;
-            --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08);
-            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
-            --shadow-glow: rgba(220, 38, 38, 0.18);
-            --input-bg: #F4F4F5;
-            --tab-bg: #FFFFFF;
-            --answer-bg: #FFFFFF;
-            --answer-border: rgba(0, 0, 0, 0.12);
-            --answer-letter-bg: #E4E4E7;
+            --shadow-sm: 0 1px 3px rgba(60, 45, 30, 0.04);
+            --shadow-lg: 0 12px 36px rgba(60, 45, 30, 0.09);
+            --shadow-card: 0 2px 8px rgba(60, 45, 30, 0.05);
+            --shadow-glow: rgba(220, 38, 38, 0.2);
+            --input-bg: #FAF5EE;
+            --tab-bg: #FAF5EE;
+            --answer-bg: #FAF5EE;
+            --answer-border: #E7DED2;
+            --answer-letter-bg: #EFE9DF;
             --correct-bg: rgba(16, 185, 129, 0.12);
             --correct-border: #10B981;
             --wrong-bg: rgba(239, 68, 68, 0.12);
             --wrong-border: #EF4444;
-            --overlay-bg: rgba(245, 245, 247, 0.96);
-            --search-bg: #F4F4F5;
+            --overlay-bg: rgba(244, 244, 245, 0.94);
+            --search-bg: #FAF5EE;
             --primary: #DC2626;
             --primary-dark: #B91C1C;
             --primary-light: #EF4444;
@@ -60,9 +60,9 @@
         }
         *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
         body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background-color:var(--bg-base);background-image:radial-gradient(rgba(255,255,255,0.12) 1px,transparent 1px);background-size:20px 20px;background-attachment:fixed;min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:0;color:var(--text-primary);overflow:hidden;transition:background .3s,color .3s}
-        .theme-light body{background-image:radial-gradient(rgba(0,0,0,0.1) 1px,transparent 1px)}
+        body.theme-light, .theme-light body{background-image:radial-gradient(rgba(0,0,0,0.08) 1.2px,transparent 1.2px)}
         .phone-container{width:100%;max-width:480px;height:100vh;height:100dvh;background-color:var(--bg-base);background-image:radial-gradient(rgba(255,255,255,0.12) 1px,transparent 1px);background-size:20px 20px;overflow:hidden;position:relative;border:none;display:flex;flex-direction:column;margin:0 auto}
-        .theme-light .phone-container{background-image:radial-gradient(rgba(0,0,0,0.1) 1px,transparent 1px)}
+        .theme-light .phone-container{background-image:radial-gradient(rgba(0,0,0,0.08) 1.2px,transparent 1.2px)}
         @media (min-width: 481px) { body{padding:0} .phone-container{max-height:none;height:100vh;height:100dvh;border-radius:0;border:none;box-shadow:none} }
         .content-area{flex:1 1 0%;min-height:0;position:relative;overflow:hidden;display:flex;flex-direction:column;width:100%}
         .screen{position:absolute;top:0px;left:0;right:0;bottom:0;display:flex;flex-direction:column;padding:20px 18px max(14px, calc(env(safe-area-inset-bottom) + 6px));opacity:0;transform:translateY(24px) scale(0.97);transition:opacity .45s ease,transform .45s cubic-bezier(0.4,0,0.2,1);pointer-events:none;overflow-y:auto}
@@ -354,25 +354,194 @@
         .overview-card:nth-child(1){animation-delay:.05s}.overview-card:nth-child(2){animation-delay:.1s}.overview-card:nth-child(3){animation-delay:.15s}.overview-card:nth-child(4){animation-delay:.2s}
         .overview-card:hover{transform:translateY(-2px);border-color:var(--card-border-hover);box-shadow:var(--shadow-card)}
         .overview-card .stat-value{font-size:19px;font-weight:800;color:#38BDF8;margin-bottom:3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-        .theme-light .overview-card{background:rgba(250,245,237,0.88);border-color:rgba(145,115,85,0.18)}
-        .theme-light .overview-card .stat-value{color:#4F46E5}
-        .theme-light .stats-chart-card{background:rgba(250,245,237,0.88);border-color:rgba(145,115,85,0.18)}
+        /* ==========================================================================
+           [СВЕТЛАЯ ТЕМА] Элегантный тактический дизайн (Warm Linen + Sand Outline)
+           ========================================================================== */
+        /* --- Главный экран: Шапка и Заголовки --- */
+        .theme-light .home-title{color:#52525B}
+        .theme-light .home-title span{color:#111111}
+        .theme-light .home-subtitle{color:#71717A;font-weight:700}
+        .theme-light .section-label{color:#52525B;font-weight:800;letter-spacing:0.06em}
+        .theme-light .section-label svg{color:#DC2626 !important}
+
+        /* --- Недельный календарь --- */
+        .theme-light .week-calendar-header{align-items:center}
+        .theme-light .week-calendar-label{color:#71717A}
+        .theme-light .week-calendar-label svg{color:#DC2626 !important}
+        .theme-light .week-date-range{background:#FAF5EE !important;border:1px solid #E7DED2 !important;color:#111111 !important;font-weight:700 !important;font-size:11.5px !important;text-transform:uppercase !important;letter-spacing:0.04em !important;padding:3.5px 10px !important;border-radius:6px !important}
+        .theme-light .week-nav-btn{background:#FAF5EE !important;border:1px solid #E7DED2 !important;color:#555555 !important;border-radius:6px !important}
+        .theme-light .week-nav-btn:hover:not(:disabled){background:#FDFBF7 !important;border-color:#DDD2C4 !important;color:#111111 !important;transform:scale(1.04)}
+        .theme-light .week-nav-btn:active:not(:disabled){transform:scale(0.94)}
+        .theme-light .week-nav-btn:disabled{background:#ECEBEA !important;border-color:#E2DED7 !important;opacity:0.35 !important;color:#999999 !important}
+        .theme-light .week-today-pill{background:#F9DCD6 !important;border:1px solid #F6AFAB !important;color:#DC2626 !important;font-weight:700 !important}
+
+        /* Дни недели: чистые белые скругленные плашки как на образце */
+        .theme-light .day-cell{background:#FFFFFF !important;border:1px solid rgba(0,0,0,0.05) !important;border-radius:8px !important;padding:10px 2px !important;box-shadow:0 1px 3px rgba(0,0,0,0.03) !important;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+        .theme-light .day-cell .day-name{color:#8E8E93 !important;font-size:11px !important;font-weight:700 !important;text-transform:uppercase !important;letter-spacing:0.05em !important}
+        .theme-light .day-cell .day-num{color:#18181B !important;font-size:13px !important;font-weight:700 !important;width:26px !important;height:26px !important;display:flex !important;align-items:center !important;justify-content:center !important;border-radius:6px !important;border:1px solid transparent}
+        /* Сегодняшний день: красная надпись дня и красная рамка вокруг числа */
+        .theme-light .day-cell.today .day-name{color:#DC2626 !important;font-weight:800 !important}
+        .theme-light .day-cell.today .day-num{border:1.5px solid #DC2626 !important;background:transparent !important;color:#DC2626 !important;font-weight:800 !important;border-radius:6px !important}
+        /* Активный день (пройден тест) */
+        .theme-light .day-cell.active:not(.today) .day-num{background:#DC2626 !important;color:#FFFFFF !important;font-weight:800 !important;border-radius:6px !important;border:none !important}
+        .theme-light .day-cell.active.today .day-num{background:#DC2626 !important;border:1.5px solid #DC2626 !important;color:#FFFFFF !important}
+        .theme-light .day-cell.active .day-dot{background:#DC2626 !important}
+
+        /* --- Карточки режимов тестирования (соответствие скриншоту) --- */
+        .theme-light .mode-card-large{background:#FAF5EE !important;border:1px solid #E7DED2 !important;border-radius:12px !important;padding:13px 15px !important;gap:14px !important;box-shadow:0 1px 4px rgba(60,45,30,0.04) !important}
+        .theme-light .mode-card-large:hover{background:#FDFBF7 !important;border-color:#DDD2C4 !important;transform:translateY(-1px) !important;box-shadow:0 4px 14px rgba(60,45,30,0.06) !important}
+        .theme-light .mode-card-large:active{background:#F4EFE6 !important;transform:scale(0.98) !important}
+        /* Темные боксы иконок внутри светлых карточек (как на референсе) */
+        .theme-light .mode-icon-box{background:#171717 !important;border-radius:9px !important;width:40px !important;height:40px !important}
+        .theme-light .icon-box-exam{background:#171717 !important;border:1px solid rgba(239,68,68,0.35) !important;color:#EF4444 !important}
+        .theme-light .icon-box-rehearsal{background:#171717 !important;border:1px solid rgba(6,182,212,0.35) !important;color:#06B6D4 !important}
+        .theme-light .icon-box-questions{background:#171717 !important;border:1px solid rgba(255,255,255,0.18) !important;color:#E4E4E7 !important}
+        /* Тексты и бейджи на карточках */
+        .theme-light .mode-title{color:#111111 !important;font-size:13.5px !important;font-weight:800 !important;text-transform:uppercase !important;letter-spacing:0.04em !important}
+        .theme-light .mode-subtitle{color:#666666 !important;font-size:11.5px !important;line-height:1.35 !important}
+        .theme-light .mode-badge-large{font-size:9px !important;font-weight:800 !important;padding:2.5px 7px !important;border-radius:5px !important;text-transform:uppercase !important;letter-spacing:0.05em !important;line-height:1.1 !important}
+        .theme-light .badge-exam{background:#F9DCD6 !important;border:1px solid #F6AFAB !important;color:#DC2626 !important}
+        .theme-light .badge-rehearsal{background:#D4F4FA !important;border:1px solid #A5F3FC !important;color:#0891B2 !important}
+        .theme-light .badge-questions{background:#EAEAEF !important;border:1px solid #D4D4D8 !important;color:#71717A !important}
+
+        /* --- Кнопка назад и общие элементы --- */
+        .theme-light .back-btn{background:#FAF5EE !important;border:1px solid #E7DED2 !important;color:#111111 !important}
+        .theme-light .back-btn:hover{background:#FDFBF7 !important;border-color:#DDD2C4 !important}
+        .theme-light .milestone-badge{background:#FAF5EE !important;border:1px solid #E7DED2 !important}
+        .theme-light .milestone-days{color:#111111 !important}
+        .theme-light .milestone-label{color:#71717A !important}
+
+        /* --- Нижняя панель (Tab Bar) --- */
+        .theme-light .tab-bar{background:#FAF5EE !important;border-top:1px solid #E7DED2 !important}
+        .theme-light .tab-item .tab-icon{color:#8E8E93 !important}
+        .theme-light .tab-item .tab-label{color:#8E8E93 !important}
+        .theme-light .tab-item.active .tab-icon{color:#111111 !important}
+        .theme-light .tab-item.active .tab-label{color:#111111 !important;font-weight:700 !important}
+        .theme-light .tab-item.active::after{background:#DC2626 !important;box-shadow:0 0 6px rgba(220,38,38,0.45) !important}
+
+        /* --- Экран вопросов --- */
+        .theme-light .search-container .search-input{background:#FFFFFF !important;border:1px solid #E7DED2 !important;color:#111111 !important}
+        .theme-light .search-container .search-input:focus{border-color:#DC2626 !important;box-shadow:0 0 0 3px rgba(220,38,38,0.12) !important}
+        .theme-light .search-container .search-input::placeholder{color:#9CA3AF !important}
+        .theme-light .search-icon{color:#8E8E93 !important}
+        .theme-light .search-count{color:#71717A !important}
+        .theme-light .q-filter-tag{background:#FAF5EE !important;border:1px solid #E7DED2 !important;color:#555555 !important}
+        .theme-light .q-filter-tag:hover{background:#FDFBF7 !important;border-color:#DDD2C4 !important;color:#111111 !important}
+        .theme-light .q-filter-tag.active{background:#DC2626 !important;border-color:#DC2626 !important;color:#FFFFFF !important}
+        .theme-light .q-filter-tag:not(.active) .q-tag-count{background:rgba(145,115,85,0.12) !important;color:#736456 !important}
+        .theme-light .question-list-item{background:#FAF5EE !important;border:1px solid #E7DED2 !important;color:#111111 !important;box-shadow:0 1px 3px rgba(60,45,30,0.04) !important}
+        .theme-light .question-list-item:hover{background:#FDFBF7 !important;border-color:#DDD2C4 !important}
+        .theme-light .question-item-text{color:#111111 !important}
+        .theme-light .question-item-num{color:#DC2626 !important}
+        .theme-light .question-answers-list{border-top:1px solid #E7DED2 !important}
+        .theme-light .q-preview-answer{color:#555555 !important}
+        .theme-light .q-preview-answer.is-correct{color:#047857 !important;font-weight:600 !important}
+
+        /* --- Экран тестирования (Quiz) --- */
+        .theme-light .quiz-screen{color:#111111}
+        .theme-light .quiz-top-bar{border-bottom:1px solid #E7DED2}
+        .theme-light .quiz-mode-badge{background:#F9DCD6 !important;border:1px solid #F6AFAB !important;color:#DC2626 !important}
+        .theme-light .quiz-timer{background:#FAF5EE !important;border:1px solid #E7DED2 !important;color:#111111 !important}
+        .theme-light .progress-track{background:#E5DDD0 !important}
+        .theme-light .progress-fill{background:#DC2626 !important}
+        .theme-light .progress-label,.theme-light .progress-counter{color:#71717A !important}
+        .theme-light .question-text{color:#111111 !important;background:#FAF5EE;border:1px solid #E7DED2;border-radius:10px;padding:14px 16px}
+        .theme-light .question-hint{background:rgba(245,158,11,0.1) !important;border:1px solid rgba(245,158,11,0.3) !important;color:#B45309 !important}
+        .theme-light .answer-btn{background:#FAF5EE !important;border:1px solid #E7DED2 !important;color:#111111 !important}
+        .theme-light .answer-btn:hover{background:#FDFBF7 !important;border-color:#DDD2C4 !important}
+        .theme-light .answer-letter{background:#EFE9DF !important;color:#555555 !important}
+        .theme-light .answer-btn.selected{background:rgba(220,38,38,0.06) !important;border-color:#DC2626 !important}
+        .theme-light .answer-btn.selected .answer-letter{background:#DC2626 !important;color:#FFFFFF !important}
+        .theme-light .answer-btn.correct{background:rgba(16,185,129,0.12) !important;border-color:#10B981 !important;color:#047857 !important}
+        .theme-light .answer-btn.correct .answer-letter{background:#10B981 !important;color:#FFFFFF !important}
+        .theme-light .answer-btn.wrong{background:rgba(239,68,68,0.12) !important;border-color:#EF4444 !important;color:#B91C1C !important}
+        .theme-light .answer-btn.wrong .answer-letter{background:#EF4444 !important;color:#FFFFFF !important}
+        .theme-light .btn-prev{background:#FAF5EE !important;border:1px solid #E7DED2 !important;color:#111111 !important}
+        .theme-light .btn-prev:hover{background:#FDFBF7 !important;border-color:#DDD2C4 !important}
+        .theme-light .btn-next{background:rgba(220,38,38,0.12) !important;border:1px solid rgba(220,38,38,0.25) !important;color:#8E8E93 !important}
+        .theme-light .btn-next.active{background:#DC2626 !important;border-color:#DC2626 !important;color:#FFFFFF !important;box-shadow:0 4px 16px rgba(220,38,38,0.3) !important}
+        .theme-light .btn-next.active.btn-submit{background:#10B981 !important;border-color:#10B981 !important;box-shadow:0 4px 16px rgba(16,185,129,0.3) !important}
+
+        /* --- Экран результатов --- */
+        .theme-light .results-title{color:#111111 !important}
+        .theme-light .results-subtitle{color:#666666 !important}
+        .theme-light .score-circle-bg{stroke:#E5DDD0 !important}
+        .theme-light .score-circle-fill{stroke:#DC2626 !important}
+        .theme-light .score-circle-text{color:#111111 !important}
+        .theme-light .stat-card{background:#FAF5EE !important;border:1px solid #E7DED2 !important}
+        .theme-light .stat-card .stat-value{color:#111111 !important;-webkit-text-fill-color:#111111 !important}
+        .theme-light .stat-card .stat-label{color:#71717A !important}
+        .theme-light .btn-secondary{background:#FAF5EE !important;border:1px solid #E7DED2 !important;color:#111111 !important}
+
+        /* --- Статистика --- */
+        .theme-light .overview-card{background:#FAF5EE !important;border:1px solid #E7DED2 !important}
+        .theme-light .overview-card .stat-value{color:#111111 !important}
+        .theme-light .overview-card .stat-label{color:#71717A !important}
+        .theme-light .stats-chart-card{background:#FAF5EE !important;border:1px solid #E7DED2 !important}
+        .theme-light .stats-chart-title{color:#111111 !important}
+        .theme-light .stats-chart-subtitle{color:#71717A !important}
         .theme-light .chart-track{background:rgba(145,115,85,0.1)}
-        .theme-light .chart-period-tabs{background:rgba(145,115,85,0.07);border-color:rgba(145,115,85,0.16)}
-        .theme-light .chart-detail-box{background:rgba(145,115,85,0.07);border-color:rgba(145,115,85,0.16)}
-        .theme-light .question-list-item{background:rgba(250,245,237,0.88);border-color:rgba(145,115,85,0.18)}
-        .theme-light .q-filter-tag{background:rgba(250,245,237,0.92);border-color:rgba(145,115,85,0.22);color:#5A4D41}
-        .theme-light .q-filter-tag:hover{border-color:rgba(145,115,85,0.36);color:#2C221A}
-        .theme-light .q-filter-tag.active{color:#fff;background:var(--primary);border-color:var(--primary)}
-        .theme-light .q-filter-tag:not(.active) .q-tag-count{background:rgba(145,115,85,0.11);color:#736456}
-        .theme-light .settings-card{background:rgba(250,245,237,0.88);border-color:rgba(145,115,85,0.18)}
-        .theme-light .mode-card-large{background:rgba(250,245,237,0.88);border-color:rgba(145,115,85,0.18)}
-        .theme-light .back-btn{background:rgba(250,245,237,0.92);border-color:rgba(145,115,85,0.2);color:#2C221A}
-        .theme-light .week-nav-btn{background:rgba(250,245,237,0.9);border-color:rgba(145,115,85,0.18);color:#635446}
-        .theme-light .week-date-range{background:rgba(250,245,237,0.9);border-color:rgba(145,115,85,0.18)}
-        .theme-light .motivation-card{background:linear-gradient(135deg, rgba(217,119,6,0.08), rgba(79,70,229,0.06));border-color:rgba(145,115,85,0.2)}
-        .theme-light .search-input{background:rgba(145,115,85,0.07);border-color:rgba(145,115,85,0.18);color:var(--text-primary)}
-        .theme-light .changelog-dot{background:#F3EDE4}
+        .theme-light .chart-period-tabs{background:#EFE9DF !important;border:1px solid #E7DED2 !important}
+        .theme-light .chart-tab{color:#71717A !important}
+        .theme-light .chart-tab.active{background:#DC2626 !important;color:#FFFFFF !important}
+        .theme-light .chart-detail-box{background:#FAF5EE !important;border:1px solid #E7DED2 !important}
+        .theme-light .history-item{border-bottom:1px solid #E7DED2 !important}
+        .theme-light .history-info h4{color:#111111 !important}
+        .theme-light .history-info p{color:#71717A !important}
+        .theme-light .history-score{color:#DC2626 !important}
+        .theme-light .motivation-card{background:#FAF5EE !important;border:1px solid #E7DED2 !important}
+        .theme-light .motivation-text{color:#111111 !important}
+
+        /* --- Настройки --- */
+        .theme-light .settings-card{background:#FAF5EE !important;border:1px solid #E7DED2 !important}
+        .theme-light .settings-item{border-bottom:1px solid #E7DED2 !important}
+        .theme-light .settings-item-text h4{color:#111111 !important}
+        .theme-light .settings-item-text p{color:#71717A !important}
+        .theme-light .theme-toggle-container{border-bottom:1px solid #E7DED2 !important}
+        .theme-light .theme-buttons-row{background:#EFE9DF !important;border:1px solid #E7DED2 !important}
+        .theme-light .theme-mode-btn{color:#71717A !important}
+        .theme-light .theme-mode-btn.is-active{background:#DC2626 !important;color:#FFFFFF !important}
+
+        /* --- Модальные окна --- */
+        .theme-light .exam-modal-overlay,.theme-light .about-modal-overlay{background:rgba(24,24,27,0.45) !important;backdrop-filter:blur(8px) !important;-webkit-backdrop-filter:blur(8px) !important}
+        .theme-light .exam-modal-card,.theme-light .about-modal-card{background:#FAF5EE !important;border:1px solid #E7DED2 !important;box-shadow:0 -12px 40px rgba(60,45,30,0.12) !important;color:#111111 !important}
+        .theme-light .exam-modal-header{border-bottom:1px solid #E7DED2}
+        .theme-light .exam-modal-title,.theme-light .about-modal-title{color:#111111 !important}
+        .theme-light .exam-modal-desc,.theme-light .about-modal-desc{color:#666666 !important}
+        .theme-light .exam-modal-section{background:#FFFFFF !important;border:1px solid #E7DED2 !important}
+        .theme-light .exam-modal-section-title{color:#111111 !important}
+        .theme-light .exam-modal-summary{background:#FDF8EE !important;border:1px solid #EAD8B8 !important}
+        .theme-light .exam-summary-val{color:#111111 !important}
+        .theme-light .stepper-btn{background:#FFFFFF !important;border:1px solid #E7DED2 !important;color:#111111 !important}
+        .theme-light .stepper-btn:hover:not(:disabled){background:#FDFBF7 !important;border-color:#DDD2C4 !important}
+        .theme-light .stepper-value{color:#111111 !important}
+        .theme-light .rehearsal-option-card{background:#FFFFFF !important;border:1px solid #E7DED2 !important}
+        .theme-light .rehearsal-option-card:hover{background:#FDFBF7 !important;border-color:#DDD2C4 !important}
+        .theme-light .rehearsal-option-card.active{background:rgba(220,38,38,0.05) !important;border-color:#DC2626 !important;box-shadow:0 0 12px rgba(220,38,38,0.15) !important}
+        .theme-light .rehearsal-opt-title{color:#111111 !important}
+        .theme-light .rehearsal-opt-desc{color:#666666 !important}
+
+        /* --- Выбор предметов --- */
+        .theme-light .discipline-card{background:#FAF5EE !important;border:1px solid #E7DED2 !important}
+        .theme-light .discipline-card:hover{background:#FDFBF7 !important;border-color:#DDD2C4 !important}
+        .theme-light .discipline-card.is-active{border:1.5px solid #DC2626 !important;background:rgba(220,38,38,0.04) !important;box-shadow:0 0 16px rgba(220,38,38,0.18) !important}
+        .theme-light .disc-title{color:#111111 !important}
+        .theme-light .disc-full-title{color:#71717A !important}
+        .theme-light .disc-tag{background:#EFE9DF !important;color:#555555 !important}
+        .theme-light .disc-footer{border-top:1px solid #E7DED2 !important}
+        .theme-light .disc-stat-pill{background:#EFE9DF !important;color:#555555 !important}
+        .theme-light .disc-active-badge{background:#F9DCD6 !important;border:1px solid #F6AFAB !important;color:#DC2626 !important}
+
+        /* --- Разбор теста и Список изменений --- */
+        .theme-light .review-card{background:#FAF5EE !important;border:1px solid #E7DED2 !important}
+        .theme-light .review-card:hover{background:#FDFBF7 !important;border-color:#DDD2C4 !important}
+        .theme-light .review-qtext{color:#111111 !important}
+        .theme-light .review-option{background:#FAF5EE !important;border:1px solid #E7DED2 !important;color:#555555 !important}
+        .theme-light .review-option.correct{background:rgba(16,185,129,0.12) !important;border-color:#10B981 !important;color:#047857 !important}
+        .theme-light .review-option.user-wrong{background:rgba(239,68,68,0.12) !important;border-color:#EF4444 !important;color:#B91C1C !important}
+        .theme-light .changelog-entry{background:#FAF5EE !important;border:1px solid #E7DED2 !important}
+        .theme-light .changelog-header-title{color:#111111 !important}
+        .theme-light .changelog-date{color:#71717A !important}
         .overview-card .stat-label{font-size:9.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
         .stats-chart-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:16px;margin-bottom:22px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);animation:fadeInUp .45s ease both}
         .stats-chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px}

@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
             window.Telegram.WebApp.BackButton.onClick(() => goBack());
         }
     } catch (e) {}
-    const hasVisited = localStorage.getItem("visited");
+    const hasVisited = (typeof window !== "undefined" && window.location && window.location.search.includes("preview=1")) || localStorage.getItem("visited") === "true";
     if (hasVisited === "true") {
         screenHistory = ["screen-home"];
         try {

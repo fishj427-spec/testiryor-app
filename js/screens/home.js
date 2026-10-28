@@ -184,7 +184,7 @@ function renderHomeEmptyDisciplines() {
 }
 
 function renderHome() {
-    const hasChosen = localStorage.getItem("quiz_discipline_chosen") === "true";
+    const hasChosen = (typeof window !== "undefined" && window.location && window.location.search.includes("preview=1")) || localStorage.getItem("quiz_discipline_chosen") === "true";
     const emptyState = document.getElementById("home-empty-state");
     const activeContent = document.getElementById("home-active-content");
     const mainTitle = document.getElementById("home-main-title");

@@ -17,6 +17,10 @@ const state = {
 * ═══════════════════════════════════════════════════════════════
 */
 function getThemeMode() {
+    if (typeof window !== "undefined" && window.location && window.location.search) {
+        if (window.location.search.includes("theme=light")) return "light";
+        if (window.location.search.includes("theme=dark")) return "dark";
+    }
     return localStorage.getItem("quiz_theme_mode") || "system";
 }
 
@@ -44,7 +48,18 @@ function getSavedTheme() {
 function applyTheme(theme) {
     const effective = (theme === "light" || theme === "dark") ? theme : getEffectiveTheme();
     document.body.className = "theme-" + effective;
+    if (document.documentElement) {
+        document.documentElement.className = "theme-" + effective;
+    }
     localStorage.setItem("quiz_theme", effective);
+    if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        const color = effective === "light" ? "#F4F4F5" : "#000000";
+        try {
+            tg.setHeaderColor(color);
+            tg.setBackgroundColor(color);
+        } catch (e) {}
+    }
 }
 
 function setThemeMode(mode) {
