@@ -149,6 +149,16 @@ const SCHEDULE_DATA = [
         "teacher": "Лузина Мария Сергеевна",
         "hasLink": false,
         "link": null
+      },
+      {
+        "number": 3,
+        "type": "консультация",
+        "time": "с 12:00",
+        "subject": "Основы экономики и управления производством (курсовая работа)",
+        "room": "Теоретический-303",
+        "teacher": "Даминева Раиса Мухаметовна",
+        "hasLink": true,
+        "link": "https://oiledu.ru"
       }
     ]
   },
@@ -264,8 +274,19 @@ const SCHEDULE_DATA = [
   {
     "date": "понедельник, 9 ноября",
     "week": "11 неделя",
-    "hasClasses": false,
-    "classes": []
+    "hasClasses": true,
+    "classes": [
+      {
+        "number": 3,
+        "type": "консультация",
+        "time": "с 12:00",
+        "subject": "Основы экономики и управления производством (курсовая работа)",
+        "room": "Теоретический-303",
+        "teacher": "Даминева Раиса Мухаметовна",
+        "hasLink": true,
+        "link": "https://oiledu.ru"
+      }
+    ]
   },
   {
     "date": "вторник, 10 ноября",
@@ -327,8 +348,19 @@ const SCHEDULE_DATA = [
   {
     "date": "понедельник, 16 ноября",
     "week": "12 неделя",
-    "hasClasses": false,
-    "classes": []
+    "hasClasses": true,
+    "classes": [
+      {
+        "number": 3,
+        "type": "консультация",
+        "time": "с 12:00",
+        "subject": "Основы экономики и управления производством (курсовая работа)",
+        "room": "Теоретический-303",
+        "teacher": "Даминева Раиса Мухаметовна",
+        "hasLink": true,
+        "link": "https://oiledu.ru"
+      }
+    ]
   },
   {
     "date": "вторник, 17 ноября",
@@ -390,8 +422,19 @@ const SCHEDULE_DATA = [
   {
     "date": "понедельник, 23 ноября",
     "week": "13 неделя",
-    "hasClasses": false,
-    "classes": []
+    "hasClasses": true,
+    "classes": [
+      {
+        "number": 3,
+        "type": "консультация",
+        "time": "с 12:00",
+        "subject": "Основы экономики и управления производством (курсовая работа)",
+        "room": "Теоретический-303",
+        "teacher": "Даминева Раиса Мухаметовна",
+        "hasLink": true,
+        "link": "https://oiledu.ru"
+      }
+    ]
   },
   {
     "date": "вторник, 24 ноября",
@@ -652,6 +695,17 @@ const SCHEDULE_DATA = [
 
 let scheduleFilter = 'all'; // 'all' or 'classes_only'
 let scheduleSelectedWeek = 'all'; // 'all' or number like 9, 10, ...
+
+try {
+    const _sp = typeof window !== "undefined" && window.location ? new URLSearchParams(window.location.search) : null;
+    if (_sp && _sp.has("week")) {
+        const _w = _sp.get("week");
+        scheduleSelectedWeek = _w === "all" ? "all" : (parseInt(_w, 10) || _w);
+    }
+    if (_sp && _sp.has("classes_only")) {
+        scheduleFilter = 'classes_only';
+    }
+} catch (e) {}
 
 function showScheduleToast(text) {
     let toast = document.getElementById("schedule-toast");
