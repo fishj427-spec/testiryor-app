@@ -13,7 +13,7 @@ function updateTelegramBackButton() {
 function navigateTo(screenId, addToHistory = true) {
     if (state.timerInterval) { clearInterval(state.timerInterval); state.timerInterval = null; }
     document.getElementById("timeup-overlay")?.classList.remove("active");
-    const tabScreens = ["screen-home", "screen-stats", "screen-settings", "screen-changelog", "screen-questions", "screen-review", "screen-disciplines"];
+    const tabScreens = ["screen-home", "screen-stats", "screen-settings", "screen-schedule", "screen-questions", "screen-review", "screen-disciplines"];
     const isTab = tabScreens.includes(screenId);
     document.getElementById("tab-bar").style.display = isTab ? "flex" : "none";
     if (addToHistory && screenHistory[screenHistory.length - 1] !== screenId) {
@@ -32,11 +32,11 @@ function navigateTo(screenId, addToHistory = true) {
     if (activeTab) activeTab.classList.add("active");
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     const target = document.getElementById(screenId);
-    if (target) setTimeout(() => target.classList.add("active"), 50);
+    if (target) target.classList.add("active");
     if (screenId === "screen-home") renderHome();
     if (screenId === "screen-stats") renderStats();
     if (screenId === "screen-settings") renderSettings();
-    if (screenId === "screen-changelog") renderChangelog();
+    if (screenId === "screen-schedule") renderSchedule();
     if (screenId === "screen-disciplines") {
         if (typeof renderDisciplines === "function") renderDisciplines();
     }

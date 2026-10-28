@@ -41,13 +41,16 @@ document.addEventListener("DOMContentLoaded", () => {
             window.Telegram.WebApp.BackButton.onClick(() => goBack());
         }
     } catch (e) {}
-    const hasVisited = (typeof window !== "undefined" && window.location && window.location.search.includes("preview=1")) || localStorage.getItem("visited") === "true";
-    if (hasVisited === "true") {
-        screenHistory = ["screen-home"];
+    const urlParams = typeof window !== "undefined" && window.location ? new URLSearchParams(window.location.search) : null;
+    const hasVisited = (urlParams && urlParams.has("preview")) || localStorage.getItem("visited") === "true";
+    if (hasVisited) {
+        const customScreen = urlParams ? urlParams.get("screen") : null;
+        const startScreen = customScreen ? (customScreen.startsWith("screen-") ? customScreen : `screen-${customScreen}`) : "screen-home";
+        screenHistory = [startScreen];
         try {
-            window.history.replaceState({ screen: "screen-home" }, "", window.location.href);
+            window.history.replaceState({ screen: startScreen }, "", window.location.href);
         } catch (e) {}
-        navigateTo("screen-home", false);
+        navigateTo(startScreen, false);
     } else {
         screenHistory = [];
         document.getElementById("screen-onboard-1").classList.add("active");
