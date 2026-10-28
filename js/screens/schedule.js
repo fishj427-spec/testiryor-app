@@ -805,7 +805,7 @@ function renderSchedule() {
                     Все дни
                 </button>
                 <button class="schedule-filter-btn ${scheduleFilter === 'classes_only' ? 'active' : ''}" onclick="setScheduleFilter('classes_only')">
-                    Только дни с парами (${visibleClassesCount})
+                    С парами
                 </button>
             </div>
         </div>
