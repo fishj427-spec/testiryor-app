@@ -498,8 +498,9 @@ const DISCIPLINES_DATA = {
         badgeClass: "badge-safety",
         description: "Официальные тестовые билеты: Вариант 1 (13 вопросов) и Вариант 2 (13 вопросов). Ионизирующие излучения, дозиметрия, источники радиации и лазерная безопасность.",
         homeNotice: {
-            title: "Обратите внимание",
-            text: "Это <strong>не все вопросы по тестам</strong>, поэтому следует повторить лекции."
+            type: "success",
+            title: "Полная база вопросов",
+            text: "Это <strong>все вопросы по тесту</strong>. Материал полностью охватывает билеты — тренируйся в удобных режимах и сдавай на максимум!"
         },
         tags: ["Дозиметрия", "Виды излучений", "Источники излучения", "Лазерная безопасность"],
         tagFilters: [
@@ -611,14 +612,24 @@ function updateAppForActiveDiscipline() {
     const noticeEl = document.getElementById("home-discipline-notice");
     if (noticeEl) {
         if (disc.homeNotice) {
+            const isWarning = disc.homeNotice.type === "warning";
+            const iconSvg = isWarning ? `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+            ` : `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+            `;
+            const cardClass = isWarning ? "discipline-notice-card notice-warning" : "discipline-notice-card notice-success";
             noticeEl.innerHTML = `
-                <div class="discipline-notice-card">
+                <div class="${cardClass}">
                     <div class="discipline-notice-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                            <line x1="12" y1="9" x2="12" y2="13"/>
-                            <line x1="12" y1="17" x2="12.01" y2="17"/>
-                        </svg>
+                        ${iconSvg}
                     </div>
                     <div class="discipline-notice-content">
                         <h4 class="discipline-notice-title">${disc.homeNotice.title}</h4>
