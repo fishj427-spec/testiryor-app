@@ -26,11 +26,111 @@
         }
         
         *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background-color:var(--bg-base);background-image:radial-gradient(rgba(255,255,255,0.12) 1px,transparent 1px);background-size:20px 20px;background-attachment:fixed;min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:0;color:var(--text-primary);overflow:hidden;transition:background .3s,color .3s}
-        .phone-container{width:100%;max-width:480px;height:100vh;height:100dvh;background-color:var(--bg-base);background-image:radial-gradient(rgba(255,255,255,0.12) 1px,transparent 1px);background-size:20px 20px;overflow:hidden;position:relative;border:none;display:flex;flex-direction:column;margin:0 auto}
-        @media (min-width: 481px) { body{padding:0} .phone-container{max-height:none;height:100vh;height:100dvh;border-radius:0;border:none;box-shadow:none} }
-        .content-area{flex:1 1 0%;min-height:0;position:relative;overflow:hidden;display:flex;flex-direction:column;width:100%}
-        .screen{position:absolute;top:0px;left:0;right:0;bottom:0;display:flex;flex-direction:column;padding:20px 18px max(14px, calc(env(safe-area-inset-bottom) + 6px));opacity:0;transform:translateY(24px) scale(0.97);transition:opacity .45s ease,transform .45s cubic-bezier(0.4,0,0.2,1);pointer-events:none;overflow-y:auto}
+        html {
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            overflow: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #000000;
+            color: var(--text-primary);
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            transition: color .3s;
+        }
+        /* [ФОНОВАЯ СЕТКА] Полноэкранный фиксированный слой: гарантированно покрывает 100% экрана, никогда не обрезается */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background-color: #000000;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .phone-container {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            height: 100dvh;
+            background: transparent;
+            overflow: hidden;
+            position: relative;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+            z-index: 1;
+            box-sizing: border-box;
+        }
+        @media (max-width: 480px) {
+            .phone-container {
+                width: 100%;
+                max-width: 100vw;
+            }
+        }
+        @media (min-width: 481px) {
+            body { padding: 0; }
+            .phone-container {
+                max-height: none;
+                height: 100vh;
+                height: 100dvh;
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+            }
+        }
+        .content-area {
+            flex: 1 1 0%;
+            min-height: 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        .screen {
+            position: absolute;
+            top: 0px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px max(14px, calc(env(safe-area-inset-bottom) + 6px));
+            opacity: 0;
+            transform: translateY(24px) scale(0.97);
+            transition: opacity .45s ease, transform .45s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            overflow-y: auto;
+            overflow-x: hidden !important;
+            scrollbar-width: none !important;
+            -webkit-overflow-scrolling: touch;
+        }
 .is-telegram .back-btn { display: none !important; }
         .screen.active{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
         /* [РЎРљР РћР›Р›Р‘РђР Р«] РџРѕР»Р·СѓРЅРєРё РїРѕР»РЅРѕСЃС‚СЊСЋ СЃРєСЂС‹С‚С‹ РІРµР·РґРµ, РєСЂРѕРјРµ РґР»РёРЅРЅС‹С… РІРѕРїСЂРѕСЃРѕРІ */
@@ -237,16 +337,16 @@
             justify-content: center;
             gap: 2px;
             cursor: pointer;
-            padding: 4px 2px;
+            padding: 4px 1px;
             border-radius: var(--radius-sm);
             transition: var(--transition);
             position: relative;
             border: none;
             background: transparent;
             outline: none;
-            flex: 1;
+            flex: 1 1 0%;
             min-width: 0;
-            max-width: 80px;
+            max-width: none;
             -webkit-tap-highlight-color: transparent;
         }
         .tab-item:active {
@@ -272,16 +372,17 @@
             transition: var(--transition);
         }
         .tab-label {
-            font-size: 10px;
+            font-size: clamp(8px, 2.35vw, 9.5px);
             font-weight: 600;
             color: var(--text-muted);
             transition: var(--transition);
-            letter-spacing: 0.05em;
+            letter-spacing: 0;
             text-transform: uppercase;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 100%;
+            text-align: center;
         }
         .tab-item.active .tab-icon {
             color: var(--text-primary);
@@ -413,41 +514,49 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
+            gap: 8px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .schedule-title-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            min-width: 0;
+            flex: 1;
         }
         .schedule-title-icon {
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             color: var(--primary);
             flex-shrink: 0;
         }
         .schedule-title {
-            font-size: 20px;
+            font-size: clamp(15px, 4.2vw, 19px);
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.02em;
             line-height: 1.2;
             margin: 0;
             color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .schedule-today-btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
+            gap: 5px;
+            padding: 5px 10px;
             background: #18181b;
             border: 1px solid rgba(239, 68, 68, 0.4);
             border-radius: 8px;
             color: #ffffff;
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
+            flex-shrink: 0;
             -webkit-tap-highlight-color: transparent;
         }
         .schedule-today-btn:active {
@@ -473,8 +582,12 @@
             align-items: center;
             gap: 6px;
             overflow-x: auto;
+            overflow-y: hidden;
             padding: 2px 0 6px;
-            margin: 0 -4px;
+            margin: 0;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
             scrollbar-width: none;
             -webkit-overflow-scrolling: touch;
         }
