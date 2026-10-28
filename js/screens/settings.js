@@ -1,19 +1,4 @@
-// [НАСТРОЙКИ] Экран настроек, персонализации темы и истории изменений
-
-const ACCENT_COLORS = {
-    red: { name: "Рубин", hex: "#EF4444", dark: "#DC2626", light: "#F87171", glow: "rgba(239, 68, 68, 0.35)" },
-    emerald: { name: "Изумруд", hex: "#10B981", dark: "#059669", light: "#34D399", glow: "rgba(16, 185, 129, 0.35)" },
-    cyan: { name: "Лазурь", hex: "#06B6D4", dark: "#0891B2", light: "#22D3EE", glow: "rgba(6, 182, 212, 0.35)" },
-    purple: { name: "Индиго", hex: "#8B5CF6", dark: "#7C3AED", light: "#A78BFA", glow: "rgba(139, 92, 246, 0.35)" },
-    amber: { name: "Янтарь", hex: "#F59E0B", dark: "#D97706", light: "#FBBF24", glow: "rgba(245, 158, 11, 0.35)" },
-    rose: { name: "Коралл", hex: "#F43F5E", dark: "#E11D48", light: "#FB7185", glow: "rgba(244, 63, 94, 0.35)" }
-};
-
-const THEME_SHADES = {
-    oled: { name: "OLED Black", hex: "#000000", surface: "#0a0a0c", card: "#131316", border: "rgba(255, 255, 255, 0.10)" },
-    graphite: { name: "Графит", hex: "#0e0f13", surface: "#15161c", card: "#1c1d24", border: "rgba(255, 255, 255, 0.12)" },
-    navy: { name: "Полночь", hex: "#090d16", surface: "#101726", card: "#172033", border: "rgba(255, 255, 255, 0.12)" }
-};
+// [НАСТРОЙКИ] Экран настроек, фонового паттерна и истории изменений
 
 const BG_PATTERNS = {
     dots: {
@@ -58,7 +43,7 @@ const CHANGELOG_DATA = [
                 label: "Нововведения",
                 items: [
                     "Экран «Расписание»: полноценное расписание занятий на 52 дня (недели 9–16) со всеми парами, аудиториями, преподавателями и ссылками",
-                    "Персонализация в Настройках: детальная настройка темы — 6 фирменных акцентных цветов, 3 оттенка тёмного фона и 4 вида текстуры",
+                    "Фоновые паттерны в Настройках: выбор текстуры фона приложения (Точки, Клетка, Крестики, Без текстуры)",
                     "Интерактивные фильтры: быстрый переход по неделям и режим «С парами»"
                 ]
             },
@@ -90,17 +75,17 @@ const CHANGELOG_DATA = [
                 type: "new",
                 label: "Нововведения",
                 items: [
-                    "Закрытие смахиванием вниз (Drag-to-dismiss) для всех шторок и модальных окон",
-                    "Новая навигация: вкладка «Тест» вынесена на 1-е место, а «Предмет» расположен по центру",
-                    "Специализированные иконки предметов для «Экономики» и «Санитарии и гигиены труда»"
+                    "Интеграция формул KaTeX: качественный математический рендеринг уравнений и формул во всех тестах",
+                    "Каталог дисциплин: расширена база предметов с возможностью мгновенного переключения",
+                    "Обновленный таймер: улучшенная визуализация оставшегося времени экзамена"
                 ]
             },
             {
                 type: "change",
-                label: "Изменения",
+                label: "Улучшения",
                 items: [
-                    "Тематические фильтры вопросов («Дозиметрия», «Виды излучений», «Источники излучения», «Лазерная безопасность»)",
-                    "Стандартизация скруглений до 5–10 px и очистка интерфейса от лишних элементов"
+                    "Оптимизация производительности рендеринга больших списков вопросов",
+                    "Улучшена адаптивность модальных окон на устройствах с небольшим экраном"
                 ]
             }
         ]
@@ -108,81 +93,74 @@ const CHANGELOG_DATA = [
     {
         version: "2.1.0",
         date: "25 октября 2026",
-        badge: "update",
+        badge: "minor",
         badgeText: "Обновление",
         groups: [
             {
                 type: "new",
                 label: "Нововведения",
                 items: [
-                    "Режим «Контрольная»: случайная выборка вопросов с настраиваемым таймером и строгими критериями",
-                    "Подробный разбор теста с цветовой индикацией ошибок"
+                    "Система тегов в вопросах: быстрый поиск по разделам и темам дисциплины",
+                    "Виброотклик (haptic feedback) при переключении фильтров и выборе ответов"
+                ]
+            },
+            {
+                type: "fix",
+                label: "Исправления",
+                items: [
+                    "Исправлен подсчет серии ежедневных тренировок (streak) при переходе через полночь",
+                    "Корректное сохранение прогресса незавершенных тестов"
                 ]
             }
         ]
     },
     {
         version: "2.0.0",
-        date: "24 октября 2026",
-        badge: "update",
-        badgeText: "Архитектура",
+        date: "23 октября 2026",
+        badge: "major",
+        badgeText: "Платформа 2.0",
         groups: [
             {
                 type: "new",
                 label: "Нововведения",
                 items: [
-                    "Модульная архитектура экранов и данных",
-                    "Поддержка PWA и оффлайн-режим"
+                    "Новый тактический тёмный дизайн интерфейса с акцентной подсветкой",
+                    "Два режима подготовки: «Контрольная» (на время без подсказок) и «Репетиционный» (с моментальным разбором ошибок)",
+                    "Детальная аналитика: статистика правильных ответов, точность и динамика прохождения тестов"
                 ]
             }
         ]
     }
 ];
 
-let changelogExpandedState = { "3.1.0": true, "3.0.0": false, "2.1.0": false, "2.0.0": false };
+// Состояние открытых карточек версий
+let changelogExpandedState = {
+    "3.1.0": true
+};
 let isChangelogSectionOpen = true;
 
 function applyCustomTheme() {
-    const savedAccent = localStorage.getItem("quiz_accent_color") || "red";
-    const savedShade = localStorage.getItem("quiz_theme_shade") || "oled";
     const savedPattern = localStorage.getItem("quiz_bg_pattern") || "dots";
-
-    const acc = ACCENT_COLORS[savedAccent] || ACCENT_COLORS.red;
-    const shade = THEME_SHADES[savedShade] || THEME_SHADES.oled;
     const pat = BG_PATTERNS[savedPattern] || BG_PATTERNS.dots;
 
     const root = document.documentElement;
-    root.style.setProperty("--primary", acc.hex);
-    root.style.setProperty("--primary-dark", acc.dark);
-    root.style.setProperty("--primary-light", acc.light);
-    root.style.setProperty("--accent", acc.hex);
-    root.style.setProperty("--shadow-glow", acc.glow);
-    root.style.setProperty("--grad-primary", `linear-gradient(135deg, ${acc.hex}, ${acc.dark})`);
-    root.style.setProperty("--grad-accent", `linear-gradient(135deg, ${acc.hex}, ${acc.dark})`);
 
-    root.style.setProperty("--bg-base", shade.hex);
-    root.style.setProperty("--bg-surface", shade.surface);
-    root.style.setProperty("--card-bg", shade.card);
-    root.style.setProperty("--tab-bg", shade.hex);
+    // Очищаем старые инлайн переопределения цветов, если они были сохранены ранее
+    root.style.removeProperty("--primary");
+    root.style.removeProperty("--primary-dark");
+    root.style.removeProperty("--primary-light");
+    root.style.removeProperty("--accent");
+    root.style.removeProperty("--shadow-glow");
+    root.style.removeProperty("--grad-primary");
+    root.style.removeProperty("--grad-accent");
+    root.style.removeProperty("--bg-base");
+    root.style.removeProperty("--bg-surface");
+    root.style.removeProperty("--card-bg");
+    root.style.removeProperty("--tab-bg");
 
+    // Применяем выбранный фоновый паттерн
     root.style.setProperty("--bg-pattern-image", pat.css);
     root.style.setProperty("--bg-pattern-size", pat.size);
-}
-
-function setAccentColor(key) {
-    if (!ACCENT_COLORS[key]) return;
-    vibrate(10);
-    localStorage.setItem("quiz_accent_color", key);
-    applyCustomTheme();
-    renderSettings();
-}
-
-function setThemeShade(key) {
-    if (!THEME_SHADES[key]) return;
-    vibrate(10);
-    localStorage.setItem("quiz_theme_shade", key);
-    applyCustomTheme();
-    renderSettings();
 }
 
 function setBgPattern(key) {
@@ -194,24 +172,23 @@ function setBgPattern(key) {
 }
 
 function toggleChangelogSection() {
-    vibrate(8);
     isChangelogSectionOpen = !isChangelogSectionOpen;
+    vibrate(8);
     renderSettings();
 }
 
 function toggleChangelogEntry(version) {
-    vibrate(8);
     changelogExpandedState[version] = !changelogExpandedState[version];
+    vibrate(8);
     renderSettings();
 }
 
 function toggleAllChangelog() {
-    vibrate(10);
-    const anyExpanded = CHANGELOG_DATA.some(e => changelogExpandedState[e.version]);
-    const nextState = !anyExpanded;
+    const allExpanded = CHANGELOG_DATA.every(e => changelogExpandedState[e.version]);
     CHANGELOG_DATA.forEach(e => {
-        changelogExpandedState[e.version] = nextState;
+        changelogExpandedState[e.version] = !allExpanded;
     });
+    vibrate(10);
     renderSettings();
 }
 
@@ -219,88 +196,42 @@ function renderSettings() {
     const el = document.getElementById("settings-content");
     if (!el) return;
 
-    const curAccent = localStorage.getItem("quiz_accent_color") || "red";
-    const curShade = localStorage.getItem("quiz_theme_shade") || "oled";
     const curPattern = localStorage.getItem("quiz_bg_pattern") || "dots";
-
     const totalVersions = CHANGELOG_DATA.length;
     const anyExpanded = CHANGELOG_DATA.some(e => changelogExpandedState[e.version]);
 
     let html = `
-        <!-- [РАЗДЕЛ: ПЕРСОНАЛИЗАЦИЯ И ТЕМА] -->
+        <!-- [РАЗДЕЛ: ФОНОВЫЙ ПАТТЕРН] -->
         <div class="settings-card">
             <div class="settings-card-header">
                 <div class="settings-card-title-row">
                     <svg class="settings-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="m4.93 4.93 4.24 4.24"/>
-                        <path d="m14.83 14.83 4.24 4.24"/>
-                        <path d="m14.83 9.17 4.24-4.24"/>
-                        <path d="m4.93 19.07 4.24-4.24"/>
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
                     </svg>
-                    <span class="settings-card-title">Оформление и тема</span>
+                    <span class="settings-card-title">Фоновый паттерн</span>
                 </div>
             </div>
 
-            <!-- 1. Акцентный цвет -->
-            <div class="settings-group">
-                <div class="settings-group-label">АКЦЕНТНЫЙ ЦВЕТ ИНТЕРФЕЙСА</div>
-                <div class="accent-swatches">
-                    ${Object.entries(ACCENT_COLORS).map(([k, acc]) => {
-                        const isActive = curAccent === k;
-                        return `
-                            <button type="button" class="accent-swatch ${isActive ? 'active' : ''}" 
-                                style="--swatch-color: ${acc.hex}; --swatch-glow: ${acc.glow};"
-                                onclick="setAccentColor('${k}')" 
-                                title="${acc.name}">
-                                ${isActive ? `
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12"/>
-                                    </svg>
-                                ` : ''}
-                            </button>
-                        `;
-                    }).join('')}
-                </div>
-            </div>
-
-            <!-- 2. Оттенок темного фона -->
-            <div class="settings-group">
-                <div class="settings-group-label">ОТТЕНОК ФОНА (DARK THEME)</div>
-                <div class="shade-picker">
-                    ${Object.entries(THEME_SHADES).map(([k, s]) => {
-                        const isActive = curShade === k;
-                        return `
-                            <button type="button" class="shade-btn ${isActive ? 'active' : ''}" onclick="setThemeShade('${k}')">
-                                <span class="shade-preview" style="background:${s.hex}; border: 1px solid ${s.border};"></span>
-                                <span class="shade-name">${s.name}</span>
-                            </button>
-                        `;
-                    }).join('')}
-                </div>
-            </div>
-
-            <!-- 3. Фоновый паттерн -->
-            <div class="settings-group" style="margin-bottom: 2px;">
-                <div class="settings-group-label">ФОНОВЫЙ ПАТТЕРН</div>
-                <div class="pattern-picker">
-                    ${Object.entries(BG_PATTERNS).map(([k, p]) => {
-                        const isActive = curPattern === k;
-                        return `
-                            <button type="button" class="pattern-btn ${isActive ? 'active' : ''}" onclick="setBgPattern('${k}')">
-                                <span class="pattern-icon">${p.icon}</span>
-                                <div class="pattern-info">
-                                    <span class="pattern-title">${p.name}</span>
-                                    <span class="pattern-desc">${p.desc}</span>
-                                </div>
-                            </button>
-                        `;
-                    }).join('')}
-                </div>
+            <div class="pattern-picker">
+                ${Object.entries(BG_PATTERNS).map(([k, p]) => {
+                    const isActive = curPattern === k;
+                    return `
+                        <button type="button" class="pattern-btn ${isActive ? 'active' : ''}" onclick="setBgPattern('${k}')">
+                            <span class="pattern-icon">${p.icon}</span>
+                            <div class="pattern-info">
+                                <span class="pattern-title">${p.name}</span>
+                                <span class="pattern-desc">${p.desc}</span>
+                            </div>
+                        </button>
+                    `;
+                }).join('')}
             </div>
         </div>
 
-        <!-- [РАЗДЕЛ: СПИСОК ИЗМЕНЕНИЙ / CHANGELOG] -->
+        <!-- [РАЗДЕЛ: ИСТОРИЯ ВЕРСИЙ / CHANGELOG] -->
         <div class="settings-card changelog-settings-card">
             <div class="settings-card-header clickable" onclick="toggleChangelogSection()" role="button" tabindex="0">
                 <div class="settings-card-title-row">
@@ -309,11 +240,12 @@ function renderSettings() {
                         <polyline points="14 2 14 8 20 8"/>
                         <line x1="16" y1="13" x2="8" y2="13"/>
                         <line x1="16" y1="17" x2="8" y2="17"/>
+                        <line x1="10" y1="9" x2="8" y2="9"/>
                     </svg>
                     <span class="settings-card-title">Список изменений</span>
-                    <span class="version-badge badge-major" style="margin-left: 6px;">v3.1.0</span>
+                    <span class="changelog-badge-latest">v${CHANGELOG_DATA[0].version}</span>
                 </div>
-                <div class="changelog-chevron-btn ${isChangelogSectionOpen ? 'open' : ''}">
+                <div class="changelog-chevron ${isChangelogSectionOpen ? 'open' : ''}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="6 9 12 15 18 9"/>
                     </svg>
@@ -323,21 +255,16 @@ function renderSettings() {
             ${isChangelogSectionOpen ? `
                 <div class="changelog-inner-wrap">
                     <div class="changelog-toolbar">
-                        <div class="changelog-toolbar-info">
-                            <span class="changelog-toolbar-badge">${totalVersions} ${pluralRu(totalVersions, "версия", "версии", "версий")}</span>
-                        </div>
-                        <button type="button" class="changelog-toggle-all-btn ${anyExpanded ? '' : 'all-collapsed'}" onclick="toggleAllChangelog()">
-                            <span>${anyExpanded ? "Свернуть всё" : "Развернуть всё"}</span>
-                            <svg class="changelog-toggle-all-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="18 15 12 9 6 15"/>
-                            </svg>
+                        <span class="changelog-toolbar-badge">${totalVersions} версии</span>
+                        <button type="button" class="changelog-toggle-all-btn" onclick="toggleAllChangelog()">
+                            ${anyExpanded ? "Свернуть всё" : "Развернуть всё"}
                         </button>
                     </div>
 
                     <div class="changelog-timeline">
                         ${CHANGELOG_DATA.map((entry, idx) => {
-                            const isExp = changelogExpandedState[entry.version];
-                            const bc = entry.badge === "major" ? "badge-major" : "badge-update";
+                            const isExp = !!changelogExpandedState[entry.version];
+                            const bc = entry.badge === "major" ? "badge-major" : "badge-minor";
                             return `
                                 <div class="changelog-entry ${isExp ? 'expanded' : ''}" data-version="${entry.version}">
                                     <div class="changelog-dot"></div>
@@ -349,7 +276,7 @@ function renderSettings() {
                                             </div>
                                             <div class="changelog-date">
                                                 <span>${entry.date}</span>
-                                                <span class="changelog-status-hint">· ${isExp ? "Скрыть" : "Подробнее"}</span>
+                                                <span class="changelog-status-hint">• ${isExp ? "Скрыть" : "Подробнее"}</span>
                                             </div>
                                         </div>
                                         <div class="changelog-chevron-btn ${isExp ? 'open' : ''}">
@@ -363,14 +290,13 @@ function renderSettings() {
                                         <div class="changelog-body-open">
                                             <div class="changelog-changes">
                                                 ${entry.groups.map(group => {
-                                                    const typeClass = group.type === "new" ? "tag-new" : group.type === "fix" ? "tag-fix" : "tag-change";
-                                                    const dotClass = group.type === "new" ? "dot-new" : group.type === "fix" ? "dot-fix" : "dot-change";
-                                                    const tagLabel = group.type === "new" ? "Новое" : group.type === "fix" ? "Исправлено" : "Изменение";
+                                                    const typeClass = group.type === "new" ? "tag-new" : group.type === "change" ? "tag-change" : "tag-fix";
+                                                    const tagLabel = group.type === "new" ? "НОВОЕ" : group.type === "change" ? "ИЗМЕНЕНИЕ" : "ИСПРАВЛЕНО";
                                                     return `
                                                         <div class="change-group">
                                                             <div class="change-group-title">
-                                                                <span class="change-group-dot ${dotClass}"></span>
-                                                                <span>${group.label}</span>
+                                                                <span class="change-group-dot"></span>
+                                                                ${group.label}
                                                             </div>
                                                             ${group.items.map(item => `
                                                                 <div class="change-item">
@@ -448,13 +374,9 @@ function resetOnboarding() {
 }
 
 if (typeof window !== "undefined") {
-    window.ACCENT_COLORS = ACCENT_COLORS;
-    window.THEME_SHADES = THEME_SHADES;
     window.BG_PATTERNS = BG_PATTERNS;
     window.CHANGELOG_DATA = CHANGELOG_DATA;
     window.applyCustomTheme = applyCustomTheme;
-    window.setAccentColor = setAccentColor;
-    window.setThemeShade = setThemeShade;
     window.setBgPattern = setBgPattern;
     window.toggleChangelogSection = toggleChangelogSection;
     window.toggleChangelogEntry = toggleChangelogEntry;
