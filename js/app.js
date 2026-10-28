@@ -22,6 +22,7 @@ window.addEventListener("keydown", (e) => {
 // [ИНИЦИАЛИЗАЦИЯ] Старт приложения
 document.addEventListener("DOMContentLoaded", () => {
     applyTheme(getSavedTheme());
+    if (typeof applyCustomTheme === "function") applyCustomTheme();
     loadSettings();
     if (typeof initModalDragToDismiss === "function") initModalDragToDismiss();
     if (typeof setActiveDiscipline === "function") {
