@@ -757,21 +757,79 @@ function fallbackCopyText(text) {
     }
 }
 
-function setScheduleFilter(filter) {
+let scheduleViewMode = 'portal';
+try {
+    const savedMode = localStorage.getItem('quiz_schedule_view_mode');
+    if (savedMode === 'offline' || savedMode === 'portal') {
+        scheduleViewMode = savedMode;
+    }
+} catch (e) {}
+
+function setScheduleViewMode(mode) {
+    if (mode !== 'portal' && mode !== 'offline') mode = 'portal';
+    scheduleViewMode = mode;
+    try {
+        localStorage.setItem('quiz_schedule_view_mode', mode);
+    } catch (e) {}
     vibrate(8);
-    scheduleFilter = filter;
-    renderSchedule();
+
+    const portalView = document.getElementById("schedule-portal-view");
+    const offlineView = document.getElementById("schedule-offline-view");
+    const portalTab = document.getElementById("tab-mode-portal");
+    const offlineTab = document.getElementById("tab-mode-offline");
+
+    if (portalView) portalView.style.display = mode === 'portal' ? 'flex' : 'none';
+    if (offlineView) offlineView.style.display = mode === 'offline' ? 'flex' : 'none';
+
+    if (portalTab) portalTab.classList.toggle('active', mode === 'portal');
+    if (offlineTab) offlineTab.classList.toggle('active', mode === 'offline');
+
+    if (mode === 'offline') {
+        renderOfflineScheduleList();
+    }
 }
 
-function setScheduleWeek(week) {
-    vibrate(8);
-    scheduleSelectedWeek = week;
-    renderSchedule();
+function showPortalLoading(show) {
+    const overlay = document.getElementById("portal-loading-overlay");
+    if (overlay) {
+        if (show) {
+            overlay.classList.add("visible");
+        } else {
+            overlay.classList.remove("visible");
+        }
+    }
+}
+
+function onPortalIframeLoad() {
+    showPortalLoading(false);
+}
+
+function reloadSchedulePortal() {
+    vibrate(10);
+    const frame = document.getElementById("schedule-portal-frame");
+    if (frame) {
+        showPortalLoading(true);
+        try {
+            frame.contentWindow.location.reload();
+        } catch (e) {
+            frame.src = "https://rasp.rusoil.net/?t=" + Date.now();
+        }
+    }
+    showScheduleToast("Обновление rasp.rusoil.net...");
+}
+
+function openScheduleExternal() {
+    vibrate(10);
+    const url = "https://rasp.rusoil.net/";
+    if (window.Telegram?.WebApp?.openLink) {
+        window.Telegram.WebApp.openLink(url);
+    } else {
+        window.open(url, "_blank");
+    }
 }
 
 function scrollToTodaySchedule() {
     vibrate(12);
-    // Find today card
     const todayCard = document.querySelector(".schedule-day-card.is-today");
     if (todayCard) {
         todayCard.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -785,13 +843,107 @@ function isDateToday(dateStr) {
     const months = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
     const curMonth = months[today.getMonth()];
     const curDay = today.getDate();
-    // Compare e.g. "среда, 28 октября" with day & month
     return dateStr.includes(curDay + " " + curMonth);
+}
+
+function setScheduleFilter(filter) {
+    vibrate(8);
+    scheduleFilter = filter;
+    renderOfflineScheduleList();
+}
+
+function setScheduleWeek(week) {
+    vibrate(8);
+    scheduleSelectedWeek = week;
+    renderOfflineScheduleList();
 }
 
 function renderSchedule() {
     const container = document.getElementById("schedule-content");
     if (!container) return;
+
+    // Check if the portal shell is already initialized
+    const existingFrame = document.getElementById("schedule-portal-frame");
+    if (!existingFrame) {
+        container.innerHTML = `
+            <!-- [ВЕРХНЯЯ ПАНЕЛЬ РАСПИСАНИЯ] -->
+            <div class="schedule-top-nav">
+                <div class="schedule-top-title-area">
+                    <div class="schedule-portal-status-dot"></div>
+                    <div class="schedule-top-title-text">РАСПИСАНИЕ</div>
+                    <span class="schedule-portal-domain">rasp.rusoil.net</span>
+                </div>
+                <div class="schedule-top-actions">
+                    <button type="button" class="schedule-action-btn" onclick="reloadSchedulePortal()" title="Обновить страницу rasp.rusoil.net">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 4v6h-6"/>
+                            <path d="M1 20v-6h6"/>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="schedule-action-btn" onclick="openScheduleExternal()" title="Открыть rasp.rusoil.net в браузере">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                            <polyline points="15 3 21 3 21 9"/>
+                            <line x1="10" y1="14" x2="21" y2="3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- [ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ: ОНЛАЙН / ОФЛАЙН] -->
+            <div class="schedule-mode-tabs">
+                <button type="button" class="schedule-mode-tab ${scheduleViewMode === 'portal' ? 'active' : ''}" id="tab-mode-portal" onclick="setScheduleViewMode('portal')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="schedule-mode-icon">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    <span>Портал УГНТУ</span>
+                    <span class="schedule-mode-pill">Онлайн</span>
+                </button>
+                <button type="button" class="schedule-mode-tab ${scheduleViewMode === 'offline' ? 'active' : ''}" id="tab-mode-offline" onclick="setScheduleViewMode('offline')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="schedule-mode-icon">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>Моя группа</span>
+                    <span class="schedule-mode-pill pill-offline">Офлайн</span>
+                </button>
+            </div>
+
+            <!-- [ВЬЮ ПОРТАЛА (ОНЛАЙН RASP.RUSOIL.NET)] -->
+            <div class="schedule-portal-view" id="schedule-portal-view" style="display: ${scheduleViewMode === 'portal' ? 'flex' : 'none'};">
+                <div class="portal-loading-overlay visible" id="portal-loading-overlay">
+                    <div class="portal-spinner"></div>
+                    <div class="portal-loading-text">Загрузка расписания УГНТУ...</div>
+                </div>
+                <iframe id="schedule-portal-frame" src="https://rasp.rusoil.net/" class="schedule-portal-iframe" onload="onPortalIframeLoad()" allow="clipboard-write; fullscreen"></iframe>
+            </div>
+
+            <!-- [ВЬЮ МОЕЙ ГРУППЫ (ОФЛАЙН КАРТОЧКИ)] -->
+            <div class="schedule-offline-view" id="schedule-offline-view" style="display: ${scheduleViewMode === 'offline' ? 'flex' : 'none'};">
+                <div id="schedule-offline-inner"></div>
+            </div>
+        `;
+    } else {
+        // Just make sure active view is in sync
+        const portalView = document.getElementById("schedule-portal-view");
+        const offlineView = document.getElementById("schedule-offline-view");
+        if (portalView) portalView.style.display = scheduleViewMode === 'portal' ? 'flex' : 'none';
+        if (offlineView) offlineView.style.display = scheduleViewMode === 'offline' ? 'flex' : 'none';
+    }
+
+    if (scheduleViewMode === 'offline') {
+        renderOfflineScheduleList();
+    }
+}
+
+function renderOfflineScheduleList() {
+    const offlineInner = document.getElementById("schedule-offline-inner");
+    if (!offlineInner) return;
 
     // Track active week for grouping
     let currentWeekNumber = 9;
@@ -833,65 +985,67 @@ function renderSchedule() {
                         <line x1="8" y1="2" x2="8" y2="6"/>
                         <line x1="3" y1="10" x2="21" y2="10"/>
                     </svg>
-                    <h1 class="schedule-title">РАСПИСАНИЕ ЗАНЯТИЙ</h1>
+                    <h1 class="schedule-title">Моя группа</h1>
                 </div>
-                <button class="schedule-today-btn" onclick="scrollToTodaySchedule()" title="Перейти к сегодняшнему дню">
+                <button type="button" class="schedule-today-btn" onclick="scrollToTodaySchedule()" title="Перейти к сегодняшнему дню">
                     <span class="schedule-today-dot"></span>
                     Сегодня
                 </button>
             </div>
 
-            <!-- Горизонтальная прокрутка недель -->
-            <div class="schedule-weeks-bar">
-                <button class="schedule-week-chip ${scheduleSelectedWeek === 'all' ? 'active' : ''}" onclick="setScheduleWeek('all')">
+            <!-- Горизонтальный скролл недель -->
+            <div class="schedule-weeks-slider" id="schedule-weeks-slider">
+                <button type="button" class="schedule-week-chip ${scheduleSelectedWeek === 'all' ? 'active' : ''}" onclick="setScheduleWeek('all')">
                     Все недели
                 </button>
                 ${weeks.map(w => `
-                    <button class="schedule-week-chip ${scheduleSelectedWeek == w ? 'active' : ''}" onclick="setScheduleWeek(${w})">
+                    <button type="button" class="schedule-week-chip ${Number(scheduleSelectedWeek) === w ? 'active' : ''}" onclick="setScheduleWeek(${w})">
                         ${w} нед
                     </button>
                 `).join('')}
             </div>
 
-            <!-- Фильтр по дням с парами -->
-            <div class="schedule-filter-bar">
-                <button class="schedule-filter-btn ${scheduleFilter === 'all' ? 'active' : ''}" onclick="setScheduleFilter('all')">
+            <!-- Переключатель фильтра: Все дни / С парами -->
+            <div class="schedule-filter-toggle">
+                <button type="button" class="schedule-toggle-opt ${scheduleFilter === 'all' ? 'active' : ''}" onclick="setScheduleFilter('all')">
                     Все дни
                 </button>
-                <button class="schedule-filter-btn ${scheduleFilter === 'classes_only' ? 'active' : ''}" onclick="setScheduleFilter('classes_only')">
+                <button type="button" class="schedule-toggle-opt ${scheduleFilter === 'classes_only' ? 'active' : ''}" onclick="setScheduleFilter('classes_only')">
                     С парами
                 </button>
             </div>
         </div>
 
-        <div class="schedule-list">
+        <div class="schedule-days-list">
     `;
 
     if (visibleDays.length === 0) {
         html += `
-            <div class="schedule-empty-state">
+            <div class="schedule-empty-card">
                 <div class="schedule-empty-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"/>
-                        <line x1="12" y1="8" x2="12" y2="12"/>
-                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        <line x1="8" y1="12" x2="16" y2="12"/>
                     </svg>
                 </div>
-                <div class="schedule-empty-title">В этой неделе нет занятий</div>
-                <div class="schedule-empty-subtitle">Выберите другую неделю или режим «Все дни»</div>
+                <div class="schedule-empty-title">Занятий нет</div>
+                <div class="schedule-empty-desc">В выбранном периоде нет пар по текущему фильтру</div>
             </div>
         `;
     } else {
-        visibleDays.forEach(day => {
-            const todayClass = day.isToday ? 'is-today' : '';
-            const weekBadge = day.week ? `<span class="schedule-day-week-badge">${day.week}</span>` : '';
-            const todayBadge = day.isToday ? `<span class="schedule-day-today-badge">СЕГОДНЯ</span>` : '';
+        visibleDays.forEach((day) => {
+            const isTodayClass = day.isToday ? 'is-today' : '';
+            const todayBadge = day.isToday ? `<span class="schedule-today-badge">СЕГОДНЯ</span>` : '';
+            const weekBadge = day.week ? `<span class="schedule-week-badge">${escapeHtml(day.week)}</span>` : '';
+
+            // Capitalize date first letter
+            const capDate = day.date.charAt(0).toUpperCase() + day.date.slice(1);
 
             html += `
-                <div class="schedule-day-card ${todayClass}" data-date="${escapeHtml(day.date)}">
+                <div class="schedule-day-card ${isTodayClass}" data-date="${escapeHtml(day.date)}">
                     <div class="schedule-day-header">
                         <div class="schedule-day-title-wrap">
-                            <span class="schedule-day-date">${escapeHtml(day.date)}</span>
+                            <span class="schedule-day-date">${escapeHtml(capDate)}</span>
                             ${todayBadge}
                         </div>
                         ${weekBadge}
@@ -900,19 +1054,13 @@ function renderSchedule() {
 
             if (!day.hasClasses || !day.classes || day.classes.length === 0) {
                 html += `
-                    <div class="schedule-no-classes-card">
-                        <svg class="schedule-no-classes-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
-                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
-                            <line x1="6" y1="1" x2="6" y2="4"/>
-                            <line x1="10" y1="1" x2="10" y2="4"/>
-                            <line x1="14" y1="1" x2="14" y2="4"/>
-                        </svg>
+                    <div class="schedule-no-classes">
+                        <span class="schedule-no-classes-dot"></span>
                         <span>Нет занятий</span>
                     </div>
                 `;
             } else {
-                html += `<div class="schedule-classes-group">`;
+                html += `<div class="schedule-classes-grid">`;
                 day.classes.forEach(c => {
                     const typeClass = c.type === 'экзамен' ? 'type-exam' : (c.type === 'консультация' ? 'type-consult' : 'type-practice');
                     const linkButtons = c.hasLink ? `
@@ -987,12 +1135,17 @@ function renderSchedule() {
     }
 
     html += `</div>`;
-    container.innerHTML = html;
+    offlineInner.innerHTML = html;
 }
 
 if (typeof window !== "undefined") {
     window.SCHEDULE_DATA = SCHEDULE_DATA;
     window.renderSchedule = renderSchedule;
+    window.renderOfflineScheduleList = renderOfflineScheduleList;
+    window.setScheduleViewMode = setScheduleViewMode;
+    window.reloadSchedulePortal = reloadSchedulePortal;
+    window.openScheduleExternal = openScheduleExternal;
+    window.onPortalIframeLoad = onPortalIframeLoad;
     window.copyScheduleLink = copyScheduleLink;
     window.setScheduleFilter = setScheduleFilter;
     window.setScheduleWeek = setScheduleWeek;
