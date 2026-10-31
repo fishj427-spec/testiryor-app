@@ -992,11 +992,11 @@ const DISCIPLINES_DATA = {
         gradient: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
         accentLight: "rgba(245, 158, 11, 0.22)",
         badgeClass: "badge-oilgas",
-        description: "Официальный банк тестовых заданий: 30 вопросов. Промышленная безопасность (ФЗ-116), газоопасные и огневые работы, сероводородная опасность (H₂S), превенторы, СИЗ и первая помощь.",
+        description: "30 вопросов по предмету (могут отличаться кардинально): промышленная безопасность (ФЗ-116), газоопасные и огневые работы, сероводород (H₂S), превенторы, СИЗ и первая помощь.",
         homeNotice: {
-            type: "success",
-            title: "Официальный банк тестов",
-            text: "В базе <strong>все 30 вопросов</strong> с проверенными правильными ответами по безопасности в нефтегазовой отрасли. Готовься к зачетам и экзаменам!"
+            type: "danger",
+            title: "Вопросы могут отличаться кардинально",
+            text: "Вопросы составлены согласно предмету, <strong style=\"color:#EF4444;\">вопросы могут отличаться</strong>."
         },
         tags: ["ФЗ-116", "Газоопасные работы", "Сероводород", "Охрана труда"],
         tagFilters: [
@@ -1158,8 +1158,9 @@ function updateAppForActiveDiscipline() {
     const noticeEl = document.getElementById("home-discipline-notice");
     if (noticeEl) {
         if (disc.homeNotice) {
+            const isDanger = disc.homeNotice.type === "danger" || disc.homeNotice.type === "error";
             const isWarning = disc.homeNotice.type === "warning";
-            const iconSvg = isWarning ? `
+            const iconSvg = (isDanger || isWarning) ? `
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
                     <line x1="12" y1="9" x2="12" y2="13"/>
@@ -1171,7 +1172,7 @@ function updateAppForActiveDiscipline() {
                     <polyline points="22 4 12 14.01 9 11.01"/>
                 </svg>
             `;
-            const cardClass = isWarning ? "discipline-notice-card notice-warning" : "discipline-notice-card notice-success";
+            const cardClass = isDanger ? "discipline-notice-card notice-danger" : (isWarning ? "discipline-notice-card notice-warning" : "discipline-notice-card notice-success");
             noticeEl.innerHTML = `
                 <div class="${cardClass}">
                     <div class="discipline-notice-icon">
