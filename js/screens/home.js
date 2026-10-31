@@ -157,7 +157,6 @@ function renderHomeEmptyDisciplines() {
     let html = "";
     disciplines.forEach(d => {
         const qCount = d.questions ? d.questions.length : 0;
-        const tags = (d.tags || []).slice(0, 3).join(" • ");
         html += `
         <div class="home-empty-item" onclick="selectDisciplineAndFeedback('${d.id}')" role="button" tabindex="0">
             <div class="home-empty-item-icon" style="background:${d.gradient};box-shadow:0 6px 16px ${d.accentLight}">
@@ -169,7 +168,6 @@ function renderHomeEmptyDisciplines() {
                     <span class="home-empty-item-count">${qCount} ${pluralRu(qCount, 'вопрос', 'вопроса', 'вопросов')}</span>
                 </div>
                 <div class="home-empty-item-desc">${d.fullTitle}</div>
-                ${tags ? `<div class="home-empty-item-tags">${tags}</div>` : ''}
             </div>
             <div class="home-empty-item-action">
                 <span class="home-empty-item-btn">

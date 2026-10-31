@@ -14,7 +14,6 @@ function renderDisciplines() {
     allDisciplines.forEach(d => {
         const isActive = d.id === activeId;
         const qCount = d.questions.length;
-        const tagsHtml = (d.tags || []).slice(0, 4).map(t => `<span class="disc-tag">${t}</span>`).join("");
         html += `
         <div class="discipline-card${isActive ? ' is-active' : ''}" onclick="selectDisciplineAndFeedback('${d.id}')" role="button" tabindex="0">
             <div class="disc-card-header">
@@ -29,9 +28,6 @@ function renderDisciplines() {
                 </div>
             </div>
             
-            <div class="disc-tags-row">
-                ${tagsHtml}
-            </div>
             <div class="disc-footer">
                 <div class="disc-stats">
                     <span class="disc-stat-pill">
@@ -79,7 +75,6 @@ function renderWelcomeDisciplineModal() {
     disciplines.forEach(d => {
         const qCount = d.questions.length;
         const isActive = d.id === activeId;
-        const tags = (d.tags || []).slice(0, 3).join(" • ");
         html += `
         <div class="welcome-disc-card${isActive ? ' is-selected' : ''}" onclick="selectDisciplineFromWelcomeModal('${d.id}')" role="button" tabindex="0">
             <div class="welcome-disc-icon-box" style="background:${d.gradient};box-shadow:0 6px 16px ${d.accentLight}">
@@ -91,7 +86,6 @@ function renderWelcomeDisciplineModal() {
                     <span class="welcome-disc-qcount">${qCount} ${pluralRu(qCount, 'вопрос', 'вопроса', 'вопросов')}</span>
                 </div>
                 <div class="welcome-disc-full">${d.fullTitle}</div>
-                ${tags ? `<div class="welcome-disc-tags">${tags}</div>` : ''}
             </div>
             <div class="welcome-disc-action">
                 <span class="welcome-disc-select-btn">
