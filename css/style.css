@@ -692,26 +692,33 @@
             display: inline-flex;
             align-items: center;
             background: #121214;
-            padding: 2.5px;
-            border-radius: 8px;
+            padding: 3px;
+            border-radius: 9px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            gap: 2px;
+            gap: 3px;
+            box-sizing: border-box;
         }
         .schedule-mode-btn {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 4px 9px;
-            font-size: 11px;
+            justify-content: center;
+            gap: 6px;
+            height: 28px;
+            min-height: 28px;
+            padding: 0 10px;
+            font-family: inherit;
+            font-size: 11.5px;
             font-weight: 700;
+            line-height: 1.2;
             color: #71717a;
             background: transparent;
             border: none;
-            border-radius: 6px;
+            border-radius: 7px;
             cursor: pointer;
             transition: all 0.2s ease;
             white-space: nowrap;
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
         .schedule-mode-btn.active {
             background: #222226;
@@ -849,46 +856,63 @@
             animation: scheduleDotPulse 1.8s infinite;
         }
 
-        /* [НЕДЕЛИ / WEEKS CHIPS] */
+                /* [НЕДЕЛИ / WEEKS CHIPS] */
         .schedule-weeks-bar {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             overflow-x: auto;
             overflow-y: hidden;
-            padding: 2px 0 6px;
+            padding: 6px 2px 8px;
             margin: 0;
             width: 100%;
             max-width: 100%;
+            min-height: 48px;
             box-sizing: border-box;
             scrollbar-width: none;
             -webkit-overflow-scrolling: touch;
+            flex-shrink: 0;
         }
         .schedule-weeks-bar::-webkit-scrollbar {
             display: none;
+            width: 0;
+            height: 0;
         }
         .schedule-week-chip {
             flex-shrink: 0;
-            padding: 5px 10px;
-            background: #141416;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 7px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+            min-height: 36px;
+            padding: 0 14px;
+            background: #161619;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 9px;
             color: #a1a1aa;
-            font-size: 11.5px;
-            font-weight: 600;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.2;
+            white-space: nowrap;
             cursor: pointer;
             transition: all 0.2s ease;
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
         .schedule-week-chip:hover {
             color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.22);
+            background: #1e1e22;
+        }
+        .schedule-week-chip:active {
+            transform: scale(0.96);
         }
         .schedule-week-chip.active {
-            background: rgba(239, 68, 68, 0.14);
-            border-color: rgba(239, 68, 68, 0.45);
+            background: rgba(239, 68, 68, 0.16);
+            border-color: rgba(239, 68, 68, 0.5);
             color: #ffffff;
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 12px rgba(239, 68, 68, 0.25);
         }
 
         /* [ФИЛЬТР / FILTER] */
@@ -897,28 +921,42 @@
             align-items: center;
             gap: 6px;
             background: #111113;
-            padding: 3px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 4px;
+            border-radius: 9px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            min-height: 40px;
+            box-sizing: border-box;
+            flex-shrink: 0;
         }
         .schedule-filter-btn {
             flex: 1;
-            padding: 5px 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 32px;
+            min-height: 32px;
+            padding: 0 12px;
             background: transparent;
             border: none;
-            border-radius: 6px;
+            border-radius: 7px;
             color: #71717a;
-            font-size: 11.5px;
-            font-weight: 600;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 700;
+            line-height: 1.2;
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+        .schedule-filter-btn:hover {
+            color: #d4d4d8;
         }
         .schedule-filter-btn.active {
-            background: #1c1c1f;
+            background: #202024;
             color: #ffffff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
         }
 
         /* [СПИСОК ДНЕЙ / DAYS LIST] */
