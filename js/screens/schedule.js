@@ -5,8 +5,8 @@
 // 2. "portal" (Прямой сайт) — встроенный фрейм rasp.rusoil.net для поиска других групп и преподавателей.
 
 let scheduleViewMode = 'synced'; // 'synced' или 'portal'
-let scheduleFilter = 'classes_only'; // 'all' или 'classes_only'
-let scheduleSelectedWeek = 'auto'; // 'auto', 'all', или номер недели (например, 9, 10...)
+let scheduleFilter = 'all'; // 'all' или 'classes_only' (по умолчанию: Все дни)
+let scheduleSelectedWeek = 'all'; // 'all', или номер недели (по умолчанию: Все недели)
 
 // Считываем параметры из URL, если переданы
 try {
@@ -365,11 +365,11 @@ function renderSchedule() {
 
             <!-- Фильтр по дням с парами -->
             <div class="schedule-filter-bar">
-                <button class="schedule-filter-btn ${scheduleFilter === 'classes_only' ? 'active' : ''}" onclick="setScheduleFilter('classes_only')">
-                    С парами
-                </button>
                 <button class="schedule-filter-btn ${scheduleFilter === 'all' ? 'active' : ''}" onclick="setScheduleFilter('all')">
                     Все дни
+                </button>
+                <button class="schedule-filter-btn ${scheduleFilter === 'classes_only' ? 'active' : ''}" onclick="setScheduleFilter('classes_only')">
+                    С парами
                 </button>
             </div>
 
