@@ -287,6 +287,14 @@
         .q-badge-var2{background:rgba(14,165,233,0.14);color:#38BDF8;border:1px solid rgba(14,165,233,0.3)}
         .rehearsal-opt-icon.var1{background:rgba(16,185,129,0.15);color:#10B981}
         .rehearsal-opt-icon.var2{background:rgba(14,165,233,0.15);color:#0EA5E9}
+        .q-badge-prombez{background:rgba(245,158,11,0.14);color:#F59E0B;border:1px solid rgba(245,158,11,0.3)}
+        .q-badge-hazwork{background:rgba(239,68,68,0.14);color:#F87171;border:1px solid rgba(239,68,68,0.3)}
+        .q-badge-h2s{background:rgba(168,85,247,0.14);color:#C084FC;border:1px solid rgba(168,85,247,0.3)}
+        .q-badge-ppe{background:rgba(14,165,233,0.14);color:#38BDF8;border:1px solid rgba(14,165,233,0.3)}
+        .rehearsal-opt-icon.prombez{background:rgba(245,158,11,0.15);color:#F59E0B}
+        .rehearsal-opt-icon.hazardous_works{background:rgba(239,68,68,0.15);color:#EF4444}
+        .rehearsal-opt-icon.h2s_explosion{background:rgba(168,85,247,0.15);color:#A855F7}
+        .rehearsal-opt-icon.safety_ppe{background:rgba(14,165,233,0.15);color:#0EA5E9}
         .quiz-screen{padding-bottom:16px}.quiz-top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.quiz-top-bar-left{display:flex;align-items:center;gap:10px}
         .back-btn{width:36px;height:36px;border-radius:8px;background:var(--card-bg);border:1px solid var(--card-border);color:var(--text-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s ease;flex-shrink:0;padding:0;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent}
         .back-btn:hover{background:var(--card-bg-hover);border-color:var(--card-border-hover);color:var(--text-primary);transform:scale(1.03)}
@@ -1471,6 +1479,7 @@
         .badge-law{background:rgba(245,158,11,0.15);color:#FBBF24}
         .badge-fin{background:rgba(16,185,129,0.15);color:#34D399}
         .badge-it{background:rgba(139,92,246,0.15);color:#A78BFA}
+        .badge-oilgas{background:rgba(245,158,11,0.15);color:#FBBF24}
         .disc-full-title{font-size:12px;color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .disc-description{font-size:12.5px;line-height:1.45;color:var(--text-secondary);margin:0}
         .disc-tags-row{display:flex;flex-wrap:wrap;gap:5px}
