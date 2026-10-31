@@ -1,13 +1,12 @@
 // [РАСПИСАНИЕ ЗАНЯТИЙ] Интеграция с порталом УГНТУ (rasp.rusoil.net)
 // Поддерживает два режима:
 // 1. "synced" (VPN / Офлайн) — актуальная локальная база с API УГНТУ, открывается мгновенно под любым зарубежным VPN.
-//    По умолчанию показывает СЕГОДНЯ и предстоящие дни, скрывая прошедшие дни.
+//    Показывает СЕГОДНЯ и будущие дни. Прошедшие дни НЕ показываются вообще.
 // 2. "portal" (Прямой сайт) — встроенный фрейм rasp.rusoil.net для поиска других групп и преподавателей.
 
 let scheduleViewMode = 'synced'; // 'synced' или 'portal'
 let scheduleFilter = 'classes_only'; // 'all' или 'classes_only'
 let scheduleSelectedWeek = 'auto'; // 'auto', 'all', или номер недели (например, 9, 10...)
-let showPastDays = false; // По умолчанию прошлые дни НЕ показываем (показываем Сегодня и будущие)
 
 // Считываем параметры из URL, если переданы
 try {
@@ -22,9 +21,6 @@ try {
         }
         if (_sp.has("filter")) {
             scheduleFilter = _sp.get("filter");
-        }
-        if (_sp.has("past")) {
-            showPastDays = _sp.get("past") === "1" || _sp.get("past") === "true";
         }
     }
 } catch (e) {}
@@ -95,13 +91,6 @@ function setScheduleWeek(week) {
     if (typeof vibrate === "function") vibrate(8);
     scheduleSelectedWeek = week;
     renderSchedule();
-}
-
-function togglePastDays() {
-    if (typeof vibrate === "function") vibrate(10);
-    showPastDays = !showPastDays;
-    renderSchedule();
-    showScheduleToast(showPastDays ? "Показаны прошедшие дни" : "Прошедшие дни скрыты");
 }
 
 function parseDayDate(rawDateStr) {
@@ -207,7 +196,7 @@ function renderSchedule() {
     const todayStr = getTodayRawDate();
     const todayMidnight = getTodayMidnight();
 
-    // Обогащаем дни статусом: isToday и isPast
+    // 1. Обогащаем дни статусом: isToday и isPast
     const enrichedDays = data.map(d => {
         const dDate = parseDayDate(d.rawDate);
         const isToday = (d.rawDate === todayStr);
@@ -219,27 +208,28 @@ function renderSchedule() {
         };
     });
 
-    // Число прошедших дней для информации в архиве
-    const pastDaysCount = enrichedDays.filter(d => d.isPast).length;
+    // 2. Строгое правило: прошлые дни НЕ показываем вообще!
+    // Оставляем только СЕГОДНЯ и будущие дни
+    const currentAndFutureDays = enrichedDays.filter(d => !d.isPast);
 
-    // Определяем текущую неделю и список доступных недель
-    const availableWeeksSet = new Set();
+    // 3. Определяем текущую неделю и список актуальных недель (только текущая и будущие)
     let currentWeekNumber = 9; // Fallback
+    const availableWeeksSet = new Set();
     enrichedDays.forEach(d => {
         if (d.rawDate === todayStr && d.weekNumber) {
             currentWeekNumber = d.weekNumber;
         }
-        if (d.hasClasses && d.weekNumber) {
-            // Если прошлые скрыты — в полосе чипов показываем актуальные и будущие недели
-            if (showPastDays || !d.isPast || d.isToday) {
-                availableWeeksSet.add(d.weekNumber);
-            }
+    });
+
+    currentAndFutureDays.forEach(d => {
+        if (d.weekNumber) {
+            availableWeeksSet.add(d.weekNumber);
         }
     });
     if (currentWeekNumber) availableWeeksSet.add(currentWeekNumber);
     const weeksList = Array.from(availableWeeksSet).sort((a, b) => a - b);
 
-    // Если неделя 'auto', открываем актуальную неделю
+    // Если неделя 'auto', открываем актуальную текущую неделю
     let effectiveWeek = scheduleSelectedWeek;
     if (effectiveWeek === 'auto') {
         effectiveWeek = currentWeekNumber;
@@ -329,22 +319,16 @@ function renderSchedule() {
     }
 
     // Режим "synced" (VPN / Офлайн)
-    // ФИЛЬТРАЦИЯ ДНЕЙ:
-    // 1. Показываем СЕГОДНЯ и предстоящие дни. Прошедшие дни скрываем (если не включен архив showPastDays).
-    let visibleDays = enrichedDays.filter(d => {
-        if (!showPastDays && d.isPast) {
-            return false;
-        }
-        return true;
-    });
+    // Фильтрация:
+    let visibleDays = currentAndFutureDays;
 
-    // 2. Фильтр по неделе
+    // Фильтр по неделе
     if (effectiveWeek !== 'all') {
         visibleDays = visibleDays.filter(d => d.weekNumber === Number(effectiveWeek));
     }
 
-    // 3. Фильтр "С парами" / "Все дни"
-    // КРИТИЧЕСКИ ВАЖНО: Сегодняшний день (isToday) показываем ВСЕГДА, даже если сегодня нет пар!
+    // Фильтр "С парами" / "Все дни"
+    // Сегодняшний день (isToday) показываем ВСЕГДА, даже если сегодня выходной / нет пар!
     if (scheduleFilter === 'classes_only') {
         visibleDays = visibleDays.filter(d => d.hasClasses || d.isToday);
     }
@@ -363,7 +347,7 @@ function renderSchedule() {
                     Группа ${escapeHtml(meta.group || "ББПЭ-23-31")}
                 </div>
                 <div class="schedule-meta-sync" title="База синхронизирована с официальным API УГНТУ">
-                    ● rasp.rusoil.net (${showPastDays ? 'все дни' : 'с сегодня'})
+                    ● rasp.rusoil.net (актуальное)
                 </div>
             </div>
 
@@ -403,7 +387,7 @@ function renderSchedule() {
                     </svg>
                 </div>
                 <div class="schedule-empty-title">В этой неделе нет предстоящих занятий</div>
-                <div class="schedule-empty-subtitle">Выберите другую неделю или откройте архив семестра</div>
+                <div class="schedule-empty-subtitle">Выберите другую неделю или режим «Все дни»</div>
             </div>
         `;
     } else {
@@ -531,21 +515,6 @@ function renderSchedule() {
         });
     }
 
-    // Кнопка для просмотра/скрытия прошедших дней семестра
-    if (pastDaysCount > 0) {
-        html += `
-            <div class="schedule-archive-toggle-wrap">
-                <button type="button" class="schedule-archive-toggle-btn ${showPastDays ? 'active' : ''}" onclick="togglePastDays()" title="Показать или скрыть прошедшие дни семестра">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="1 4 1 10 7 10"/>
-                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
-                    </svg>
-                    ${showPastDays ? 'Скрыть прошедшие дни' : `Показать архив семестра (прошедших дней: ${pastDaysCount})`}
-                </button>
-            </div>
-        `;
-    }
-
     html += `
             </div>
         </div>
@@ -567,7 +536,6 @@ if (typeof window !== "undefined") {
     window.switchScheduleMode = switchScheduleMode;
     window.setScheduleFilter = setScheduleFilter;
     window.setScheduleWeek = setScheduleWeek;
-    window.togglePastDays = togglePastDays;
     window.scrollToTodaySchedule = scrollToTodaySchedule;
     window.copyScheduleLink = copyScheduleLink;
     window.reloadSchedulePortal = reloadSchedulePortal;
